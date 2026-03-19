@@ -259,7 +259,7 @@ if (typeof d3 !== 'undefined') {
         '# Welcome to the live Python Playground!',
         '# Click ▶ Run to execute.',
         '',
-        'string x = "This is Crazy!"',
+        'x = "This is Crazy!"',
         'for i in x:',
         '   print(i)'
     ].join('\n');
