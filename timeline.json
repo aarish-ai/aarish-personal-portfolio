@@ -2,11 +2,11 @@
   {
     "id": "t1",
     "title": "Email Spam Classifier",
-    "date": "2023-01-15",
+    "date": "2026-03-18",
     "tags": ["Python", "ML", "scikit-learn"],
     "short": "Multinomial Naive Bayes classifier achieving over 97% accuracy using NLTK + scikit-learn pipeline.",
     "longHtml": "<p>Built a complete NLP pipeline to classify emails as spam or ham. Used NLTK for tokenization and lemmatization, TF-IDF vectorization, and a Multinomial Naive Bayes model trained on the Enron dataset. Achieved <strong>97.3% accuracy</strong> with precision/recall carefully balanced to minimize false positives.</p><p><strong>Tech:</strong> Python, scikit-learn, NLTK, pandas</p>",
-    "github": "https://github.com"
+    "github": "https://github.com/aarish-ai/Email-Spam-Classifier"
   },
   {
     "id": "t2",
@@ -20,10 +20,10 @@
   {
     "id": "t3",
     "title": "This Portfolio Website",
-    "date": "2026-03-18",
+    "date": "2026-03-19",
     "tags": ["HTML", "CSS", "JavaScript"],
     "short": "A scrolling portfolio with Islamic geometric backgrounds, live Python playground, and animated timeline.",
     "longHtml": "<p>A fully reimagined portfolio featuring a parametric Islamic geometry background that morphs based on scroll position, a live in-browser Python IDE powered by Pyodide in a Web Worker, and an interactive D3 project timeline.</p><p><strong>Tech:</strong> HTML5, CSS3, Vanilla JS, D3, Pyodide, Monaco Editor</p>",
-    "github": "https://github.com"
+    "github": "https://github.com/aarish-ai/My-Personal-Portfolio"
   }
 ]
