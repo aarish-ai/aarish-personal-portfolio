@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aarish — Portfolio</title>
+    <meta name="description" content="Aarish's personal portfolio — developer, creator, builder.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ─── QURAN BANNER ─────────────────────────────────── -->
+    <div class="quran-banner">All praise is to Allah — the Lord of all worlds</div>
+
+    <!-- ─── ISLAMIC GEOMETRY CANVAS (fixed background) ───── -->
+    <canvas id="geo-canvas"></canvas>
+
+    <!-- ─── HERO ─────────────────────────────────────────── -->
+    <section class="hero-section" id="home">
+        <div class="hero-content">
+            <img src="myPic.jpg" alt="Profile photo of Aarish" class="profile-pic" id="profile-pic">
+            <h1 class="hero-title">
+                As-salamu Alaykum, my name is
+                <span class="glow-name">Aarish</span>
+            </h1>
+            <p class="hero-sub">I build dynamic, purposeful things with code.</p>
+            <a href="#projects" class="cta-btn">View My Work</a>
+        </div>
+    </section>
+
+    <!-- ─── ABOUT ─────────────────────────────────────────── -->
+    <section class="section" id="about">
+        <div class="glass-box reveal">
+            <h2 class="section-title">About Me</h2>
+            <p>I'm Aarish — a passionate Software Engineer. I am currently pursuing my Undergraduate
+                career at National University of Sciences and Technology (NUST) in Artificial Intelligence.
+                I love to code and to create solutions for the world through my skills. I specify in AI, ML, and DL
+                but have also expereince in Web development. I beleive that through our efforts we can change the world
+                and so we should keep striving on the right path.
+            </p>
+            <p style="margin-top:12px;">When I'm not coding, you'll find me designing graphics or just reading
+                something. I love books and beleive that knowledge is our greatest treasure.
+            </p>
+        </div>
+    </section>
+
+    <!-- ─── PLAYGROUND ───────────────────────────────────── -->
+    <section class="section" id="playground">
+        <div class="glass-box reveal">
+            <h2 class="section-title">Playground</h2>
+            <p class="section-sub">I started my coding journey with Python and really like the language,
+                so I thought to show it to you as well. Here you can write and run code directly in your browser — no
+                server, no install.
+                Powered by
+                <strong>Pyodide</strong> (WebAssembly).
+            </p>
+
+            <div class="playground-wrapper">
+                <!-- Toolbar -->
+                <div class="playground-toolbar">
+                    <button id="py-run-btn" disabled>
+                        <span id="run-icon">▶</span> Run
+                    </button>
+                    <button id="py-clear-btn">✕ Clear</button>
+                    <span id="py-status" class="py-status">Loading Python runtime…</span>
+                </div>
+
+                <!-- Monaco Editor mount -->
+                <div id="monaco-editor" class="monaco-editor-wrap"></div>
+
+                <!-- Console output -->
+                <div id="py-console" class="py-console">Python console output will appear here…</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── PROJECTS ──────────────────────────────────────── -->
+    <section class="section" id="projects">
+        <div class="glass-box reveal">
+            <h2 class="section-title">Projects</h2>
+            <p class="section-sub">Click any node to expand project details.</p>
+            <div id="timeline-container" class="timeline-container">
+                <!-- D3 timeline injected here by script.js -->
+            </div>
+            <!-- Expandable detail panel -->
+            <div id="timeline-detail" class="timeline-detail hidden"></div>
+        </div>
+    </section>
+
+    <!-- ─── CONTACT ───────────────────────────────────────── -->
+    <section class="section" id="contact">
+        <div class="glass-box reveal">
+            <h2 class="section-title">Contact (Still Under Construction)</h2>
+            <p>Have a project in mind or just want to say salam? Feel free to reach out!</p>
+            <form class="contact-form" onsubmit="return false;">
+                <input type="text" placeholder="Your name" required>
+                <input type="email" placeholder="Your email" required>
+                <textarea rows="5" placeholder="Your message…" required></textarea>
+                <button type="submit" class="cta-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ─── FOOTER ────────────────────────────────────────── -->
+    <footer class="footer">
+        <p>© <span id="year"></span> Aarish. Built with curiosity & care.</p>
+    </footer>
+
+    <!-- ─── SCRIPTS ───────────────────────────────────────── -->
+    <!-- D3 from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+    <!-- Monaco loader -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+    <!-- Main site script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
