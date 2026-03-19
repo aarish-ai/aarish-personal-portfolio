@@ -179,12 +179,12 @@ function seededRandom(offset = 0) {
 (function initSkills() {
     const skillsList = document.getElementById('skills-list');
     const skills = [
-        { label: "HTML / CSS", value: 90 },
-        { label: "JavaScript", value: 85 },
-        { label: "Python", value: 80 },
+        { label: "HTML / CSS", value: 95 },
+        { label: "JavaScript", value: 80 },
+        { label: "Python", value: 85 },
         { label: "UI / UX", value: 70 },
         { label: "Problem Solving", value: 88 },
-        { label: "AI / ML", value: 75 }
+        { label: "AI / ML", value: 70 }
     ];
 
     // Inject skills
