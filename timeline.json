@@ -11,7 +11,7 @@
   {
     "id": "t2",
     "title": "Micro-OS Portfolio (v1)",
-    "date": "2026-01-01",
+    "date": "2026-03-17",
     "tags": ["JavaScript", "ES Modules", "D3"],
     "short": "A fully windowed, browser-based desktop shell with drag-and-drop apps built in native JS.",
     "longHtml": "<p>Designed and implemented a windowed OS interface running entirely in the browser. Featured a custom Window Manager, draggable windows, a taskbar, and four distinct application modules including a Python Playground, Resume Timeline, and Generative Art generator.</p><p><strong>Tech:</strong> Vanilla JS, ES Modules, D3.js, Pyodide, Monaco Editor</p>",
