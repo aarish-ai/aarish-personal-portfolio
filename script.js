@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
    AARISH PORTFOLIO — script.js
-   • Enhanced Generative Islamic Geometry (Scroll + Seed)
+   • Islamic Geometry Background
    • Nav Palette Controller (Track + Toggle)
    • Skills Animation (Intersection Observer)
    • D3 Interactive Project Timeline
@@ -14,116 +14,235 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
 // Simple seedable random for consistent variation per session
-const SESSION_SEED = Math.random();
+const SESSION_SEED = Math.random() * 100000;
 function seededRandom(offset = 0) {
-    const x = Math.sin(SESSION_SEED + offset) * 10000;
+    const x = Math.sin(SESSION_SEED + offset * 999.123) * 10000;
     return x - Math.floor(x);
 }
 
 /* ─────────────────────────────────────────────── */
-/* 2. ENHANCED GENERATIVE ISLAMIC GEOMETRY         */
+/* 2. GENERATIVE ISLAMIC GEOMETRY                  */
+/*     - one stable pattern
+/*     - slow motion
+/*     - more layers appear as you scroll
+/*     - interconnected, clean, and spacious
 /* ─────────────────────────────────────────────── */
 (function initEnhancedGeo() {
     const canvas = document.getElementById('geo-canvas');
-    const ctx = canvas.getContext('2d');
-    let W, H, scrollFraction = 0;
+    const ctx = canvas.getContext('2d', { alpha: true });
 
-    // Randomized parameters for this visit
-    // symmetryBase: 6, 8, 10, or 12
-    const symmetryBase = [6, 8, 10, 12][Math.floor(seededRandom(1) * 4)];
-    const rotationBaseDir = seededRandom(2) > 0.5 ? 1 : -1;
-    const rotationSpeed = (0.1 + seededRandom(3) * 0.2) * rotationBaseDir; // Faster, guaranteed motion
-    const complexitySeed = seededRandom(4);
-    const startTime = Date.now();
+    let W = 0, H = 0, dpr = 1, scrollFraction = 0;
+
+    const GEO = {
+        symmetry: 8,
+        radii: [0.16, 0.30, 0.46, 0.62, 0.78, 0.92],
+        visibleStart: 4,
+        outerSpeed: 0.00028,
+        middleSpeed: -0.00022,
+        innerSpeed: 0.00018,
+        strokeWidth: 1.9,
+        pointRadius: 2.3
+    };
 
     function resize() {
-        W = canvas.width = window.innerWidth;
-        H = canvas.height = window.innerHeight;
+        dpr = Math.max(1, window.devicePixelRatio || 1);
+        W = window.innerWidth;
+        H = window.innerHeight;
+
+        canvas.width = Math.floor(W * dpr);
+        canvas.height = Math.floor(H * dpr);
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
+
     resize();
     window.addEventListener('resize', resize);
 
     window.addEventListener('scroll', () => {
         const maxScroll = document.body.scrollHeight - window.innerHeight;
-        scrollFraction = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+        scrollFraction = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
     });
 
-    function drawPattern() {
+    function buildLayer(radius, rotation, innerRatio) {
+        const starPoints = [];
+        const anchors = [];
+        const total = GEO.symmetry * 2;
+
+        for (let i = 0; i < total; i++) {
+            const angle = (i / total) * Math.PI * 2 + rotation;
+            const r = i % 2 === 0 ? radius : radius * innerRatio;
+            const x = Math.cos(angle) * r;
+            const y = Math.sin(angle) * r;
+            starPoints.push({ x, y });
+
+            if (i % 2 === 0) {
+                anchors.push({ x, y });
+            }
+        }
+
+        return { starPoints, anchors };
+    }
+
+    function drawPolygon(points, alpha, lineWidth) {
+        if (!points.length) return;
+
+        ctx.beginPath();
+        ctx.lineWidth = lineWidth;
+        ctx.strokeStyle = `rgba(34,139,34,${alpha})`;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+            ctx.lineTo(points[i].x, points[i].y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    function drawLayerConnections(prevAnchors, currAnchors, alpha, lineWidth) {
+        ctx.lineWidth = lineWidth;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = `rgba(46,204,64,${alpha})`;
+
+        for (let i = 0; i < GEO.symmetry; i++) {
+            // direct inter-layer connection
+            ctx.beginPath();
+            ctx.moveTo(prevAnchors[i].x, prevAnchors[i].y);
+            ctx.lineTo(currAnchors[i].x, currAnchors[i].y);
+            ctx.stroke();
+
+            // a light diagonal bridge to form triangles/star facets
+            if (i % 2 === 0) {
+                ctx.beginPath();
+                ctx.moveTo(prevAnchors[i].x, prevAnchors[i].y);
+                ctx.lineTo(currAnchors[(i + 1) % GEO.symmetry].x, currAnchors[(i + 1) % GEO.symmetry].y);
+                ctx.stroke();
+            }
+        }
+    }
+
+    function drawDots(points, alpha) {
+        for (const p of points) {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, GEO.pointRadius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(46,204,64,${alpha})`;
+            ctx.fill();
+        }
+    }
+
+    function drawPattern(time) {
         ctx.clearRect(0, 0, W, H);
-        
-        const t = scrollFraction;
-        const time = (Date.now() - startTime) * 0.001; // Cumulative time in seconds
-        
-        // Dynamic stats based on scroll
-        const currentSymmetry = Math.round(symmetryBase + t * 6); 
-        const rings = Math.round(3 + t * 5); 
-        const baseR = Math.min(W, H) * (0.12 + t * 0.04);
+
+        const minDim = Math.min(W, H);
+        const safeRadius = minDim * 0.48;
+
+        // Start with a fairly complete structure, then add only a few outer layers as the user scrolls.
+        const visibleLayers = Math.min(
+            GEO.radii.length,
+            GEO.visibleStart + Math.floor(scrollFraction * 2)
+        );
 
         ctx.save();
         ctx.translate(W / 2, H / 2);
-        
-        // Moderate rotation
-        ctx.rotate(time * rotationSpeed * 0.4);
 
-        for (let ring = 1; ring <= rings; ring++) {
-            const r = baseR * ring * 0.85;
-            const alpha = 0.05 + (ring / rings) * 0.07 + (t * 0.1);
-            
-            ctx.save();
-            // Counter-rotation for alternate rings adds many-layered feel
-            ctx.rotate(time * rotationSpeed * (ring % 2 === 0 ? 0.4 : -0.4));
-            
-            ctx.strokeStyle = `rgba(34,139,34,${alpha})`;
-            ctx.lineWidth = 1 + t;
+        // Clip keeps everything elegant and inside the screen.
+        ctx.beginPath();
+        ctx.arc(0, 0, safeRadius, 0, Math.PI * 2);
+        ctx.clip();
 
-            for (let i = 0; i < currentSymmetry; i++) {
-                const angle = (i / currentSymmetry) * Math.PI * 2;
-                const x1 = Math.cos(angle) * r;
-                const y1 = Math.sin(angle) * r;
-                
-                // Lines to center
-                ctx.beginPath();
-                ctx.moveTo(0,0);
-                ctx.lineTo(x1, y1);
-                ctx.stroke();
+        // Calm central glow
+        ctx.beginPath();
+        ctx.arc(0, 0, safeRadius * 0.10, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(34,139,34,0.02)';
+        ctx.fill();
 
-                // Interconnecting chords (jump by 2 for star pattern)
-                const step = 2; 
-                const angle2 = ((i + step) / currentSymmetry) * Math.PI * 2;
-                const x2 = Math.cos(angle2) * r;
-                const y2 = Math.sin(angle2) * r;
-                
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.stroke();
+        const allLayers = [];
 
-                // Extra complexity: secondary chords on deep scroll
-                if (t > 0.35) {
-                    const angle3 = ((i + 3) / currentSymmetry) * Math.PI * 2;
-                    ctx.beginPath();
-                    ctx.moveTo(x1, y1);
-                    ctx.lineTo(Math.cos(angle3) * r, Math.sin(angle3) * r);
-                    ctx.strokeStyle = `rgba(46,204,64,${alpha * 0.6})`;
-                    ctx.stroke();
-                }
+        for (let layer = 0; layer < visibleLayers; layer++) {
+            const progress = layer / Math.max(1, visibleLayers - 1);
 
-                // Decorative nodes
-                if (ring > 1) {
-                    ctx.beginPath();
-                    ctx.arc(x1, y1, 1.5 + t * 2.5, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(46,204,64,${alpha * 1.8})`;
-                    ctx.fill();
-                }
+            // Large spacing between rings.
+            const radius = safeRadius * GEO.radii[layer];
+
+            // A single clean, stable geometry with subtle layered motion.
+            const spinSign = layer % 2 === 0 ? 1 : -1;
+            const spin = time * (GEO.outerSpeed + layer * 0.00005) * spinSign;
+            const phase = layer * (Math.PI / 18) + spin;
+
+            const layerRatio = 0.56 + progress * 0.10;
+            const { starPoints, anchors } = buildLayer(radius, phase, layerRatio);
+
+            allLayers.push({ starPoints, anchors });
+
+            // Main star ring
+            drawPolygon(starPoints, 0.10 + progress * 0.05, GEO.strokeWidth + progress * 0.4);
+
+            // Small anchor dots
+            drawDots(anchors, 0.10 + progress * 0.08);
+
+            // Connect to previous visible layer for a neat lattice effect.
+            if (layer > 0) {
+                drawLayerConnections(
+                    allLayers[layer - 1].anchors,
+                    anchors,
+                    0.07 + progress * 0.03,
+                    GEO.strokeWidth + 0.1
+                );
             }
-            ctx.restore();
         }
+
+        // Slow central rotation gives the whole pattern visible motion.
+        ctx.save();
+        ctx.rotate(time * GEO.outerSpeed * 1.6);
+        if (allLayers.length > 0) {
+            const outer = allLayers[allLayers.length - 1].anchors;
+            ctx.strokeStyle = 'rgba(46,204,64,0.045)';
+            ctx.lineWidth = 1.1;
+            for (let i = 0; i < outer.length; i++) {
+                const a = outer[i];
+                const b = outer[(i + 2) % outer.length];
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
+                ctx.stroke();
+            }
+        }
+        ctx.restore();
+
+        // Soft inner rotation for depth.
+        ctx.save();
+        ctx.rotate(time * GEO.middleSpeed);
+        if (allLayers.length > 1) {
+            const mid = allLayers[1].anchors;
+            ctx.strokeStyle = 'rgba(34,139,34,0.05)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < mid.length; i += 2) {
+                const a = mid[i];
+                const b = mid[(i + 3) % mid.length];
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
+                ctx.stroke();
+            }
+        }
+        ctx.restore();
+
+        // Faint outer boundary keeps the pattern unified.
+        ctx.beginPath();
+        ctx.arc(0, 0, safeRadius * 0.985, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(34,139,34,0.025)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
 
         ctx.restore();
         requestAnimationFrame(drawPattern);
     }
 
-    drawPattern();
+    requestAnimationFrame(drawPattern);
 })();
 
 /* ─────────────────────────────────────────────── */
@@ -179,12 +298,12 @@ function seededRandom(offset = 0) {
 (function initSkills() {
     const skillsList = document.getElementById('skills-list');
     const skills = [
-        { label: "HTML / CSS", value: 95 },
-        { label: "JavaScript", value: 80 },
-        { label: "Python", value: 85 },
+        { label: "HTML / CSS", value: 90 },
+        { label: "JavaScript", value: 85 },
+        { label: "Python", value: 80 },
         { label: "UI / UX", value: 70 },
         { label: "Problem Solving", value: 88 },
-        { label: "AI / ML", value: 70 }
+        { label: "AI / ML", value: 75 }
     ];
 
     // Inject skills
