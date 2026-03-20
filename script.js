@@ -299,11 +299,11 @@ function seededRandom(offset = 0) {
     const skillsList = document.getElementById('skills-list');
     const skills = [
         { label: "HTML / CSS", value: 90 },
-        { label: "JavaScript", value: 85 },
+        { label: "JavaScript", value: 75 },
         { label: "Python", value: 80 },
-        { label: "UI / UX", value: 70 },
+        { label: "UI / UX", value: 60 },
         { label: "Problem Solving", value: 88 },
-        { label: "AI / ML", value: 75 }
+        { label: "AI / ML", value: 60 }
     ];
 
     // Inject skills
