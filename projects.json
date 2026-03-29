@@ -2,28 +2,28 @@
     {
         "id": "t1",
         "title": "Email Spam Classifier",
-        "date": "2023-01-15",
+        "date": "2026-03-01",
         "tags": ["Python", "ML", "scikit-learn"],
         "short": "Multinomial Naive Bayes classifier achieving over 97% accuracy using NLTK + scikit-learn pipeline.",
         "longHtml": "<p>Built a complete NLP pipeline to classify emails as spam or ham. Used NLTK for tokenization and lemmatization, TF-IDF vectorization, and a Multinomial Naive Bayes model trained on the Enron dataset. Achieved <strong>97.3% accuracy</strong> with precision/recall carefully balanced to minimize false positives.</p><p><strong>Tech:</strong> Python, scikit-learn, NLTK, pandas</p>",
-        "github": "https://github.com"
+        "github": "https://github.com/aarish-ai/Email-Spam-Classifier"
     },
     {
-        "id": "t2",
-        "title": "Micro-OS Portfolio (v1)",
-        "date": "2026-01-01",
-        "tags": ["JavaScript", "ES Modules", "D3"],
-        "short": "A fully windowed, browser-based desktop shell with drag-and-drop apps built in native JS.",
-        "longHtml": "<p>Designed and implemented a windowed OS interface running entirely in the browser. Featured a custom Window Manager, draggable windows, a taskbar, and four distinct application modules including a Python Playground, Resume Timeline, and Generative Art generator.</p><p><strong>Tech:</strong> Vanilla JS, ES Modules, D3.js, Pyodide, Monaco Editor</p>",
-        "github": "https://github.com"
+      "id": "t2",
+      "title": "Digit Recognition — MNIST",
+      "date": "2026-03-27",
+      "tags": ["Python", "TensorFlow", "Keras", "CNN", "MNIST", "Deep Learning"],
+      "short": "A CNN-based handwritten digit recognition system trained on MNIST, achieving around 99% test accuracy with data augmentation and early stopping.",
+      "longHtml": "<p>Built a complete machine learning pipeline to classify handwritten digits (0–9) using the MNIST dataset. The project includes preprocessing, data augmentation, CNN model training, evaluation, and visualization of results such as training curves, confusion matrix, and prediction samples. The model uses three convolutional blocks with batch normalization and dropout for strong generalization, reaching about <strong>99% test accuracy</strong>.</p><p><strong>Tech:</strong> Python, TensorFlow, Keras, NumPy, Matplotlib, Seaborn, scikit-learn</p>",
+      "github": "https://github.com/aarish-ai/Digit-Recogniser"
     },
     {
-        "id": "t3",
-        "title": "This Portfolio Website",
-        "date": "2026-03-18",
-        "tags": ["HTML", "CSS", "JavaScript"],
-        "short": "A scrolling portfolio with Islamic geometric backgrounds, live Python playground, and animated timeline.",
-        "longHtml": "<p>A fully reimagined portfolio featuring a parametric Islamic geometry background that morphs based on scroll position, a live in-browser Python IDE powered by Pyodide in a Web Worker, and an interactive D3 project timeline.</p><p><strong>Tech:</strong> HTML5, CSS3, Vanilla JS, D3, Pyodide, Monaco Editor</p>",
-        "github": "https://github.com"
+      "id": "t3",
+      "title": "Chess — Play Chess Against AI",
+      "date": "2025-12-15",
+      "tags": ["HTML", "CSS", "JavaScript", "Python", "Flask", "Chess"],
+      "short": "A web-based chess game built with Flask and a browser-based frontend, allowing users to play against a computer-controlled opponent.",
+      "longHtml": "<p>Built a simple and interactive chess application that lets users play against an AI opponent through a browser interface. The project combines a lightweight frontend with a Python Flask backend to handle the game experience smoothly. It focuses on core web development concepts, game interaction, and backend integration in a clean and practical way.</p><p><strong>Tech:</strong> HTML, CSS, JavaScript, Python, Flask</p>",
+      "github": "https://github.com/aarish-ai/Chess"
     }
 ]
