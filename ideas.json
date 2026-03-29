@@ -1,14 +1,18 @@
 [
     {
-        "title": "Neural Architectures",
-        "desc": "Exploring bio-inspired deep learning models that mimic fluid continuous learning paradigms."
+        "title": "Truth Mirror",
+        "desc": "TruthMirror will be an evidence-based claim verification system that checks news or user-submitted statements against credible sources and returns a clear verdict with citations, confidence, and reasoning. It supports supported/partially supported/contradicted/unsupported/unclear outcomes and abstains whenever evidence is insufficient"
     },
     {
-        "title": "Quantum Simulations",
-        "desc": "Building visual approximations of quantum state collapse using WebGL and advanced noise patterns."
+        "title": "Argument Critic",
+        "desc": "An AI that takes two opposing sides of a debate and rewrites each side into its strongest, fairest version before comparing them. It helps expose weak reasoning, hidden assumptions, and what each side is really trying to prove"
     },
     {
-        "title": "Tariqah Systems",
-        "desc": "Algorithms intelligently modeled after traditional Islamic geometric recursion mathematics."
+        "title": "AI Lie Tone",
+        "desc": "An AI that analyzes text, voice, or chat tone for signs of evasion, manipulation, overconfidence, or emotional inconsistency. It does not claim absolute truth; it flags when something feels psychologically or logically off"
+    },
+    {
+        "title":"Reflection AI",
+        "desc":"An AI that studies your habits, choices, excuses, and repeated patterns to show you who you are becoming in practice, not just in words. It acts like a mirror for self-accountability, helping reveal blind spots, contradictions, and growth points."
     }
 ]
