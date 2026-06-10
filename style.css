@@ -240,9 +240,53 @@ body {
 }
 
 #projects-section {
-    max-width: none;
-    width: 100%;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #050a14;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+#dodecahedron-container {
+  position: absolute;
+  inset: 0;
+}
+#dodecahedron-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+#projects-label {
+  position: absolute;
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 700;
+  color: #ffffff;
+  pointer-events: none;
+  z-index: 2;
+  letter-spacing: 0.04em;
+}
+#project-tooltip {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 20, 40, 0.85);
+  border: 1px solid rgba(0, 220, 180, 0.3);
+  border-radius: 12px;
+  padding: 16px 24px;
+  color: #e0f4f0;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  max-width: 320px;
+  transition: opacity 0.3s ease;
+}
+#project-tooltip.hidden { opacity: 0; pointer-events: none; }
+#tooltip-title { margin: 0 0 6px; font-size: 1.1rem; color: #00ffaa; }
+#tooltip-desc  { margin: 0 0 10px; font-size: 0.85rem; color: #a0c8c0; }
+#tooltip-link  { font-size: 0.85rem; color: #00ffaa; text-decoration: none; }
 
 .sticky-geo-container {
     position: sticky;
