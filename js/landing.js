@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
          window.scrollTo(0, document.body.scrollHeight);
       }
       currentIndex++;
-      setTimeout(typeChar, 18);
+      setTimeout(typeChar, 6);
     } else {
       // Pause then type final lines
       setTimeout(typeFinalLines, 500);
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
          window.scrollTo(0, document.body.scrollHeight);
       }
       finalIndex++;
-      setTimeout(typeFinalLines, 18);
+      setTimeout(typeFinalLines, 6);
     } else {
       document.getElementById('ghost-prompt').classList.add('show');
       typingComplete = true;
