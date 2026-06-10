@@ -1,0 +1,26 @@
+[
+  {
+    "id": "truth-mirror",
+    "name": "TruthMirror",
+    "description": "An AI-powered geopolitical fact-checking and intelligence synthesis engine. Built on a multi-agent pipeline combining local and cloud LLMs for real-time source triangulation.",
+    "highlights": ["multi-agent", "Gemini", "Qwen2.5", "RAG", "Ollama", "geopolitical"],
+    "tech": ["Python", "Ollama", "Gemini 2.5 Flash", "Wikipedia API", "Google News RSS"],
+    "url": ""
+  },
+  {
+    "id": "online-school",
+    "name": "OnlineSchool",
+    "description": "A full-featured LMS built on WordPress using LearnPress, Elementor Pro, WooCommerce, and custom plugins. Includes interactive H5P lesson widgets.",
+    "highlights": ["LearnPress", "WooCommerce", "H5P", "custom plugin", "Elementor"],
+    "tech": ["WordPress", "PHP", "ACF Pro", "LearnPress", "H5P"],
+    "url": ""
+  },
+  {
+    "id": "color-mixer",
+    "name": "ColorMixer",
+    "description": "A self-contained additive RGB color mixing widget built for H5P lesson embedding. Draggable light circles with mix-blend-mode screen compositing.",
+    "highlights": ["mix-blend-mode", "draggable", "RGB", "canvas"],
+    "tech": ["HTML", "CSS", "JavaScript", "H5P Iframe Embedder"],
+    "url": ""
+  }
+]

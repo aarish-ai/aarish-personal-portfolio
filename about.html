@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aarish — About Me</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/about.css">
+</head>
+<body class="page-fade">
+    <a href="home.html" class="back-btn" id="back-btn">← back</a>
+
+    <!-- Northern Lights Aurora Background -->
+    <div class="aurora-bg"></div>
+
+    <section class="section about-section">
+        <div class="about-layout reveal">
+            <!-- Text Container (Left side) -->
+            <div class="about-text-content">
+                <div class="section-heading-container mask-reveal reveal-trigger"
+                    style="text-align: left; margin-bottom: 20px;">
+                    <h2 class="section-label white-text">About Me</h2>
+                </div>
+                <p class="about-paragraph mask-reveal delay-1 spotlight-text">
+                    I'm Aarish — a passionate AI Engineer who loves to code, currently pursuing my Bachelors from
+                    National University of Sciences and Technology (NUST) in Artificial Intelligence.
+                    I primarily work in AI, ML, DL fields but also have some experience in Web Development. I want
+                    to build solutions for this world; to uplift our brotherhood into something greater. I believe
+                    that through our efforts we can change the world, so we need to keep striving on the right path.
+                </p>
+            </div>
+            <!-- Image Container (Right side) -->
+            <div class="about-image-content">
+                <img src="assets/aarish.jpg" alt="Aarish Profile" class="about-profile-pic mask-reveal delay-3">
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Back button
+            const backBtn = document.getElementById('back-btn');
+            backBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.body.style.opacity = '0';
+                document.body.style.transition = 'opacity 400ms ease';
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 420);
+            });
+
+            // Spotlight text interaction
+            document.querySelectorAll('.spotlight-text').forEach(el => {
+                el.addEventListener('mousemove', e => {
+                    const rect = el.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    el.style.setProperty('--mouse-x', `${x}px`);
+                    el.style.setProperty('--mouse-y', `${y}px`);
+                    if (!el.classList.contains('active')) el.classList.add('active');
+                });
+                el.addEventListener('mouseleave', () => {
+                    el.classList.remove('active');
+                });
+            });
+
+            // Reveal observer
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.mask-reveal').forEach(el => {
+                revealObserver.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aarish — Work</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/work.css">
+</head>
+<body class="page-fade">
+    <canvas id="ripple-bg" style="position: fixed; top:0; left:0; z-index:0; pointer-events:none;"></canvas>
+    
+    <a href="home.html" class="back-btn" id="back-btn">← back</a>
+
+    <div class="work-container">
+        <div class="left-panel" id="projects-array">
+            <!-- Array rendered dynamically -->
+        </div>
+        
+        <div class="right-panel">
+            <div id="project-details">
+                <h2 class="project-title" id="proj-title"></h2>
+                <div class="project-desc" id="proj-desc"></div>
+                <div class="tech-stack-line" id="proj-stack"></div>
+                <div class="view-link-wrapper" id="proj-link-wrapper"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/ripple.js"></script>
+    <script src="js/work.js"></script>
+</body>
+</html>

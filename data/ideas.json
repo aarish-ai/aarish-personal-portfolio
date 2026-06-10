@@ -1,0 +1,18 @@
+[
+  {
+    "name": "MirrorMind",
+    "description": "A journaling AI that reflects your own thinking back at you — not to answer, but to help you think deeper through structured Socratic questioning."
+  },
+  {
+    "name": "IslamicOS",
+    "description": "A personal productivity system built entirely around Islamic time structure — Fajr to Isha, with task scheduling, focus blocks, and spiritual checkpoints."
+  },
+  {
+    "name": "GhazaliNet",
+    "description": "An AI-assisted reader for classical Islamic texts that surfaces cross-references between Al-Ghazali, Ibn Arabi, and Rumi in real time."
+  },
+  {
+    "name": "GeoPulse",
+    "description": "A live geopolitical event tracker that scores news sources on their source ladder position and flags narrative conflicts across hostile outlets."
+  }
+]
