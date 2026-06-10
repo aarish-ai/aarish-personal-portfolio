@@ -177,6 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentIndex < totalChars) {
       if (chars[currentIndex].char !== '\\n') {
          document.getElementById(`char-${currentIndex}`).style.display = "inline";
+      } else {
+         window.scrollTo(0, document.body.scrollHeight);
       }
       currentIndex++;
       setTimeout(typeChar, 18);
@@ -191,6 +193,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (finalIndex < totalFinalChars) {
       if (finalChars[finalIndex].char !== '\\n') {
          document.getElementById(`char-${offset+finalIndex}`).style.display = "inline";
+      } else {
+         window.scrollTo(0, document.body.scrollHeight);
       }
       finalIndex++;
       setTimeout(typeFinalLines, 18);
