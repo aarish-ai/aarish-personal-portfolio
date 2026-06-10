@@ -28,7 +28,7 @@
     console.log('[Dodecahedron] Canvas size:', W, 'x', H);
 
     const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 100);
-    camera.position.set(0, 0, 7.5);
+    camera.position.set(0, 0, 11);
 
     const scene = new THREE.Scene();
 
@@ -38,6 +38,7 @@
     scene.add(ambient, dirLight);
 
     const dodecGroup = new THREE.Group();
+    dodecGroup.position.set(0, -0.8, 0);
     scene.add(dodecGroup);
 
     const phi = (1 + Math.sqrt(5)) / 2;
