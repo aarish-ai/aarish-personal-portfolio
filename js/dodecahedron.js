@@ -1,29 +1,3 @@
-const PROJECTS = [
-  {
-    title: "Truth Mirror",
-    description: "AI-powered geopolitical fact-checking & intelligence synthesis.",
-    tech: ["API","LLMs","Web Scraping", "NLP"],
-    url: "https://your-link.com",
-    color: 0x00ffaa      // bright teal-green glow
-  },
-  {
-    title: "Chess — Play Chess Against AI",
-    description: "Built a simple and interactive chess application that lets users play against an AI opponent through a browser interface. The project combines a lightweight frontend with a Python Flask backend to handle the game experience smoothly. It focuses on core web development concepts, game interaction, and backend integration in a clean and practical way.",
-    tech: ["HTML","CSS","JavaScript","Python","Flask"],
-    url: "https://your-link.com",
-    color: 0x00ccff      // cyan glow
-  },
-  {
-    title: "Digit Recognition — MNIST",
-    description: "Built a complete machine learning pipeline to classify handwritten digits (0–9) using the MNIST dataset. The project includes preprocessing, data augmentation, CNN model training, evaluation, and visualization of results such as training curves, confusion matrix, and prediction samples. The model uses three convolutional blocks with batch normalization and dropout for strong generalization, reaching about 99% test accuracy",
-    tech: ["MNIST", "Keras", "CNN", "Deep Learning", "Tensor Flow"],
-    url: "https://your-link.com",
-    color: 0x88aaff      // soft indigo glow
-  },
-  // remaining 17 slots → null
-  ...Array(17).fill(null)
-];
-
 const phi = (1 + Math.sqrt(5)) / 2;      // ≈ 1.618
 const invPhi = 1 / phi;                  // ≈ 0.618
 
@@ -93,49 +67,76 @@ for (let i = 0; i < vertices.length; i++) {
   }
 }
 
+let PROJECTS = Array(20).fill(null);
 const interactables = [];
 const filledMeshes = [];
 
 const sphereGeomEmpty = new THREE.SphereGeometry(0.055, 16, 16);
 const sphereGeomFilled = new THREE.SphereGeometry(0.12, 32, 32);
 
-for (let i = 0; i < vertices.length; i++) {
-  const project = PROJECTS[i];
-  let mesh;
-  
-  if (project !== null) {
-    const material = new THREE.MeshPhongMaterial({
-      color: project.color,
-      emissive: project.color,
-      emissiveIntensity: 0.5,
-      transparent: true,
-      opacity: 1.0
-    });
-    mesh = new THREE.Mesh(sphereGeomFilled, material);
-    
-    const pointLight = new THREE.PointLight(project.color, 0.8, 2.0);
-    mesh.add(pointLight);
-    filledMeshes.push({ mesh, vertexIndex: i });
-  } else {
-    const material = new THREE.MeshBasicMaterial({
-      color: 0x334466,
-      transparent: true,
-      opacity: 0.5
-    });
-    mesh = new THREE.Mesh(sphereGeomEmpty, material);
+// Make the initialization async to fetch projects.json
+async function initProjects() {
+  try {
+    const res = await fetch('projects.json');
+    if (res.ok) {
+      const data = await res.json();
+      data.forEach((p, idx) => {
+        if (idx < 20) PROJECTS[idx] = p;
+      });
+    }
+  } catch (err) {
+    console.error('Error fetching projects.json:', err);
   }
-  
-  mesh.position.copy(vertices[i]);
-  mesh.userData = { vertexIndex: i };
-  
-  dodecGroup.add(mesh);
-  interactables.push(mesh);
+
+  for (let i = 0; i < vertices.length; i++) {
+    const project = PROJECTS[i];
+    let mesh;
+    
+    if (project !== null) {
+      const projColor = new THREE.Color(project.color || 0x00ffaa);
+      const material = new THREE.MeshPhongMaterial({
+        color: projColor,
+        emissive: projColor,
+        emissiveIntensity: 0.5,
+        transparent: true,
+        opacity: 1.0
+      });
+      mesh = new THREE.Mesh(sphereGeomFilled, material);
+      
+      const pointLight = new THREE.PointLight(projColor, 0.8, 2.0);
+      mesh.add(pointLight);
+      filledMeshes.push({ mesh, vertexIndex: i });
+    } else {
+      const material = new THREE.MeshBasicMaterial({
+        color: 0x334466,
+        transparent: true,
+        opacity: 0.5
+      });
+      mesh = new THREE.Mesh(sphereGeomEmpty, material);
+    }
+    
+    mesh.position.copy(vertices[i]);
+    mesh.userData = { vertexIndex: i };
+    
+    dodecGroup.add(mesh);
+    interactables.push(mesh);
+  }
 }
+
+initProjects();
 
 let isDragging = false;
 let prevMouse = { x: 0, y: 0 };
 let rotationVelocity = { x: 0, y: 0 };
 const autoRotateSpeed = 0.003;
+
+const raycaster = new THREE.Raycaster();
+const tooltip = document.getElementById('project-tooltip');
+const tooltipTitle = document.getElementById('tooltip-title');
+const tooltipDesc = document.getElementById('tooltip-desc');
+const tooltipLink = document.getElementById('tooltip-link');
+const projectModal = document.getElementById('project-modal');
+const modalContent = document.getElementById('project-modal-content');
 
 container.addEventListener('pointerdown', (e) => {
   isDragging = true;
@@ -153,6 +154,10 @@ container.addEventListener('pointermove', (e) => {
     dodecGroup.rotation.y += rotationVelocity.y;
     prevMouse.x = e.clientX;
     prevMouse.y = e.clientY;
+    
+    renderer.domElement.style.cursor = 'grabbing';
+    tooltip.classList.add('hidden');
+    return;
   }
   
   // Raycast hover
@@ -165,17 +170,23 @@ container.addEventListener('pointermove', (e) => {
   raycaster.setFromCamera(mouse, camera);
   const hits = raycaster.intersectObjects(interactables);
   
-  if (isDragging) {
-    renderer.domElement.style.cursor = 'grabbing';
-  } else if (hits.length > 0) {
+  if (hits.length > 0) {
     const idx = hits[0].object.userData.vertexIndex;
-    if (PROJECTS[idx] !== null) {
+    const project = PROJECTS[idx];
+    
+    if (project !== null) {
       renderer.domElement.style.cursor = 'pointer';
+      tooltipTitle.textContent = project.title;
+      tooltipDesc.textContent = project.short || project.description || "Click to view details";
+      tooltipLink.style.display = "none"; // Hide link since click opens modal
+      tooltip.classList.remove('hidden');
     } else {
       renderer.domElement.style.cursor = 'grab';
+      tooltip.classList.add('hidden');
     }
   } else {
     renderer.domElement.style.cursor = 'grab';
+    tooltip.classList.add('hidden');
   }
 });
 
@@ -186,13 +197,8 @@ container.addEventListener('pointerup', () => {
 container.addEventListener('pointerleave', () => {
   isDragging = false;
   renderer.domElement.style.cursor = 'default';
+  tooltip.classList.add('hidden');
 });
-
-const raycaster = new THREE.Raycaster();
-const tooltip = document.getElementById('project-tooltip');
-const tooltipTitle = document.getElementById('tooltip-title');
-const tooltipDesc = document.getElementById('tooltip-desc');
-const tooltipLink = document.getElementById('tooltip-link');
 
 container.addEventListener('click', (e) => {
   if (Math.abs(rotationVelocity.x) > 0.02 || Math.abs(rotationVelocity.y) > 0.02) return; // Ignore click if dragging fast
@@ -211,18 +217,30 @@ container.addEventListener('click', (e) => {
     const project = PROJECTS[idx];
     
     if (project !== null) {
-      tooltipTitle.textContent = project.title;
-      tooltipDesc.textContent = project.description;
-      tooltipLink.href = project.url;
-      tooltip.classList.remove('hidden');
-    } else {
-      tooltipTitle.textContent = "Slot open";
-      tooltipDesc.textContent = "Project coming soon...";
-      tooltipLink.href = "#";
-      tooltip.classList.remove('hidden');
+      // Connect to the global openModal function from script.js
+      const tagsHtml = (project.tags || []).map(t => `<span class="proj-tag">${t}</span>`).join('');
+      const linkHtml = project.github ? `<a href="${project.github}" target="_blank" rel="noopener" class="proj-link">View Project →</a>` : '';
+      
+      modalContent.innerHTML = `
+          <button class="modal-close" aria-label="Close modal">✕</button>
+          <h2 class="minimal-title" style="margin-bottom:15px; font-size: 2rem;">${project.title}</h2>
+          <div class="proj-tags">${tagsHtml}</div>
+          <div class="proj-desc">${project.longHtml || project.short || project.description}</div>
+          ${linkHtml}
+      `;
+      
+      const clickRect = {
+        left: e.clientX - 15,
+        top: e.clientY - 15,
+        width: 30,
+        height: 30
+      };
+      
+      if (typeof openModal === 'function') {
+        openModal(projectModal, clickRect);
+      }
+      tooltip.classList.add('hidden');
     }
-  } else {
-    tooltip.classList.add('hidden');
   }
 });
 
