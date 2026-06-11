@@ -150,3 +150,42 @@
     font-weight: 600;
     margin-bottom: 20px;
 }
+
+/* Profile photo glitch on hover */
+.profile-photo-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: default;
+}
+
+.profile-photo-wrapper img {
+  transition: filter 150ms ease;
+  display: block;
+}
+
+.profile-photo-wrapper:hover img {
+  animation: photo-glitch 400ms steps(1) forwards;
+}
+
+@keyframes photo-glitch {
+  0%   { filter: none;                clip-path: inset(0 0 0 0); 
+         transform: translateX(0); }
+  10%  { filter: saturate(0) contrast(1.2);
+         clip-path: inset(8% 0 72% 0);
+         transform: translateX(-4px); }
+  20%  { filter: saturate(0) hue-rotate(90deg);
+         clip-path: inset(40% 0 40% 0);
+         transform: translateX(4px); }
+  30%  { filter: none;
+         clip-path: inset(70% 0 5% 0);
+         transform: translateX(-2px); }
+  40%  { filter: saturate(0);
+         clip-path: inset(0 0 0 0);
+         transform: translateX(3px); }
+  60%  { filter: none; transform: translateX(-1px);
+         clip-path: inset(20% 0 60% 0); }
+  80%  { filter: none; transform: translateX(0);
+         clip-path: inset(0 0 0 0); }
+  100% { filter: none; transform: translateX(0);
+         clip-path: inset(0 0 0 0); }
+}
