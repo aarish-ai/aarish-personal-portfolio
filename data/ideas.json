@@ -1,18 +1,22 @@
 [
   {
     "name": "MirrorMind",
-    "description": "A journaling AI that reflects your own thinking back at you — not to answer, but to help you think deeper through structured Socratic questioning."
+    "shortDesc": "A journaling AI that reflects your thinking back — structured Socratic questioning, not answers.",
+    "longDesc": "Most AI tools give you answers. MirrorMind does the opposite — it reads what you wrote and responds with a question designed to push your own thinking one layer deeper. Built on the idea that clarity comes from within, not from a chatbot. The system uses a question-tree structure where each response is chosen based on the emotional and logical pattern of your entry. The goal is to be the tool Al-Ghazali would have used for muhasaba — self-accounting."
   },
   {
     "name": "IslamicOS",
-    "description": "A personal productivity system built entirely around Islamic time structure — Fajr to Isha, with task scheduling, focus blocks, and spiritual checkpoints."
+    "shortDesc": "A productivity system built entirely around Islamic time — Fajr to Isha, task blocks, spiritual checkpoints.",
+    "longDesc": "Modern productivity tools are built on a secular 9-to-5 assumption. IslamicOS rebuilds the stack from scratch: the day starts at Fajr, focus blocks are shaped around prayer times, and there are reflection checkpoints built into the flow. It is not just a scheduler — it embeds the Islamic concept of barakah (blessing in time) into how tasks are prioritised and reviewed. Think Notion meets a prayer timetable API meets a personal Wird tracker."
   },
   {
     "name": "GhazaliNet",
-    "description": "An AI-assisted reader for classical Islamic texts that surfaces cross-references between Al-Ghazali, Ibn Arabi, and Rumi in real time."
+    "shortDesc": "An AI reader for classical Islamic texts — surfaces cross-references between Al-Ghazali, Ibn Arabi, and Rumi.",
+    "longDesc": "The great Islamic scholars wrote in conversation with each other across centuries, but those threads are invisible unless you already know where to look. GhazaliNet is a semantic search and cross-reference engine trained on classical texts. You highlight a passage in Ihya Ulum al-Din and it surfaces the parallel concept in the Masnavi or the Fusus al-Hikam. Designed for students of Islamic philosophy who want to do serious textual research without a decade of prerequisite reading."
   },
   {
     "name": "GeoPulse",
-    "description": "A live geopolitical event tracker that scores news sources on their source ladder position and flags narrative conflicts across hostile outlets."
+    "shortDesc": "A live geopolitical tracker that scores sources on credibility and flags narrative conflicts across outlets.",
+    "longDesc": "Mainstream news gives you a single narrative framed as fact. GeoPulse treats every news event as a contested object and maps the narrative distance between sources — how differently is Al Jazeera, Reuters, and a primary government document describing the same event? It uses the source-ladder methodology: primary documents rank highest, then forensic/OSINT, then investigative journalism, then wire services. The output is not a summary — it is a conflict map that shows you where the disagreements are and what each side is claiming."
   }
 ]

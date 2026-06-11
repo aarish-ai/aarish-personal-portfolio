@@ -11,30 +11,23 @@
 </head>
 <body class="page-fade">
     <div class="home-container">
-        <h1 class="greeting">As-salamu Alaykum! I am <span class="name-hl">Aarish</span>; what would you like to know about me?</h1>
+        <h1 class="greeting">As-salamu Alaykum! I am <span class="name-hl" id="aarish-name">Aarish</span>; what would you like to know about me?</h1>
         
         <div class="spacer"></div>
         
         <div class="chat-input-wrapper">
+            <div id="chat-output"></div>
             <input type="text" id="chat-input" placeholder="/help for help" autofocus autocomplete="off" spellcheck="false">
             <div id="ghost-msg"></div>
             
-            <div id="help-menu">
-                <div class="help-cmd">Work</div>
-                <div class="help-act">yourWork</div>
-                
-                <div class="help-cmd">About</div>
-                <div class="help-act">aboutYou</div>
-                
-                <div class="help-cmd">Ideas</div>
-                <div class="help-act">yourIdeas</div>
-                
-                <div class="help-cmd">CV</div>
-                <div class="help-act">downloadCv</div>
-            </div>
+            <div id="help-menu" style="display: none;"></div>
         </div>
     </div>
     
+    <div id="contact-dialog">Contact</div>
+    <script src="js/glitch.js"></script>
+    <script src="js/footer.js"></script>
+    <script src="js/sound.js"></script>
     <script src="js/home.js"></script>
 </body>
 </html>

@@ -1,6 +1,5 @@
 .ideas-container {
-  width: 100vw;
-  height: 100vh;
+  padding: 80px 60px 116px 60px;
   position: relative;
   z-index: 1;
 }
@@ -93,4 +92,86 @@
 
 .dimmed .kw, .dimmed .idea-name, .dimmed .colon, .dimmed .desc-kw, .dimmed .idea-desc, .dimmed .quote {
   color: #333333;
+}
+
+/* Run button */
+.run-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: 1px solid #1f1f1f;
+  border-radius: 4px;
+  color: #333333;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 3px 8px;
+  transition: color 200ms ease, border-color 200ms ease;
+  z-index: 5;
+}
+.run-btn:hover {
+  color: var(--teal);
+  border-color: var(--teal);
+}
+
+/* Terminal output within quadrant */
+.idea-terminal {
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: #040404;
+  border-left: 2px solid #1a1a1a;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.9;
+  color: #444444;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 400ms ease, opacity 300ms ease;
+  opacity: 0;
+}
+.idea-terminal.visible {
+  max-height: 160px;
+  opacity: 1;
+}
+.idea-terminal .term-error {
+  color: var(--teal);
+}
+
+/* Expanded overlay panel */
+#idea-expanded-panel {
+  position: absolute;
+  background: #000000;
+  border: 1px solid #1f1f1f;
+  border-radius: 8px;
+  padding: 48px 52px;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease, transform 300ms ease;
+  transform: scale(0.97);
+}
+#idea-expanded-panel.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+#idea-expanded-panel .close-expanded {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #444444;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 200ms;
+}
+#idea-expanded-panel .close-expanded:hover { color: white; }
+
+/* Dim siblings when expanded */
+.ideas-grid.has-expanded .quadrant {
+  opacity: 0.2;
+  transition: opacity 300ms ease;
 }

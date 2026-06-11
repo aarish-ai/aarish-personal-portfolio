@@ -23,7 +23,7 @@
                     style="text-align: left; margin-bottom: 20px;">
                     <h2 class="section-label white-text">About Me</h2>
                 </div>
-                <p class="about-paragraph mask-reveal delay-1 spotlight-text">
+                <p class="about-paragraph mask-reveal delay-1 spotlight-text" id="about-bio">
                     I'm Aarish — a passionate AI Engineer who loves to code, currently pursuing my Bachelors from
                     National University of Sciences and Technology (NUST) in Artificial Intelligence.
                     I primarily work in AI, ML, DL fields but also have some experience in Web Development. I want
@@ -33,13 +33,36 @@
             </div>
             <!-- Image Container (Right side) -->
             <div class="about-image-content">
-                <img src="aarish.jpg" alt="Aarish Profile" class="about-profile-pic mask-reveal delay-3">
+                <div class="profile-photo-wrapper">
+                    <img src="aarish.jpg" alt="Aarish Profile" class="about-profile-pic mask-reveal delay-3">
+                </div>
             </div>
         </div>
     </section>
 
+    <script src="js/footer.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            if (window.initFooter) window.initFooter();
+            
+            // Bio typewriter
+            const bioEl = document.getElementById('about-bio');
+            if (!bioEl) return;
+            const fullText = bioEl.textContent.trim();
+            bioEl.textContent = '';
+            bioEl.style.visibility = 'visible';
+
+            const SPEED = 32; 
+            let i = 0;
+            function typeBio() {
+              if (i < fullText.length) {
+                bioEl.textContent += fullText[i];
+                i++;
+                setTimeout(typeBio, SPEED);
+              }
+            }
+            setTimeout(typeBio, 600);
+
             // Back button
             const backBtn = document.getElementById('back-btn');
             backBtn.addEventListener('click', (e) => {

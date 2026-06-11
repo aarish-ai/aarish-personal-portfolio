@@ -4,6 +4,7 @@
   height: 100vh;
   position: relative;
   z-index: 1;
+  padding-bottom: 36px;
 }
 
 .left-panel {
@@ -15,6 +16,7 @@
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-size: var(--text-sm);
   scrollbar-width: none;
+  max-height: calc(100vh - 100px);
 }
 
 .left-panel::-webkit-scrollbar {
@@ -55,6 +57,7 @@
   padding: 80px 80px 80px 40px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 #project-details {
@@ -119,4 +122,16 @@
 .view-link:hover {
   color: var(--white);
   text-decoration: underline;
+}
+
+.array-cursor {
+  color: var(--teal);
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+.array-item.active {
+  color: var(--teal);
+  font-size: 14px;
+  transition: all 200ms ease;
 }

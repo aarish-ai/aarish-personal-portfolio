@@ -202,6 +202,8 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById('ghost-prompt').classList.add('show');
       typingComplete = true;
       document.getElementById('cursor').style.display = 'none';
+      if (window.initGlitch) window.initGlitch();
+      if (window.initFooter) window.initFooter();
     }
   }
 
