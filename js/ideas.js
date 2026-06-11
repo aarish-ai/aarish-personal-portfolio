@@ -37,19 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
       quadrant.dataset.ideaIndex = i;
       
       if (idea) {
-        quadrant.innerHTML = \`
+        quadrant.innerHTML = `
           <button class="run-btn">run</button>
           <div class="sig-line">
             <span class="kw">def </span>
-            <span class="idea-name">\${idea.name}</span>
+            <span class="idea-name">${idea.name}</span>
             <span class="colon">:</span>
           </div>
           <div class="desc-line">
             <span class="desc-kw">desc = </span>
-            <span class="quote">"</span><span class="idea-desc">\${idea.shortDesc}</span><span class="quote">"</span>
+            <span class="quote">"</span><span class="idea-desc">${idea.shortDesc}</span><span class="quote">"</span>
           </div>
           <div class="idea-terminal" data-running="false"></div>
-        \`;
+        `;
 
         const runBtn = quadrant.querySelector('.run-btn');
         runBtn.addEventListener('click', (e) => {
@@ -59,10 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
           terminal.dataset.running = 'true';
 
           const lines = [
-            \`> running \${idea.name}.py...\`,
-            \`  initializing concept_engine...\`,
-            \`  loading idea_tree.json...\`,
-            \`  RuntimeError: idea not yet built. work in progress.\`
+            `> running ${idea.name}.py...`,
+            `  initializing concept_engine...`,
+            `  loading idea_tree.json...`,
+            `  RuntimeError: idea not yet built. work in progress.`
           ];
 
           terminal.innerHTML = '';
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       } else {
         quadrant.classList.add('dimmed');
-        quadrant.innerHTML = \`
+        quadrant.innerHTML = `
           <div class="sig-line">
             <span class="kw">def </span>
             <span class="idea-name">???</span>
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="desc-kw">desc = </span>
             <span class="quote">"</span><span class="idea-desc">coming soon</span><span class="quote">"</span>
           </div>
-        \`;
+        `;
       }
       
       quadrant.addEventListener('click', () => {
@@ -127,13 +127,13 @@ document.addEventListener('DOMContentLoaded', () => {
     collapseIdea(false); 
 
     document.getElementById('expanded-def-line').innerHTML =
-      \`<span style="color:var(--keyword);font-family:'JetBrains Mono';font-size:13px">def </span>\` +
-      \`<span style="color:white;font-family:Inter;font-size:24px;font-weight:600">\${idea.name}</span>\` +
-      \`<span style="color:#555;font-family:'JetBrains Mono';font-size:13px">:</span>\`;
+      `<span style="color:var(--keyword);font-family:'JetBrains Mono';font-size:13px">def </span>` +
+      `<span style="color:white;font-family:Inter;font-size:24px;font-weight:600">${idea.name}</span>` +
+      `<span style="color:#555;font-family:'JetBrains Mono';font-size:13px">:</span>`;
 
     document.getElementById('expanded-long-desc').innerHTML =
-      \`<div style="margin-top:20px;padding-left:24px;font-family:Inter;font-size:15px;\` +
-      \`font-weight:300;color:#cccccc;line-height:1.85;max-width:620px">\${idea.longDesc}</div>\`;
+      `<div style="margin-top:20px;padding-left:24px;font-family:Inter;font-size:15px;` +
+      `font-weight:300;color:#cccccc;line-height:1.85;max-width:620px">${idea.longDesc}</div>`;
 
     const gridRect = grid.getBoundingClientRect();
     const panelW = gridRect.width * 0.65;
