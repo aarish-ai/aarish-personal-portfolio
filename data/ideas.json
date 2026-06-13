@@ -5,18 +5,18 @@
     "longDesc": "Most AI tools give you answers. MirrorMind does the opposite — it reads what you wrote and responds with a question designed to push your own thinking one layer deeper. Built on the idea that clarity comes from within, not from a chatbot. The system uses a question-tree structure where each response is chosen based on the emotional and logical pattern of your entry. The goal is to be the tool Al-Ghazali would have used for muhasaba — self-accounting."
   },
   {
-    "name": "IslamicOS",
-    "shortDesc": "A productivity system built entirely around Islamic time — Fajr to Isha, task blocks, spiritual checkpoints.",
-    "longDesc": "Modern productivity tools are built on a secular 9-to-5 assumption. IslamicOS rebuilds the stack from scratch: the day starts at Fajr, focus blocks are shaped around prayer times, and there are reflection checkpoints built into the flow. It is not just a scheduler — it embeds the Islamic concept of barakah (blessing in time) into how tasks are prioritised and reviewed. Think Notion meets a prayer timetable API meets a personal Wird tracker."
+    "name": "LostAndFound",
+    "shortDesc": "A system which helps you discover the lost items in your by specifying your area.",
+    "longDesc": "A system which takes your location and uses that to show you the lost items around you. When registering a lost item you can add the tag of location and th sytem will automatically link that item to that location, and the people in that location can see it. Other than that it will automatically pair found items with already regsitered lost ones or add new entries if no such item has been registered as lost yet."
   },
   {
-    "name": "GhazaliNet",
-    "shortDesc": "An AI reader for classical Islamic texts — surfaces cross-references between Al-Ghazali, Ibn Arabi, and Rumi.",
-    "longDesc": "The great Islamic scholars wrote in conversation with each other across centuries, but those threads are invisible unless you already know where to look. GhazaliNet is a semantic search and cross-reference engine trained on classical texts. You highlight a passage in Ihya Ulum al-Din and it surfaces the parallel concept in the Masnavi or the Fusus al-Hikam. Designed for students of Islamic philosophy who want to do serious textual research without a decade of prerequisite reading."
+    "name": "SkillHub",
+    "shortDesc": "A platform that can teach yoh practical real world skills practically",
+    "longDesc": "This platform which teaches a vast variety of skills using pracice and hands on training. It will go beyond conventional skills and teach people how to communicate, learn, think, code, solve a problem, and technical skills like how to fix a light bulb, car engine, pc etc through interactive 3d models, quizes, and explainers"
   },
   {
-    "name": "GeoPulse",
-    "shortDesc": "A live geopolitical tracker that scores sources on credibility and flags narrative conflicts across outlets.",
-    "longDesc": "Mainstream news gives you a single narrative framed as fact. GeoPulse treats every news event as a contested object and maps the narrative distance between sources — how differently is Al Jazeera, Reuters, and a primary government document describing the same event? It uses the source-ladder methodology: primary documents rank highest, then forensic/OSINT, then investigative journalism, then wire services. The output is not a summary — it is a conflict map that shows you where the disagreements are and what each side is claiming."
+    "name": "DoomScroller",
+    "shortDesc": "An agent that can 'scroll' your accounts for you and give you all the details that you might have missed",
+    "longDesc": "This agent would go to your social accounts, and 'doomscrolls' for you, because scrolling does destroy your brain, attention span, cognitive skills and in general degrades your mental awareness, though one benefit it does give is keeps you updated on the latest news and fact which you just cannot get by searching things up; so this AI will got through your feed and group the facts, news, explanations by topic and you can ask it one by one to learn without breaking your attention span"
   }
 ]

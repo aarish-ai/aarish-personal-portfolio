@@ -6,10 +6,11 @@
     'Using AI to learn AI to make AI',
     'Reading Documentation . . .',
     'Why did I declare this variable again?',
-    'My code runs fine, mostly',
-    'Its not my code, the API is giving errors',
+    'My code runs fine, mostly.',
+    'Its not my code, the API is giving errors.',
     'Just call an API . . .',
     'LOVE :)',
+    'Wait a minute! Your actually reading this stuff?',
   ];
 
   const TYPE_SPEED   = 55;    // ms per character
