@@ -2,25 +2,33 @@
   {
     "id": "truth-mirror",
     "name": "TruthMirror",
-    "description": "An AI-powered geopolitical fact-checking and intelligence synthesis engine. Built on a multi-agent pipeline combining local and cloud LLMs for real-time source triangulation.",
-    "highlights": ["multi-agent", "Gemini", "Qwen2.5", "RAG", "Ollama", "geopolitical"],
-    "tech": ["Python", "Ollama", "Gemini 2.5 Flash", "Wikipedia API", "Google News RSS"],
-    "url": ""
+    "description": "This codebase is an ongoing multi agent geopolitical intelligence and fact-analysis engine. It takes a claim, and uses LLMs breaks it into smaller sub-claims, gathers live evidence from multiple sources, tags the evidence by perspective, and then uses AI to synthesize the results into a structured verdict and narrative summary. Instead of giving only a simple true/false answer, it aims to show the broader context, disputes, and source framing around the claim. (Under Development as of June 2026)",
+    "highlights": ["LLMS","geopolitical", "sub-claims", "evidence", "sources", "perspective", "results", "verdict", "narrative", "disputes", "source-framing"],
+    "tech": ["HTML/CSS/JS", "Ollama", "Google Gemini", "Open Router API (NVIDIA Nemotron)", "Wikipedia, arxiv, Crossref etc APIs/Web Scraping", "JSON Framing", "Secret Handling"],
+    "url": "https://github.com/aarish-ai/Truth-Mirror"
   },
   {
-    "id": "online-school",
-    "name": "OnlineSchool",
-    "description": "A full-featured LMS built on WordPress using LearnPress, Elementor Pro, WooCommerce, and custom plugins. Includes interactive H5P lesson widgets.",
-    "highlights": ["LearnPress", "WooCommerce", "H5P", "custom plugin", "Elementor"],
-    "tech": ["WordPress", "PHP", "ACF Pro", "LearnPress", "H5P"],
-    "url": ""
+    "id": "email-classifier",
+    "name": "EmailSpamClassifier",
+    "description": "This project is a Python machine learning pipeline for classifying SMS messages as Spam or Ham (not spam). It automatically downloads the SMS Spam Collection dataset, preprocesses the text, converts messages into TF-IDF features, trains a Multinomial Naive Bayes model, and evaluates its performance with accuracy and a classification report. The model achieves around 97% accuracy on the test set.",
+    "highlights": ["classifying", "spam", "preprocesses", "TF-IDF", "Multinomial Naive Bias", "evaluates", "97% accuracy"],
+    "tech": ["Python", "pandas", "scikit-learn", "NLTK", "Multinomial Naive Bias"],
+    "url": "https://github.com/aarish-ai/Email-Spam-Classifier"
   },
   {
-    "id": "color-mixer",
-    "name": "ColorMixer",
-    "description": "A self-contained additive RGB color mixing widget built for H5P lesson embedding. Draggable light circles with mix-blend-mode screen compositing.",
-    "highlights": ["mix-blend-mode", "draggable", "RGB", "canvas"],
-    "tech": ["HTML", "CSS", "JavaScript", "H5P Iframe Embedder"],
-    "url": ""
+    "id": "digit-recognizer",
+    "name": "DigitRecognizer",
+    "description": "This is a deep learning project for handwritten digit recognition using the MNIST dataset. It builds and trains a Convolutional Neural Network (CNN) to classify grayscale images of digits from 0 to 9, reaching about 99% test accuracy. The pipeline includes data loading, preprocessing, augmentation, model training, evaluation, visualization, and saving the trained model for later use",
+    "highlights": ["deep learning project", "MNIST dataset", "(CNN)", "0 to 9", "data loading", "preprocessing", "augmentation", "model training", "evaluation", "visualization", "saving"],
+    "tech": ["Python", "Tensor Flow / Keras", "NumPy", "Matplotlib", "Seaborn", "scikit-learn", "CNN"],
+    "url": "https://github.com/aarish-ai/Digit-Recogniser"
+  },
+  {
+    "id": "chess",
+    "name": "ChessAgainstAI",
+    "description": "This is simple a web-based chess game (made for learning) where a player can play against an AI opponent in the browser. The project is mainly a learning-focused application that combines game logic, user interaction, and a simple server into one working app.",
+    "highlights": ["web-based", "AI opponent", "game logic", "user interaction", "server"],
+    "tech": ["Python", "Flask", "HTML", "CSS", "JavaScript", "Git", "Virtual Enviornment"],
+    "url": "https://github.com/aarish-ai/Chess"
   }
 ]
