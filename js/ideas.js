@@ -107,12 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
       
       quadrant.addEventListener('click', () => {
         if (!idea) return;
-        const panel = document.getElementById('idea-expanded-panel');
-        const currentIdx = parseInt(panel.dataset.activeIndex ?? '-1');
-        if (currentIdx === i) {
-          collapseIdea();
+        if (activeIdx === i) {
+          closeIdea();
         } else {
-          expandIdea(i);
+          openIdea(i);
         }
       });
 
@@ -120,60 +118,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function expandIdea(index) {
+  const backdrop    = document.getElementById('ideas-backdrop');
+  const expandPanel = document.getElementById('idea-expanded-panel');
+  const closeBtn    = document.getElementById('expanded-close-btn');
+  let   activeIdx   = -1;
+
+  function openIdea(index) {
     const idea = loadedIdeas[index];
     if (!idea) return;
-    
-    collapseIdea(false); 
+    activeIdx = index;
 
-    document.getElementById('expanded-def-line').innerHTML =
-      `<span style="color:var(--keyword);font-family:'JetBrains Mono';font-size:13px">def </span>` +
-      `<span style="color:white;font-family:Inter;font-size:24px;font-weight:600">${idea.name}</span>` +
-      `<span style="color:#555;font-family:'JetBrains Mono';font-size:13px">:</span>`;
+    // Fill content — title and longDesc only, no keywords
+    document.getElementById('expanded-idea-title').textContent = idea.name;
+    document.getElementById('expanded-idea-desc').textContent  = idea.longDesc;
 
-    document.getElementById('expanded-long-desc').innerHTML =
-      `<div style="margin-top:20px;padding-left:24px;font-family:Inter;font-size:15px;` +
-      `font-weight:300;color:#cccccc;line-height:1.85;max-width:620px">${idea.longDesc}</div>`;
-
-    const gridRect = grid.getBoundingClientRect();
-    const panelW = gridRect.width * 0.65;
-    const panelH = gridRect.height * 0.70;
-    const panelL = gridRect.left + (gridRect.width - panelW) / 2;
-    
-    const panel = document.getElementById('idea-expanded-panel');
-    panel.style.width  = panelW + 'px';
-    panel.style.minHeight = panelH + 'px';
-    panel.style.left   = panelL + 'px';
-    panel.style.position = 'fixed';
-    panel.style.top    = (gridRect.top + (gridRect.height - panelH) / 2) + 'px';
-
-    grid.classList.add('has-expanded');
-    panel.dataset.activeIndex = index;
-    requestAnimationFrame(() => panel.classList.add('visible'));
-  }
-
-  function collapseIdea(animate = true) {
-    const panel = document.getElementById('idea-expanded-panel');
-    if (!panel.classList.contains('visible')) return;
-    panel.classList.remove('visible');
-    grid.classList.remove('has-expanded');
-    if (!animate) {
-      panel.style.transition = 'none';
-      requestAnimationFrame(() => { panel.style.transition = ''; });
-    }
-    panel.dataset.activeIndex = '-1';
-  }
-
-  const closeBtn = document.querySelector('.close-expanded');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', (e) => { 
-      e.stopPropagation(); 
-      collapseIdea(); 
+    // Activate backdrop then panel
+    backdrop.classList.add('active');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        expandPanel.classList.add('visible');
+      });
     });
   }
 
+  function closeIdea() {
+    activeIdx = -1;
+    expandPanel.classList.remove('visible');
+    backdrop.classList.remove('active');
+  }
+
+  // Close on backdrop click (outside the panel)
+  // IMPORTANT: clicking the backdrop closes — clicking the panel does NOT
+  backdrop.addEventListener('click', (e) => {
+    // Only close if click is directly on backdrop, not on the panel
+    if (e.target === backdrop) closeIdea();
+  });
+
+  // Close button inside panel
+  closeBtn.addEventListener('click', closeIdea);
+
+  // Escape key
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') collapseIdea();
+    if (e.key === 'Escape' && activeIdx !== -1) closeIdea();
   });
 
   if (window.initGlitch) window.initGlitch();

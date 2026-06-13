@@ -22,7 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentProjects = [];
   let activeIndex = -1;
-  let animationTimer1, animationTimer2, animationTimer3;
+  let importTimer1 = null;
+  let importTimer2 = null;
+  let importTimer3 = null;
+
+  function clearImportTimers() {
+    clearTimeout(importTimer1);
+    clearTimeout(importTimer2);
+    clearTimeout(importTimer3);
+  }
 
   fetch('data/projects.json')
     .then(r => r.json())
@@ -72,13 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function selectProject(index) {
+    clearImportTimers();
     if (activeIndex === index) return;
     activeIndex = index;
-
-    // Clear previous timers
-    clearTimeout(animationTimer1);
-    clearTimeout(animationTimer2);
-    clearTimeout(animationTimer3);
 
     const items = document.querySelectorAll('.project-item');
     items.forEach((item, idx) => {
@@ -111,34 +115,39 @@ document.addEventListener('DOMContentLoaded', () => {
     tempLine.style.color = '#444444';
     tempLine.style.fontFamily = "'JetBrains Mono', monospace";
     tempLine.style.fontSize = '13px';
+    tempLine.style.transition = 'opacity 200ms ease';
     tempLine.innerHTML = `> importing ${project.name}...`;
     projDesc.appendChild(tempLine);
 
-    animationTimer1 = setTimeout(() => {
+    importTimer1 = setTimeout(() => {
       tempLine.innerHTML = `> importing ${project.name}... <span style="color:var(--teal)">✓</span>`;
       
-      animationTimer2 = setTimeout(() => {
-        detailsPanel.style.opacity = '0';
+      importTimer2 = setTimeout(() => {
+        tempLine.style.opacity = '0';
         
-        animationTimer3 = setTimeout(() => {
-          // Fill actual details
-          tempLine.remove();
-          projTitle.textContent = project.name;
-          projDesc.innerHTML = highlightDesc(project.description, project.highlights);
-          
-          projStack.innerHTML = '<span class="tech-label">stack  </span>' + 
-            (project.tech || []).map(t => `<span class="tech-token">${t}</span>`).join('<span class="tech-sep">  ·  </span>');
+        importTimer3 = setTimeout(() => {
+          detailsPanel.style.opacity = '0';
+          setTimeout(() => {
+            // Fill actual details
+            tempLine.remove();
+            projTitle.textContent = project.name;
+            projDesc.innerHTML = highlightDesc(project.description, project.highlights);
+            
+            projStack.innerHTML = '<span class="tech-label">stack  </span>' + 
+              (project.tech || []).map(t => `<span class="tech-token">${t}</span>`).join('<span class="tech-sep">  ·  </span>');
 
-          if (project.url) {
-            projLinkWrapper.innerHTML = `<a href="${project.url}" target="_blank" rel="noopener" class="view-link">→ view project</a>`;
-          } else {
-            projLinkWrapper.innerHTML = '';
-          }
+            if (project.url) {
+              projLinkWrapper.innerHTML = `<a href="${project.url}" target="_blank" rel="noopener" class="view-link">→ view project</a>`;
+            } else {
+              projLinkWrapper.innerHTML = '';
+            }
 
-          detailsPanel.style.opacity = '1';
+            detailsPanel.style.transition = 'opacity 200ms ease';
+            detailsPanel.style.opacity = '1';
+          }, 50); // Small buffer before fading in
         }, 200);
       }, 400);
-    }, 200);
+    }, 1500);
   }
 
   if (window.initGlitch) window.initGlitch();

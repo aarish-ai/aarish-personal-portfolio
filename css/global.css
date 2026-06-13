@@ -134,17 +134,17 @@ body::-webkit-scrollbar { display: none; }
 #ambient-footer .footer-right {
   margin-left: auto;
   flex-shrink: 0;
-  color: #2a2a2a;
+  color: #ffffff;
   padding-left: 24px;
 }
 
 #ambient-footer .footer-right span.sep {
   margin: 0 8px;
-  color: #1f1f1f;
+  color: #ffffff;
 }
 
 #ambient-footer .footer-right .val {
-  color: var(--teal);
+  color: #ffffff;
 }
 
 @keyframes blink {

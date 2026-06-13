@@ -17,10 +17,46 @@
   animation: fadeIn 200ms ease forwards;
 }
 
-.greeting .name-hl {
-  color: var(--teal);
-  text-decoration: underline;
-  text-underline-offset: 5px;
+#aarish-name {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: #2dd4bf;
+  text-decoration: none;
+  cursor: pointer;
+  vertical-align: baseline;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+#binary-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#chat-zone {
+  position: relative;
+  z-index: 1;
+  background: #000000;
+  padding: 40px 60px 60px 60px;
+  border-radius: 0;
+}
+
+#chat-zone .chat-input-wrapper,
+#chat-zone #chat-output,
+#chat-zone #chat-input {
+  background: #000000;
+  position: relative;
+  z-index: 2;
+}
+
+#chat-input {
+  background: #000000;
+}
+#chat-output {
+  background: #000000;
 }
 
 .spacer {

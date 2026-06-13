@@ -21,10 +21,14 @@
             <!-- Grid rendered dynamically -->
         </div>
     </div>
-    <div id="idea-expanded-panel">
-        <button class="close-expanded">✕ close</button>
-        <div id="expanded-def-line"></div>
-        <div id="expanded-long-desc"></div>
+    <!-- Dim backdrop -->
+    <div id="ideas-backdrop"></div>
+
+    <!-- Expanded panel -->
+    <div id="idea-expanded-panel" role="dialog" aria-modal="true">
+        <button id="expanded-close-btn" aria-label="Close">✕</button>
+        <div id="expanded-idea-title"></div>
+        <div id="expanded-idea-desc"></div>
     </div>
     
     <script src="js/ripple.js"></script>

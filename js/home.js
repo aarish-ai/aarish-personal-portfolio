@@ -7,6 +7,7 @@
     'aboutYou', 'about',
     'yourIdeas', 'ideas',
     'downloadCv', 'cv',
+    'yourContact', 'contact',
     '/help', '/clear',
     '/rumi', '/bismillah', '/sudo'
   ];
@@ -79,6 +80,7 @@
       { left: 'About',      right: 'aboutYou'   },
       { left: 'Ideas',      right: 'yourIdeas'  },
       { left: 'CV',         right: 'downloadCv' },
+      { left: 'Contact',    right: 'yourContact'},
       { left: '/help',      right: ''           },
       { left: '/clear',     right: ''           },
       { left: '/rumi',      right: ''           },
@@ -238,6 +240,10 @@
       case 'cv':
         cmdDownloadCV();
         break;
+      case 'yourcontact':
+      case 'contact':
+        cmdContact();
+        break;
       case '/help':
         cmdHelp();
         break;
@@ -379,5 +385,106 @@
   // Focus the input on load
   input.focus();
   console.log('[home.js] Ready.');
+
+  // ── BINARY BACKGROUND CANVAS ──────────────────────
+  (function () {
+    const canvas  = document.getElementById('binary-bg');
+    if (!canvas) return;
+    const ctx     = canvas.getContext('2d');
+
+    const FONT_SIZE   = 13;
+    const FONT_FAMILY = "'JetBrains Mono', monospace";
+    const MOUSE_RADIUS = 120;   // px — how far the glow reaches
+    const CHAR_COLOR_MAX = 160; // max brightness (light grey, not white)
+
+    let cols, rows, chars, W, H;
+    let mouseX = -9999;
+    let mouseY = -9999;
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+      cols = Math.ceil(W / FONT_SIZE);
+      rows = Math.ceil(H / FONT_SIZE);
+
+      // Build grid of random 0s and 1s — fixed, never changes
+      chars = [];
+      for (let r = 0; r < rows; r++) {
+        const row = [];
+        for (let c = 0; c < cols; c++) {
+          row.push(Math.random() < 0.5 ? '0' : '1');
+        }
+        chars.push(row);
+      }
+    }
+
+    function getChatZoneRect() {
+      const zone = document.getElementById('chat-zone');
+      if (!zone) return null;
+      return zone.getBoundingClientRect();
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
+      ctx.textBaseline = 'top';
+
+      const zoneRect = getChatZoneRect();
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * FONT_SIZE;
+          const y = r * FONT_SIZE;
+
+          // If this cell is inside the chat zone, skip drawing
+          // (the chat zone has its own solid black background)
+          if (zoneRect &&
+              x >= zoneRect.left - FONT_SIZE &&
+              x <= zoneRect.right &&
+              y >= zoneRect.top  - FONT_SIZE &&
+              y <= zoneRect.bottom) {
+            continue;
+          }
+
+          // Distance from mouse
+          const dx   = x - mouseX;
+          const dy   = y - mouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist > MOUSE_RADIUS) {
+            // Outside glow radius — invisible (same as background)
+            continue;
+          }
+
+          // Inside radius — brightness falls off from center to edge
+          // At dist=0: full brightness (CHAR_COLOR_MAX)
+          // At dist=MOUSE_RADIUS: 0
+          const t          = 1 - (dist / MOUSE_RADIUS);
+          const brightness = Math.round(t * t * CHAR_COLOR_MAX);
+          // t*t gives a smooth quadratic falloff
+
+          ctx.fillStyle = `rgb(${brightness},${brightness},${brightness})`;
+          ctx.fillText(chars[r][c], x, y);
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    window.addEventListener('mouseleave', () => {
+      mouseX = -9999;
+      mouseY = -9999;
+    });
+
+    window.addEventListener('resize', resize);
+
+    resize();
+    draw();
+  })();
 
 })();
