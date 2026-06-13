@@ -144,7 +144,7 @@ body::-webkit-scrollbar { display: none; }
 }
 
 #ambient-footer .footer-right .val {
-  color: #ffffff;
+  color: #2dd4bf;
 }
 
 @keyframes blink {

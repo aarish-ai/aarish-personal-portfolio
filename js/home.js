@@ -412,16 +412,13 @@
       for (let r = 0; r < rows; r++) {
         const row = [];
         for (let c = 0; c < cols; c++) {
-          row.push(Math.random() < 0.5 ? '0' : '1');
+          row.push({
+            char: Math.random() < 0.5 ? '0' : '1',
+            brightness: 0
+          });
         }
         chars.push(row);
       }
-    }
-
-    function getChatZoneRect() {
-      const zone = document.getElementById('chat-zone');
-      if (!zone) return null;
-      return zone.getBoundingClientRect();
     }
 
     function draw() {
@@ -429,42 +426,35 @@
       ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
       ctx.textBaseline = 'top';
 
-      const zoneRect = getChatZoneRect();
-
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const x = c * FONT_SIZE;
           const y = r * FONT_SIZE;
-
-          // If this cell is inside the chat zone, skip drawing
-          // (the chat zone has its own solid black background)
-          if (zoneRect &&
-              x >= zoneRect.left - FONT_SIZE &&
-              x <= zoneRect.right &&
-              y >= zoneRect.top  - FONT_SIZE &&
-              y <= zoneRect.bottom) {
-            continue;
-          }
+          const cell = chars[r][c];
 
           // Distance from mouse
           const dx   = x - mouseX;
           const dy   = y - mouseY;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist > MOUSE_RADIUS) {
-            // Outside glow radius — invisible (same as background)
-            continue;
+          let targetBrightness = 0;
+          if (dist <= MOUSE_RADIUS) {
+            const t = 1 - (dist / MOUSE_RADIUS);
+            targetBrightness = Math.round(t * t * CHAR_COLOR_MAX);
           }
 
-          // Inside radius — brightness falls off from center to edge
-          // At dist=0: full brightness (CHAR_COLOR_MAX)
-          // At dist=MOUSE_RADIUS: 0
-          const t          = 1 - (dist / MOUSE_RADIUS);
-          const brightness = Math.round(t * t * CHAR_COLOR_MAX);
-          // t*t gives a smooth quadratic falloff
+          if (targetBrightness > cell.brightness) {
+            cell.brightness = targetBrightness;
+          } else if (cell.brightness > 0) {
+            // Decay over ~0.5s (30 frames at 60fps) -> approx 5.3 brightness per frame
+            cell.brightness = Math.max(0, cell.brightness - 5);
+          }
 
-          ctx.fillStyle = `rgb(${brightness},${brightness},${brightness})`;
-          ctx.fillText(chars[r][c], x, y);
+          if (cell.brightness > 0) {
+            const b = Math.round(cell.brightness);
+            ctx.fillStyle = `rgb(${b},${b},${b})`;
+            ctx.fillText(cell.char, x, y);
+          }
         }
       }
 
