@@ -10,7 +10,7 @@
     'Its not my code, the API is giving errors.',
     'Just call an API . . .',
     'LOVE :)',
-    'Wait a minute! Your actually reading this stuff?',
+    'Wait a minute! Your actually reading this stuff?'
   ];
 
   const TYPE_SPEED   = 55;    // ms per character
