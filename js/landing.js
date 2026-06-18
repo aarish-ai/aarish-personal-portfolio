@@ -100,8 +100,7 @@
 
     // Entering line (no dots)
     await bootSimpleLine(
-      'Entering  (thank you for waiting, btw did you know anything' +
-      ' in this universe is either a potato or not a potato)',
+      'Entering  (thank you for waiting)',
       0
     );
 
@@ -124,5 +123,7 @@
       runBootSequence();
     }
   });
+
+  if (typeof initCustomCursor === 'function') initCustomCursor();
 
 })();

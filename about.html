@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/about.css">
 </head>
 <body class="page-fade">
-    <a href="home.html" class="back-btn" id="back-btn">← back</a>
+    <a href="home.html" class="back-btn magnetic" id="back-btn">← back</a>
 
     <!-- Northern Lights Aurora Background -->
     <div class="aurora-bg"></div>
@@ -40,6 +40,8 @@
         </div>
     </section>
 
+    <script src="js/magnetic.js"></script>
+    <script src="js/cursor.js"></script>
     <script src="js/footer.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -103,6 +105,9 @@
             document.querySelectorAll('.mask-reveal').forEach(el => {
                 revealObserver.observe(el);
             });
+
+            if (typeof initMagnetic === 'function') initMagnetic('.magnetic');
+            if (typeof initCustomCursor === 'function') initCustomCursor();
         });
     </script>
 </body>

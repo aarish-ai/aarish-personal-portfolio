@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof window.initRipple === 'function') {
     window.initRipple('ripple-bg');
   }
+  if (typeof window.initIslamicBg === 'function') {
+    window.initIslamicBg('islamic-bg-canvas');
+  }
 
   const backBtn = document.getElementById('back-btn');
   backBtn.addEventListener('click', (e) => {
@@ -33,15 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < 4; i++) {
       const idea = ideas[i];
       const quadrant = document.createElement('div');
-      quadrant.className = 'quadrant';
+      quadrant.className = 'quadrant magnetic';
       quadrant.dataset.ideaIndex = i;
       
       if (idea) {
         quadrant.innerHTML = `
-          <button class="run-btn">run</button>
+          <button class="run-btn magnetic">run</button>
           <div class="sig-line">
             <span class="kw">def </span>
-            <span class="idea-name">${idea.name}</span>
+            <span class="idea-name"></span>
             <span class="colon">:</span>
           </div>
           <div class="desc-line">
@@ -50,6 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="idea-terminal" data-running="false"></div>
         `;
+
+        const nameSpan = quadrant.querySelector('.idea-name');
+        if (typeof scrambleText === 'function') {
+          scrambleText(nameSpan, idea.name, 500);
+        } else {
+          nameSpan.textContent = idea.name;
+        }
 
         const runBtn = quadrant.querySelector('.run-btn');
         runBtn.addEventListener('click', (e) => {
@@ -116,6 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       grid.appendChild(quadrant);
     }
+
+    if (typeof initMagnetic === 'function') initMagnetic('.magnetic');
   }
 
   const backdrop    = document.getElementById('ideas-backdrop');
@@ -164,4 +176,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (window.initGlitch) window.initGlitch();
   if (window.initFooter) window.initFooter();
+  if (typeof initCustomCursor === 'function') initCustomCursor();
 });

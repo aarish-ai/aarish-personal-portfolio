@@ -135,3 +135,10 @@
   font-size: 14px;
   transition: all 200ms ease;
 }
+
+#islamic-bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}

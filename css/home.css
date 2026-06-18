@@ -37,6 +37,18 @@
   pointer-events: none;
 }
 
+#matrix-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+#matrix-canvas.active {
+  opacity: 1;
+}
+
 #chat-zone {
   position: relative;
   z-index: 1;

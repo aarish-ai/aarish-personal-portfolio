@@ -54,6 +54,7 @@
   window.initSound = function () {
     const btn = document.createElement('button');
     btn.id = 'sound-toggle';
+    btn.className = 'magnetic';
     btn.textContent = '♩';
     btn.title = 'Toggle keyboard sounds';
     btn.addEventListener('click', toggle);

@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof window.initRipple === 'function') {
     window.initRipple('ripple-bg');
   }
+  if (typeof window.initIslamicBg === 'function') {
+    window.initIslamicBg('islamic-bg-canvas');
+  }
 
   const backBtn = document.getElementById('back-btn');
   backBtn.addEventListener('click', (e) => {
@@ -61,9 +64,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     projects.forEach((proj, index) => {
       const item = document.createElement('span');
-      item.className = 'project-item array-item';
+      item.className = 'project-item array-item magnetic';
       item.dataset.index = index;
-      item.innerHTML = `"${proj.name}"<span class="project-item-comma">,</span>`;
+      
+      item.innerHTML = `"<span class="project-name-span"></span>"<span class="project-item-comma">,</span>`;
+      const nameSpan = item.querySelector('.project-name-span');
+      if (typeof scrambleText === 'function') {
+        scrambleText(nameSpan, proj.name, 500);
+      } else {
+        nameSpan.textContent = proj.name;
+      }
       
       item.addEventListener('click', () => {
         selectProject(index);
@@ -77,6 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
     closeBracket.style.marginTop = '28px';
     closeBracket.textContent = ']';
     arrayContainer.appendChild(closeBracket);
+
+    if (typeof initMagnetic === 'function') initMagnetic('.magnetic');
   }
 
   function selectProject(index) {
@@ -152,4 +164,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (window.initGlitch) window.initGlitch();
   if (window.initFooter) window.initFooter();
+  if (typeof initCustomCursor === 'function') initCustomCursor();
 });

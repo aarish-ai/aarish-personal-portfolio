@@ -9,7 +9,7 @@
     'downloadCv', 'cv',
     'yourContact', 'contact',
     '/help', '/clear',
-    '/rumi', '/bismillah', '/sudo'
+    '/rumi', '/matrix', '/sudo'
   ];
 
   // ── STATE ──────────────────────────────────────────────
@@ -84,7 +84,7 @@
       { left: '/help',      right: ''           },
       { left: '/clear',     right: ''           },
       { left: '/rumi',      right: ''           },
-      { left: '/bismillah', right: ''           },
+      { left: '/matrix',    right: ''           },
       { left: '/sudo',      right: ''           },
     ];
 
@@ -153,9 +153,70 @@
     if (typeof SoundModule !== 'undefined') SoundModule.playOutputSound();
   }
 
-  function cmdBismillah() {
-    printLine('Starting with the Name of Allah . . .', '#2dd4bf');
+  let matrixRunning = false;
+
+  function cmdMatrix() {
+    if (matrixRunning) return;
+    matrixRunning = true;
+
+    const canvas = document.getElementById('matrix-canvas');
+    if (!canvas) return;
+    const ctx    = canvas.getContext('2d');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const fontSize = 16;
+    const cols = Math.ceil(canvas.width / fontSize);
+    const drops = new Array(cols).fill(0).map(() =>
+      Math.floor(Math.random() * -40)
+    );
+
+    canvas.classList.add('active');
+
+    let frameId;
+    function frame() {
+      // Trail fade
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
+      ctx.fillStyle = '#00ff66';
+
+      for (let i = 0; i < cols; i++) {
+        const char = Math.random() < 0.5 ? '0' : '1';
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+        ctx.fillText(char, x, y);
+
+        if (y > canvas.height && Math.random() > 0.97) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+      frameId = requestAnimationFrame(frame);
+    }
+    frame();
+
+    // Stop after 4.5s, fade out, then clean up
+    setTimeout(() => {
+      canvas.classList.remove('active');
+      setTimeout(() => {
+        cancelAnimationFrame(frameId);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        matrixRunning = false;
+      }, 420); // matches the CSS opacity transition
+    }, 4500);
   }
+
+  window.addEventListener('resize', () => {
+    if (!matrixRunning) {
+      const canvas = document.getElementById('matrix-canvas');
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    }
+  });
 
   function cmdSudo() {
     printLine('nice try.', '#555555');
@@ -253,8 +314,8 @@
       case '/rumi':
         cmdRumi();
         break;
-      case '/bismillah':
-        cmdBismillah();
+      case '/matrix':
+        cmdMatrix();
         break;
       case '/sudo':
         cmdSudo();
@@ -381,6 +442,9 @@
 
   if (typeof initSound   === 'function') initSound();
   else console.warn('[home.js] initSound not available.');
+
+  if (typeof initMagnetic === 'function') initMagnetic('.magnetic');
+  if (typeof initCustomCursor === 'function') initCustomCursor();
 
   // Focus the input on load
   input.focus();
