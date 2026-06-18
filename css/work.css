@@ -34,7 +34,6 @@
 
 .project-item {
   color: #cccccc;
-  cursor: pointer;
   margin-left: 24px;
   margin-bottom: 28px;
   transition: all 200ms ease;
@@ -140,12 +139,5 @@
   position: fixed;
   inset: 0;
   z-index: 0;
-  pointer-events: none;
-}
-
-#ripple-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 1 !important;
   pointer-events: none;
 }

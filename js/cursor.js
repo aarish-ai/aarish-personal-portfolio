@@ -1,6 +1,7 @@
 (function () {
   window.initCustomCursor = function () {
     if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (document.getElementById('custom-cursor')) return;
 
     const wrapper = document.createElement('div');
     wrapper.id = 'custom-cursor';

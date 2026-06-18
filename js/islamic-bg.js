@@ -1,22 +1,37 @@
 (function () {
   window.initIslamicBg = function (canvasId) {
+    console.log('[islamic-bg] init called for canvas id:', canvasId);
+
     const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
+    if (!canvas) {
+      console.error('[islamic-bg] FATAL: canvas element not found:', canvasId);
+      return;
+    }
+    console.log('[islamic-bg] canvas element found:', canvas);
+
     const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      console.error('[islamic-bg] FATAL: could not get 2d context');
+      return;
+    }
 
     function resize() {
       canvas.width  = window.innerWidth;
       canvas.height = window.innerHeight;
+      console.log('[islamic-bg] resized to', canvas.width, 'x', canvas.height);
     }
     resize();
     window.addEventListener('resize', resize);
 
     let angle = 0;
-    const ROTATE_SPEED = 0.0006; // radians per frame — very slow
-    const COLOR_TEAL = 'rgba(45, 212, 191, 0.07)';
-    const COLOR_BLUE = 'rgba(56, 189, 248, 0.06)';
+    const ROTATE_SPEED = 0.0006;
 
-    function drawStar(cx, cy, outerR, innerR, points, rotation, color) {
+    const COLOR_TEAL = '#2dd4bf';
+    const COLOR_BLUE = '#38bdf8';
+
+    function drawStar(cx, cy, outerR, innerR, points, rotation, color, alpha) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
       ctx.beginPath();
       for (let i = 0; i < points * 2; i++) {
         const r = i % 2 === 0 ? outerR : innerR;
@@ -30,11 +45,12 @@
       ctx.strokeStyle = color;
       ctx.lineWidth = 1;
       ctx.stroke();
+      ctx.restore();
     }
 
-    function drawCrossingOctagram(cx, cy, radius, rotation, color) {
-      // 8 points around the circle, connect every point to the one
-      // 3 steps away — produces the classic 8-pointed star weave
+    function drawCrossingOctagram(cx, cy, radius, rotation, color, alpha) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
       const pts = [];
       for (let i = 0; i < 8; i++) {
         const a = (Math.PI / 4) * i + rotation;
@@ -50,32 +66,43 @@
       ctx.strokeStyle = color;
       ctx.lineWidth = 0.75;
       ctx.stroke();
+      ctx.restore();
     }
 
+    let frameCount = 0;
     function frame() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const cx = canvas.width / 2;
       const cy = canvas.height / 2;
       const baseR = Math.min(canvas.width, canvas.height) * 0.32;
 
-      drawStar(cx, cy, baseR, baseR * 0.55, 8, angle, COLOR_TEAL);
-      drawStar(cx, cy, baseR * 0.7, baseR * 0.4, 8, -angle * 1.4, COLOR_BLUE);
-      drawCrossingOctagram(cx, cy, baseR * 0.85, angle * 0.6, COLOR_TEAL);
+      drawStar(cx, cy, baseR, baseR * 0.55, 8, angle, COLOR_TEAL, 0.10);
+      drawStar(cx, cy, baseR * 0.7, baseR * 0.4, 8, -angle * 1.4, COLOR_BLUE, 0.09);
+      drawCrossingOctagram(cx, cy, baseR * 0.85, angle * 0.6, COLOR_TEAL, 0.10);
 
-      // Two faint framing circles
+      ctx.save();
+      ctx.globalAlpha = 0.08;
       ctx.beginPath();
       ctx.arc(cx, cy, baseR, 0, Math.PI * 2);
       ctx.strokeStyle = COLOR_BLUE;
       ctx.lineWidth = 0.5;
       ctx.stroke();
+      ctx.restore();
 
+      ctx.save();
+      ctx.globalAlpha = 0.10;
       ctx.beginPath();
       ctx.arc(cx, cy, baseR * 1.15, 0, Math.PI * 2);
       ctx.strokeStyle = COLOR_TEAL;
       ctx.lineWidth = 0.5;
       ctx.stroke();
+      ctx.restore();
 
       angle += ROTATE_SPEED;
+      frameCount++;
+      if (frameCount === 1) {
+        console.log('[islamic-bg] first frame drawn successfully');
+      }
       requestAnimationFrame(frame);
     }
     frame();

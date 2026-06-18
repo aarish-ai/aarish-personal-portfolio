@@ -1,7 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  if (typeof window.initRipple === 'function') {
-    window.initRipple('ripple-bg');
-  }
   if (typeof window.initIslamicBg === 'function') {
     window.initIslamicBg('islamic-bg-canvas');
   }

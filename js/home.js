@@ -413,8 +413,6 @@
   if (nameEl && dialog) {
     let hideTimer = null;
 
-    nameEl.style.cursor = 'pointer';
-
     function showDialog() {
       clearTimeout(hideTimer);
       const rect  = nameEl.getBoundingClientRect();

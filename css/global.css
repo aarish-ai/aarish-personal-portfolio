@@ -53,7 +53,6 @@ body::-webkit-scrollbar { display: none; }
   color: var(--white);
   background: none;
   border: none;
-  cursor: pointer;
   transition: color 200ms ease;
   text-decoration: none;
 }
@@ -162,7 +161,6 @@ body::-webkit-scrollbar { display: none; }
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   color: var(--teal);
-  cursor: pointer;
   z-index: 200;
   white-space: nowrap;
   opacity: 0;
@@ -198,7 +196,6 @@ body::-webkit-scrollbar { display: none; }
   z-index: 500;
   background: none;
   border: none;
-  cursor: pointer;
   color: #333333;
   font-size: 14px;
   transition: color 200ms ease;
@@ -209,13 +206,7 @@ body::-webkit-scrollbar { display: none; }
 #sound-toggle:hover { color: var(--teal); }
 #sound-toggle.active { color: var(--teal); }
 
-html, body, * {
-  cursor: none !important;
-}
 
-input, textarea {
-  caret-color: var(--teal);
-}
 
 #custom-cursor {
   position: fixed;
@@ -251,4 +242,14 @@ input, textarea {
 #custom-cursor.cursor-diamond .cursor-diamond-group {
   transform: rotate(0deg);
   opacity: 1;
+}
+
+html, body, *, *::before, *::after,
+a, button, input, textarea, select, label,
+[onclick], svg, canvas {
+  cursor: none !important;
+}
+
+input, textarea {
+  caret-color: var(--teal);
 }

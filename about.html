@@ -40,12 +40,14 @@
         </div>
     </section>
 
-    <script src="js/magnetic.js"></script>
     <script src="js/cursor.js"></script>
+    <script src="js/magnetic.js"></script>
     <script src="js/footer.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            if (window.initFooter) window.initFooter();
+            if (typeof initFooter === 'function') initFooter();
+            if (typeof initCustomCursor === 'function') initCustomCursor();
+            if (typeof initMagnetic === 'function') initMagnetic('.magnetic');
             
             // Bio typewriter
             const bioEl = document.getElementById('about-bio');
