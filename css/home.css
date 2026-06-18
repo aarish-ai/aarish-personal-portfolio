@@ -43,7 +43,7 @@
   z-index: 0;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 400ms ease;
+  transition: opacity 1000ms ease;
 }
 #matrix-canvas.active {
   opacity: 1;

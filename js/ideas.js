@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const nameSpan = quadrant.querySelector('.idea-name');
         if (typeof scrambleText === 'function') {
-          scrambleText(nameSpan, idea.name, 500);
+          scrambleText(nameSpan, idea.name, 1000);
         } else {
           nameSpan.textContent = idea.name;
         }

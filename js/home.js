@@ -160,7 +160,6 @@
     matrixRunning = true;
 
     const canvas = document.getElementById('matrix-canvas');
-    if (!canvas) return;
     const ctx    = canvas.getContext('2d');
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -174,38 +173,49 @@
     canvas.classList.add('active');
 
     let frameId;
-    function frame() {
-      // Trail fade
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    let lastFrameTime = 0;
+    const FRAME_INTERVAL = 65; // ms between updates — slower fall speed
 
-      ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
-      ctx.fillStyle = '#00ff66';
+    function frame(timestamp) {
+      if (timestamp - lastFrameTime >= FRAME_INTERVAL) {
+        lastFrameTime = timestamp;
 
-      for (let i = 0; i < cols; i++) {
-        const char = Math.random() < 0.5 ? '0' : '1';
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
-        ctx.fillText(char, x, y);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        if (y > canvas.height && Math.random() > 0.97) {
-          drops[i] = 0;
+        ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
+        ctx.fillStyle = '#00ff66';
+
+        for (let i = 0; i < cols; i++) {
+          const char = Math.random() < 0.5 ? '0' : '1';
+          const x = i * fontSize;
+          const y = drops[i] * fontSize;
+          ctx.fillText(char, x, y);
+
+          if (y > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i] += 0.5; // slower descent than before (was += 1)
         }
-        drops[i]++;
       }
       frameId = requestAnimationFrame(frame);
     }
-    frame();
+    frameId = requestAnimationFrame(frame);
 
-    // Stop after 4.5s, fade out, then clean up
+    // Fade in is handled by the CSS transition triggered by .active above.
+    // After 6000ms (5s fully visible + 1s fade-in already elapsed),
+    // begin fade-out:
     setTimeout(() => {
       canvas.classList.remove('active');
-      setTimeout(() => {
-        cancelAnimationFrame(frameId);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        matrixRunning = false;
-      }, 420); // matches the CSS opacity transition
-    }, 4500);
+    }, 6000);
+
+    // After the full 7000ms (1s fade-in + 5s visible + 1s fade-out),
+    // stop the animation and clean up:
+    setTimeout(() => {
+      cancelAnimationFrame(frameId);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      matrixRunning = false;
+    }, 7000);
   }
 
   window.addEventListener('resize', () => {

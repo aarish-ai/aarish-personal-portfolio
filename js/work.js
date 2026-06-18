@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
       item.innerHTML = `"<span class="project-name-span"></span>"<span class="project-item-comma">,</span>`;
       const nameSpan = item.querySelector('.project-name-span');
       if (typeof scrambleText === 'function') {
-        scrambleText(nameSpan, proj.name, 500);
+        scrambleText(nameSpan, proj.name, 1000);
       } else {
         nameSpan.textContent = proj.name;
       }
