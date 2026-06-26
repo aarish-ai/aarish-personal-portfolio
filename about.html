@@ -1,116 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aarish — About Me</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/about.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Aarish</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/about.css">
 </head>
-<body class="page-fade">
-    <a href="home.html" class="back-btn magnetic" id="back-btn">← back</a>
+<body>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo" id="nav-monogram">
+      <svg viewBox="0 0 24 24">
+        <polygon points="12,2 18,5 22,12 18,19 12,22 6,19 2,12 6,5" fill="none" stroke="#1B2A4A" stroke-width="1.2"/>
+        <path d="M9,17 L12,7 L15,17 M10.2,13.5 L13.8,13.5" fill="none" stroke="#1B2A4A" stroke-width="1.2"/>
+      </svg>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html">← Home</a>
+    </div>
+    <button id="contact-seal" aria-label="Contact">
+      <svg viewBox="0 0 24 24">
+        <polygon points="12,2 18,5 22,12 18,19 12,22 6,19 2,12 6,5" fill="none" stroke="#1B2A4A" stroke-width="1.2"/>
+        <path d="M9,17 L12,7 L15,17 M10.2,13.5 L13.8,13.5" fill="none" stroke="#1B2A4A" stroke-width="1.2"/>
+      </svg>
+    </button>
+  </nav>
 
-    <!-- Northern Lights Aurora Background -->
-    <div class="aurora-bg"></div>
+  <section class="about-folio">
+    <div class="folio-frame">
+      <img src="assets/aarish.jpg" alt="Aarish" class="about-photo">
+      <div class="about-bio-wrap">
+        <h1 class="section-title">About</h1>
+        <p id="about-bio">
+          I'm an AI student who'd rather build than just study — most of
+          what I know about machine learning, web systems, and software
+          architecture has come from shipping real projects rather than
+          only coursework. Outside of code, I care a lot about Islamic
+          philosophy — Rumi and Al-Ghazali especially — and about staying
+          genuinely informed on geopolitics and ideas rather than taking
+          headlines at face value. I'm always building something; right
+          now that's a multi-agent fact-checking system and a portfolio
+          that, frankly, took longer to design than most of my projects.
+        </p>
+      </div>
+    </div>
+  </section>
 
-    <section class="section about-section">
-        <div class="about-layout reveal">
-            <!-- Text Container (Left side) -->
-            <div class="about-text-content">
-                <div class="section-heading-container mask-reveal reveal-trigger"
-                    style="text-align: left; margin-bottom: 20px;">
-                    <h2 class="section-label white-text">About Me</h2>
-                </div>
-                <p class="about-paragraph mask-reveal delay-1 spotlight-text" id="about-bio">
-                    I'm Aarish — a passionate AI Engineer who loves to code, currently pursuing my Bachelors from
-                    National University of Sciences and Technology (NUST) in Artificial Intelligence.
-                    I primarily work in AI, ML, DL fields but also have some experience in Web Development. I want
-                    to build solutions for this world; to uplift our brotherhood into something greater. I believe
-                    that through our efforts we can change the world, so we need to keep striving on the right path.
-                </p>
-            </div>
-            <!-- Image Container (Right side) -->
-            <div class="about-image-content">
-                <div class="profile-photo-wrapper">
-                    <img src="aarish.jpg" alt="Aarish Profile" class="about-profile-pic mask-reveal delay-3">
-                </div>
-            </div>
-        </div>
-    </section>
+  <div id="contact-backdrop"></div>
+  <div id="contact-panel">
+    <button id="contact-panel-close" aria-label="Close">✕</button>
+    <div id="contact-panel-content"></div>
+  </div>
 
-    <script src="js/cursor.js"></script>
-    <script src="js/magnetic.js"></script>
-    <script src="js/footer.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof initFooter === 'function') initFooter();
-            if (typeof initCustomCursor === 'function') initCustomCursor();
-            if (typeof initMagnetic === 'function') initMagnetic('.magnetic');
-            
-            // Bio typewriter
-            const bioEl = document.getElementById('about-bio');
-            if (!bioEl) return;
-            const fullText = bioEl.textContent.trim();
-            bioEl.textContent = '';
-            bioEl.style.visibility = 'visible';
-
-            const SPEED = 32; 
-            let i = 0;
-            function typeBio() {
-              if (i < fullText.length) {
-                bioEl.textContent += fullText[i];
-                i++;
-                setTimeout(typeBio, SPEED);
-              }
-            }
-            setTimeout(typeBio, 600);
-
-            // Back button
-            const backBtn = document.getElementById('back-btn');
-            backBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.body.style.opacity = '0';
-                document.body.style.transition = 'opacity 400ms ease';
-                setTimeout(() => {
-                    window.location.href = 'home.html';
-                }, 420);
-            });
-
-            // Spotlight text interaction
-            document.querySelectorAll('.spotlight-text').forEach(el => {
-                el.addEventListener('mousemove', e => {
-                    const rect = el.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    el.style.setProperty('--mouse-x', `${x}px`);
-                    el.style.setProperty('--mouse-y', `${y}px`);
-                    if (!el.classList.contains('active')) el.classList.add('active');
-                });
-                el.addEventListener('mouseleave', () => {
-                    el.classList.remove('active');
-                });
-            });
-
-            // Reveal observer
-            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
-            const revealObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.mask-reveal').forEach(el => {
-                revealObserver.observe(el);
-            });
-
-            if (typeof initMagnetic === 'function') initMagnetic('.magnetic');
-            if (typeof initCustomCursor === 'function') initCustomCursor();
-        });
-    </script>
+  <script src="js/contact.js"></script>
+  <script src="js/about.js"></script>
 </body>
 </html>

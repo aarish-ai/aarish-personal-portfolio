@@ -1,27 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/landing.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aarish — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/home.css">
 </head>
-<body class="page-fade">
-    <div class="scanline-overlay" aria-hidden="true"></div>
-    <div id="landing-container">
-        <div id="prompt-line">
-            <span id="prompt-text">C:\\Users\\Viewer\\CoolWebsites\\AarishPortfolio&gt; main.py</span>
-            <span id="prompt-cursor" class="cursor-blink">█</span>
-        </div>
-        <div id="ghost-hint">press enter to proceed</div>
-        <div id="boot-sequence"></div>
+<body>
+
+  <!-- Hidden SVG arch clip-path definition (Phase 4) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <clipPath id="arch-clip" clipPathUnits="objectBoundingBox">
+        <path d="M0,1 L0,0.42 C0,0.20 0.16,0.07 0.5,0 C0.84,0.07 1,0.20 1,0.42 L1,1 Z" />
+      </clipPath>
+    </defs>
+  </svg>
+
+  <!-- Reveal overlay — see Phase 8 -->
+  <div id="reveal-overlay">
+    <svg id="reveal-star" viewBox="0 0 100 100" width="120" height="120">
+      <!-- 8-point star outline, drawn via JS-controlled stroke -->
+      <polygon points="50,5 61,39 95,39 67,59 78,93 50,72 22,93 33,59 5,39 39,39"
+               fill="none" stroke="#B8924A" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <nav class="site-nav">
+    <div class="nav-logo" id="nav-monogram">
+      <svg viewBox="0 0 24 24">
+        <polygon points="12,2 18,5 22,12 18,19 12,22 6,19 2,12 6,5" fill="none" stroke="#1B2A4A" stroke-width="1.2"/>
+        <path d="M9,17 L12,7 L15,17 M10.2,13.5 L13.8,13.5" fill="none" stroke="#1B2A4A" stroke-width="1.2"/>
+      </svg>
+    </div> <!-- filled by contact.js or inline SVG, see Phase 10 -->
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="about.html">About</a>
     </div>
-    <script src="js/cursor.js"></script>
-    <script src="js/glitch.js"></script>
-    <script src="js/footer.js"></script>
-    <script src="js/landing.js"></script>
+    <button id="contact-seal" aria-label="Contact">
+      <!-- geometric seal badge, see Phase 10 -->
+      <svg viewBox="0 0 24 24">
+        <polygon points="12,2 18,5 22,12 18,19 12,22 6,19 2,12 6,5" fill="none" stroke="#1B2A4A" stroke-width="1.2"/>
+        <path d="M9,17 L12,7 L15,17 M10.2,13.5 L13.8,13.5" fill="none" stroke="#1B2A4A" stroke-width="1.2"/>
+      </svg>
+    </button>
+  </nav>
+
+  <section id="hero">
+    <div class="hero-watermark" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="hero-kicker">AI Student & Builder</p>
+      <h1 class="hero-name">Aarish</h1>
+      <p class="hero-intro">
+        I build AI systems and web tools end to end — from multi-agent
+        pipelines to learning platforms — and I write about what I learn
+        along the way.
+      </p>
+    </div>
+    <div class="scroll-cue" id="scroll-cue" aria-hidden="true">
+      <!-- compass rose icon, see Phase 9 -->
+      <svg viewBox="0 0 28 28" width="28" height="28">
+        <circle cx="14" cy="14" r="12" fill="none" stroke="#B8924A" stroke-width="1"/>
+        <line x1="14" y1="2" x2="14" y2="26" stroke="#B8924A" stroke-width="1"/>
+        <line x1="2" y1="14" x2="26" y2="14" stroke="#B8924A" stroke-width="1"/>
+        <polygon points="14,8 16,14 14,20 12,14" fill="#B8924A"/>
+      </svg>
+    </div>
+  </section>
+
+  <section id="work">
+    <h2 class="section-title">Selected Work</h2>
+    <div id="tessellation-strip"></div>      <!-- Phase 11 -->
+    <div id="project-grid"></div>            <!-- Phase 12 -->
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-frieze" aria-hidden="true"></div>
+    <div class="footer-content">
+      <p>Aarish — built with curiosity and care.</p>
+      <div class="footer-links">
+        <a id="footer-email" href="#">Email</a>
+        <a id="footer-github" href="#" target="_blank">GitHub</a>
+        <a id="footer-linkedin" href="#" target="_blank">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Contact panel — see Phase 10 -->
+  <div id="contact-panel">
+    <button id="contact-panel-close" aria-label="Close">✕</button>
+    <div id="contact-panel-content"></div>
+  </div>
+  <div id="contact-backdrop"></div>
+
+  <script src="js/reveal.js"></script>
+  <script src="js/tessellation.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/contact.js"></script>
+  <script>
+    document.getElementById('scroll-cue').addEventListener('click', () => {
+      document.getElementById('work').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
 </body>
 </html>

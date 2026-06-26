@@ -2,128 +2,34 @@
   {
     "id": "truth-mirror",
     "name": "TruthMirror",
-    "description": "This project is an ongoing multi agent geopolitical intelligence and fact-analysis engine. It takes a claim, and uses LLMs breaks it into smaller sub-claims, gathers live evidence from multiple sources, tags the evidence by perspective, and then uses AI to synthesize the results into a structured verdict and narrative summary. Instead of giving only a simple true/false answer, it aims to show the broader context, disputes, and source framing around the claim. (Under Development as of June 2026)",
-    "highlights": [
-      "LLMs",
-      "geopolitical",
-      "sub-claims",
-      "evidence",
-      "sources",
-      "perspective",
-      "results",
-      "verdict",
-      "narrative",
-      "disputes",
-      "source framing"
-    ],
-    "tech": [
-      "HTML/CSS/JS",
-      "Ollama",
-      "Google Gemini",
-      "Open Router API (NVIDIA Nemotron)",
-      "Wikipedia, arxiv, Crossref etc APIs/Web Scraping",
-      "JSON Framing",
-      "Secret Handling"
-    ],
-    "url": "https://github.com/aarish-ai/Truth-Mirror"
+    "oneLiner": "A multi-agent system that fact-checks geopolitical claims against real sources in real time.",
+    "tech": ["Python", "Ollama", "Gemini 2.5 Flash", "Wikipedia API", "Google News RSS"],
+    "image": "assets/projects/truth-mirror.jpg",
+    "problem": "Most news consumers have no fast way to check whether a geopolitical claim is actually supported by primary sources, or whether it's one outlet's framing dressed up as fact.",
+    "approach": "I built a multi-agent pipeline using local and cloud LLMs together — a routing agent decides which claims need deep verification, a retrieval agent pulls from Wikipedia and live news sources, and a synthesis agent triangulates across them before producing a verdict. Version 2 introduced a temporal scope gate to stop the system from treating outdated sources as current evidence, and a logging layer that records exactly which sources were used for every verdict.",
+    "outcome": "The v2.1 patch fixed source-routing bugs and added the temporal gate, making verdicts noticeably more reliable on fast-moving stories. The hardest lesson was that retrieval quality matters more than model size — a smaller model with better sources consistently beat a bigger model with sloppy retrieval.",
+    "url": ""
   },
   {
-    "id": "fake-forward-app",
-    "name": "FakeForwardApp",
-    "description": "This is a multi-step fact-verification pipeline, built in a Hackathon and deployed on Render, designed to analyze viral social media messages that may contain multiple claims. It uses GPT-4o to decompose each message into sub-claims, searches for supporting or contradicting evidence using external sources (DuckDuckGo, WikiPedia), and then evaluates the authenticity of each claim. Based on the evidence, it assigns a score out of 10 to each claim and produces an overall verdict for the message, such as True, Probable, False, or Unverifiable when reliable evidence cannot be found",
-    "highlights": [
-      "Hackathon",
-      "viral social media messages",
-      "multiple claims",
-      "searches",
-      "score",
-      "verdict",
-      "sub-claims",
-      "evidence"
-    ],
-    "tech": [
-      "Python",
-      "OpenRouter API",
-      "DuckDuckGo",
-      "WikiPediaAPI",
-      "GPT4-o",
-      "Render",
-      "FastAPI",
-      "HTML/CSS/JS",
-      "Secret Handling"
-    ],
-    "url": "https://github.com/aarish-ai/FakeForward-App"
+    "id": "online-school",
+    "name": "OnlineSchool",
+    "oneLiner": "A full LMS built on WordPress, handling courses, payments, and interactive lessons end to end.",
+    "tech": ["WordPress", "PHP", "ACF Pro", "LearnPress", "H5P", "WooCommerce"],
+    "image": "assets/projects/online-school.jpg",
+    "problem": "The client needed a complete teaching platform — course delivery, payment handling, and genuinely interactive lessons — without the cost or rigidity of a custom-built LMS from scratch.",
+    "approach": "I combined LearnPress for course structure, WooCommerce for payments, and Elementor Pro for the front-end, then layered in custom PHP and ACF Pro fields where the off-the-shelf plugins couldn't do what was needed. For lesson interactivity, I built and embedded custom H5P widgets rather than relying on static video.",
+    "outcome": "The platform handles real enrolled students and real payments. The biggest takeaway was learning where to draw the line between configuring existing tools versus writing custom code — over-customizing a CMS creates maintenance debt fast.",
+    "url": ""
   },
   {
-    "id": "email-classifier",
-    "name": "EmailSpamClassifier",
-    "description": "This project is a Python machine learning pipeline for classifying SMS messages as Spam or Ham (not spam). It automatically downloads the SMS Spam Collection dataset, preprocesses the text, converts messages into TF-IDF features, trains a Multinomial Naive Bayes model, and evaluates its performance with accuracy and a classification report. The model achieves around 97% accuracy on the test set.",
-    "highlights": [
-      "classifying",
-      "spam",
-      "preprocesses",
-      "TF-IDF",
-      "Multinomial Naive Bias",
-      "evaluates",
-      "97% accuracy"
-    ],
-    "tech": [
-      "Python",
-      "pandas",
-      "scikit-learn",
-      "NLTK",
-      "Multinomial Naive Bias"
-    ],
-    "url": "https://github.com/aarish-ai/Email-Spam-Classifier"
-  },
-  {
-    "id": "digit-recognizer",
-    "name": "DigitRecognizer",
-    "description": "This is a deep learning project for handwritten digit recognition using the MNIST dataset. It builds and trains a Convolutional Neural Network (CNN) to classify grayscale images of digits from 0 to 9, reaching about 99% test accuracy. The pipeline includes data loading, preprocessing, augmentation, model training, evaluation, visualization, and saving the trained model for later use",
-    "highlights": [
-      "deep learning project",
-      "MNIST dataset",
-      "(CNN)",
-      "0 to 9",
-      "data loading",
-      "preprocessing",
-      "augmentation",
-      "model training",
-      "evaluation",
-      "visualization",
-      "saving"
-    ],
-    "tech": [
-      "Python",
-      "Tensor Flow / Keras",
-      "NumPy",
-      "Matplotlib",
-      "Seaborn",
-      "scikit-learn",
-      "CNN"
-    ],
-    "url": "https://github.com/aarish-ai/Digit-Recogniser"
-  },
-  {
-    "id": "chess",
-    "name": "ChessAgainstAI",
-    "description": "This is simple a web-based chess game (made for learning) where a player can play against an AI opponent in the browser. The project is mainly a learning-focused application that combines game logic, user interaction, and a simple server into one working app.",
-    "highlights": [
-      "web-based",
-      "AI opponent",
-      "game logic",
-      "user interaction",
-      "server"
-    ],
-    "tech": [
-      "Python",
-      "Flask",
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "Git",
-      "Virtual Enviornment"
-    ],
-    "url": "https://github.com/aarish-ai/Chess"
+    "id": "color-mixer",
+    "name": "ColorMixer",
+    "oneLiner": "An interactive additive-color teaching widget, built to make RGB light mixing intuitive for young learners.",
+    "tech": ["HTML", "CSS", "JavaScript", "mix-blend-mode", "H5P Iframe Embedder"],
+    "image": "assets/projects/color-mixer.jpg",
+    "problem": "Color mixing is taught with static diagrams that don't convey why red and green light make yellow — the concept needs to be felt, not just read.",
+    "approach": "I built a self-contained draggable widget where three colored light circles can be dragged over each other, using mix-blend-mode: screen to genuinely simulate additive light mixing in the browser rather than faking it with pre-rendered colors. It was packaged as a single embeddable file for direct use inside H5P lessons.",
+    "outcome": "Students could immediately see and manipulate the relationship between light colors instead of memorizing it. It also taught me how much can be achieved with a single well-chosen CSS property instead of a heavier canvas-based simulation.",
+    "url": ""
   }
 ]

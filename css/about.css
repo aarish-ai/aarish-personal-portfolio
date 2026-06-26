@@ -1,191 +1,47 @@
-:root {
-  --green: #00e676;
-  --green-glow: rgba(0, 230, 118, 0.4);
-  --text-muted: #aaaaaa;
-}
-
-.about-section {
-  position: relative;
-  z-index: 2;
-  width: 100vw;
-  height: 100vh;
+.about-folio {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 80px 36px 80px;
+  padding: 120px var(--space-md) var(--space-xl);
 }
 
-/* ── AURORA BACKGROUND ── */
-.aurora-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    overflow: hidden;
-    background: var(--black);
+.folio-frame {
+  max-width: 920px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--space-lg);
+  background: var(--ivory-deep);
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  padding: var(--space-lg);
 }
 
-.aurora-bg::before,
-.aurora-bg::after {
-    content: '';
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    top: -50%;
-    left: -50%;
-    background: radial-gradient(circle at 50% 50%, rgba(0, 230, 118, 0.1), transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(0, 180, 216, 0.15), transparent 50%);
-    filter: blur(80px);
-    animation: aurora-dance 20s infinite alternate ease-in-out;
+.about-photo {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid var(--gold-soft);
+  object-fit: cover;
 }
 
-.aurora-bg::after {
-    background: radial-gradient(circle at 20% 80%, rgba(0, 180, 216, 0.12), transparent 50%),
-                radial-gradient(circle at 40% 60%, rgba(0, 230, 118, 0.08), transparent 50%);
-    animation: aurora-dance 25s infinite alternate-reverse ease-in-out;
+/* Drop-capital effect on the bio's first letter */
+#about-bio::first-letter {
+  font-family: var(--font-serif);
+  font-size: 64px;
+  font-weight: 700;
+  color: var(--gold);
+  float: left;
+  line-height: 0.8;
+  margin-right: 8px;
+  margin-top: 6px;
 }
 
-@keyframes aurora-dance {
-    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-    50% { transform: translate(3%, 8%) rotate(5deg) scale(1.1); }
-    100% { transform: translate(-3%, -5%) rotate(-5deg) scale(0.9); }
+#about-bio {
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--ink-soft);
 }
 
-/* ── SPOTLIGHT TEXT ── */
-.spotlight-text {
-    position: relative;
-    color: var(--text-muted);
-    transition: color 0.3s;
-}
-
-.spotlight-text.active {
-    background: radial-gradient(
-        circle 120px at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        var(--green) 0%,
-        var(--green-glow) 50%,
-        var(--text-muted) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-
-.about-layout {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 60px;
-    align-items: center;
-    padding: 0 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.about-paragraph {
-    color: var(--text-muted);
-    font-size: 1.15rem;
-    margin-bottom: 24px;
-    line-height: 1.8;
-    font-weight: 300;
-}
-
-.about-image-content {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.about-profile-pic {
-    width: 100%;
-    max-width: 300px;
-    border-radius: 4px;
-    filter: grayscale(40%);
-    transition: filter 0.4s;
-}
-
-.about-profile-pic:hover {
-    filter: grayscale(0%);
-}
-
-@media (max-width: 900px) {
-    .about-layout {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-
-    .about-image-content {
-        justify-content: flex-start;
-        order: -1;
-    }
-}
-
-/* Reveal */
-.mask-reveal {
-    opacity: 0;
-    transform: translateY(20px);
-    filter: blur(5px);
-    transition: opacity 0.8s ease, transform 0.8s ease, filter 0.8s ease;
-}
-
-.mask-reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-}
-
-.delay-1 {
-    transition-delay: 0.1s;
-}
-
-.delay-2 {
-    transition-delay: 0.25s;
-}
-
-.delay-3 {
-    transition-delay: 0.4s;
-}
-
-.section-label {
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-
-/* Profile photo glitch on hover */
-.profile-photo-wrapper {
-  position: relative;
-  display: inline-block;
-  cursor: default;
-}
-
-.profile-photo-wrapper img {
-  transition: filter 150ms ease;
-  display: block;
-}
-
-.profile-photo-wrapper:hover img {
-  animation: photo-glitch 400ms steps(1) forwards;
-}
-
-@keyframes photo-glitch {
-  0%   { filter: none;                clip-path: inset(0 0 0 0); 
-         transform: translateX(0); }
-  10%  { filter: saturate(0) contrast(1.2);
-         clip-path: inset(8% 0 72% 0);
-         transform: translateX(-4px); }
-  20%  { filter: saturate(0) hue-rotate(90deg);
-         clip-path: inset(40% 0 40% 0);
-         transform: translateX(4px); }
-  30%  { filter: none;
-         clip-path: inset(70% 0 5% 0);
-         transform: translateX(-2px); }
-  40%  { filter: saturate(0);
-         clip-path: inset(0 0 0 0);
-         transform: translateX(3px); }
-  60%  { filter: none; transform: translateX(-1px);
-         clip-path: inset(20% 0 60% 0); }
-  80%  { filter: none; transform: translateX(0);
-         clip-path: inset(0 0 0 0); }
-  100% { filter: none; transform: translateX(0);
-         clip-path: inset(0 0 0 0); }
+@media (max-width: 760px) {
+  .folio-frame { grid-template-columns: 1fr; }
 }
