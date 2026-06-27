@@ -120,9 +120,24 @@ a {
   transform: scale(1.06);
 }
 
-.nav-logo svg, #contact-seal svg {
-  width: 18px;
-  height: 18px;
+.nav-logo {
+  display: flex;
+  opacity: 0.85;
+  transition: opacity 200ms ease;
+  cursor: pointer;
+}
+.nav-logo:hover { opacity: 1; }
+.nav-logo svg { width: 20px; height: 20px; }
+#contact-seal svg { width: 22px; height: 22px; }
+
+@keyframes seal-pulse-once {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.12); }
+  60%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+#contact-seal.seal-pulse {
+  animation: seal-pulse-once 650ms ease 1;
 }
 
 #contact-backdrop {

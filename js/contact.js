@@ -56,5 +56,9 @@
       document.getElementById('footer-github').href   = `https://${c.github}`;
       document.getElementById('footer-linkedin').href = `https://${c.linkedin}`;
     });
+
+    setTimeout(() => {
+      document.getElementById('contact-seal')?.classList.add('seal-pulse');
+    }, 1100);
   });
 })();

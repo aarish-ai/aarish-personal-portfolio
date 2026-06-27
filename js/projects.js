@@ -1,6 +1,7 @@
 (function () {
   let projects = [];
   let expandedId = null;
+  const ROMANS = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
 
   function highlight(text, terms) {
     let out = text;
@@ -11,21 +12,26 @@
     return out;
   }
 
-  function renderCard(p) {
+  function renderCard(p, index) {
     const card = document.createElement('div');
     card.className = 'project-card';
     card.dataset.id = p.id;
 
     card.innerHTML = `
-      <img class="project-card-image" src="${p.image}"
-           onerror="this.style.background='linear-gradient(135deg, var(--teal), var(--ink))'; this.removeAttribute('src');"
-           alt="${p.name}">
+      <div class="plate-mark">${ROMANS[index] || (index + 1)}</div>
+      <div class="project-card-image card-art-mount"></div>
       <h3>${p.name}</h3>
       <p class="one-liner">${p.oneLiner}</p>
       <div class="tech-tags">
         ${p.tech.slice(0,4).map(t => `<span class="tech-tag">${t}</span>`).join('')}
       </div>
+      <span class="corner-tick tl"></span>
+      <span class="corner-tick tr"></span>
+      <span class="corner-tick bl"></span>
+      <span class="corner-tick br"></span>
     `;
+
+    window.mountCardArt(card.querySelector('.card-art-mount'), p);
 
     card.addEventListener('click', () => {
       if (expandedId === p.id) return;
@@ -53,9 +59,7 @@
 
     const highlights = p.tech || [];
     card.innerHTML = `
-      <img class="project-card-image" src="${p.image}"
-           onerror="this.style.background='linear-gradient(135deg, var(--teal), var(--ink))'; this.removeAttribute('src');"
-           alt="${p.name}">
+      <div class="project-card-image card-art-mount"></div>
       <div class="project-detail-body">
         <h3 style="font-family:var(--font-serif); font-size:28px;">${p.name}</h3>
         <p class="one-liner" style="margin-top:8px;">${p.oneLiner}</p>
@@ -73,6 +77,8 @@
       </div>
     `;
 
+    window.mountCardArt(card.querySelector('.card-art-mount'), p);
+
     card.querySelector('.collapse-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       toggleExpand(p.id);
@@ -84,8 +90,8 @@
   function renderAll() {
     const grid = document.getElementById('project-grid');
     grid.innerHTML = '';
-    projects.forEach(p => {
-      const el = (expandedId === p.id) ? renderExpanded(p) : renderCard(p);
+    projects.forEach((p, i) => {
+      const el = (expandedId === p.id) ? renderExpanded(p) : renderCard(p, i);
       grid.appendChild(el);
     });
   }

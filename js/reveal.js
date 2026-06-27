@@ -3,24 +3,21 @@
     const overlay = document.getElementById('reveal-overlay');
     const star    = document.getElementById('reveal-star');
 
-    // Trigger star grow almost immediately
+    // Star draws itself like ink tracing a line
     requestAnimationFrame(() => {
-      star.style.opacity = '1';
-      setTimeout(() => {
-        star.classList.add('grow');
-      }, 50);
+      star.classList.add('draw');
     });
 
-    // Begin fading the whole overlay shortly after the star starts
-    // growing, so it feels like one continuous flourish, not two
-    // separate steps
+    // Once drawn, the overlay irises shut around the star and
+    // disappears, revealing the page that's already rendered beneath
     setTimeout(() => {
-      overlay.classList.add('fade-out');
-    }, 380);
+      overlay.classList.add('iris-close');
+      star.classList.add('fade');
+    }, 400);
 
-    // Remove overlay from the DOM flow entirely once faded
+    // Remove from DOM flow entirely once the animation completes
     setTimeout(() => {
       overlay.style.display = 'none';
-    }, 750);
+    }, 850);
   });
 })();
