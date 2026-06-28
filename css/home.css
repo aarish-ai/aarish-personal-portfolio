@@ -109,27 +109,18 @@
   font-size: 13px;
   letter-spacing: 0.03em;
   color: var(--teal);
-  margin-bottom: var(--space-sm);
-}
-.hero-kicker::after {
-  content: '';
-  display: block;
-  width: 48px;
-  height: 0;
-  margin: 10px 0 0;
-  border-top: 1px solid var(--gold-soft);
-  border-bottom: 1px solid var(--gold-soft);
-  padding-top: 3px;
+  margin-bottom: 6px;
 }
 
 .hero-name {
-  position: relative;
-  display: inline-block;
   font-family: var(--font-serif);
   font-size: clamp(56px, 9vw, 96px);
   font-weight: 700;
   color: var(--ink);
   line-height: 1.05;
+  margin-bottom: 4px;
+  position: relative;
+  display: inline-block;
 }
 .name-underline {
   position: absolute;
@@ -149,13 +140,23 @@
 }
 
 .hero-intro {
-  margin-top: var(--space-sm);
+  margin-top: 4px;
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 19px;
   font-weight: 500;
   color: var(--ink-soft);
   line-height: 1.6;
+}
+.hero-intro::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 0;
+  margin: 16px 0 0;
+  border-top: 1px solid var(--gold-soft);
+  border-bottom: 1px solid var(--gold-soft);
+  padding-top: 3px;
 }
 
 .hero-illumination {
@@ -166,24 +167,7 @@
   justify-content: center;
   overflow: hidden;
 }
-.hero-illumination .hero-rosette {
-  width: 100%;
-  height: 100%;
-  max-width: 420px;
-  opacity: 0.55;
-  animation: breathe-rotate 240s linear infinite,
-             breathe-pulse 14s ease-in-out infinite;
-  transform-origin: center;
-}
 
-@keyframes breathe-rotate {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-@keyframes breathe-pulse {
-  0%, 100% { opacity: 0.55; }
-  50%      { opacity: 0.68; }
-}
 
 .lamplight {
   position: absolute;
@@ -225,9 +209,11 @@
 @media (max-width: 760px) {
   .hero-grid { grid-template-columns: 1fr; text-align: center; }
   .hero-content { text-align: center; max-width: 100%; margin: 0 auto; }
-  .hero-kicker::after { margin: 10px auto 0; }
+  .hero-intro::after { margin: 16px auto 0; }
   .hero-illumination { height: 220px; }
-  .hero-illumination .hero-rosette { max-width: 260px; opacity: 0.4; }
+  .astrolabe-svg { max-width: 260px; opacity: 0.5; }
+  .marginalia { display: none; }
+  .constellation { display: none; }
 }
 
 .hero-cursor {
@@ -254,6 +240,129 @@
 }
 .hero-cursor.active {
   opacity: 1;
+}
+
+.astrolabe-svg {
+  width: 100%;
+  height: 100%;
+  max-width: 420px;
+  opacity: 0.65;
+}
+
+.astro-ring {
+  transform-box: view-box;
+  transform-origin: 200px 200px;
+}
+
+@keyframes astro-spin-cw  { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes astro-spin-ccw { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+
+.astro-middle  { animation: astro-spin-ccw 320s linear infinite; }
+.astro-pointer { animation: astro-spin-cw  200s linear infinite; }
+/* astro-outer and astro-inner are intentionally NOT animated —
+   a real instrument's frame and scale stay fixed */
+
+.marginalia {
+  position: absolute;
+  top: 50%;
+  right: 38px;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: right center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+  opacity: 0;
+  max-width: 280px;
+  white-space: nowrap;
+  transition: opacity 600ms ease;
+  z-index: 1;
+}
+.marginalia.visible { opacity: 0.65; }
+
+.motes-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.mote {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0;
+  animation: mote-drift linear infinite;
+}
+@keyframes mote-drift {
+  0%   { opacity: 0; transform: translateY(0) translateX(0); }
+  10%  { opacity: 0.5; }
+  90%  { opacity: 0.35; }
+  100% { opacity: 0; transform: translateY(-160px) translateX(var(--mote-drift-x, 10px)); }
+}
+
+.constellation {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.constellation-dot {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: none;
+  opacity: 0.55;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  transition: transform 200ms ease, opacity 200ms ease, box-shadow 200ms ease;
+}
+.constellation-dot:hover,
+.constellation-dot:focus-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.6);
+  box-shadow: 0 0 0 6px rgba(184,146,74,0.18);
+}
+.constellation-tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--ivory);
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  padding: 8px 12px;
+  min-width: 150px;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+  z-index: 5;
+}
+.constellation-tip strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 13px;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.constellation-tip span {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+.constellation-dot:hover .constellation-tip,
+.constellation-dot:focus-visible .constellation-tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* Phase 11 */

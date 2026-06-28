@@ -72,36 +72,25 @@
     </div>
 
     <div class="folio-mark" aria-hidden="true">Fol. I</div>
+    <div class="marginalia" id="marginalia" aria-hidden="true"></div>
 
-    <!-- Lamplight lives directly inside #hero (not nested deeper) so
-         its coordinates line up with the mousemove math in Phase F -->
     <div class="lamplight" aria-hidden="true"></div>
+    <div class="motes-field" aria-hidden="true"></div>
+    <div class="constellation" id="constellation"></div>
 
     <div class="hero-grid">
       <div class="hero-content">
-        <p class="hero-kicker">As-salamu alaykum, my name is</p>
+        <p class="hero-kicker">As-salamu alaykum, I'm</p>
         <h1 class="hero-name">
           Aarish
           <svg class="name-underline" viewBox="0 0 220 14" preserveAspectRatio="none" aria-hidden="true">
             <path d="M4,8 C40,2 90,12 130,6 C160,2 190,9 216,5" fill="none" stroke="var(--gold)" stroke-width="2"/>
           </svg>
         </h1>
-        <p class="hero-intro">AI Student and Passionate Engineer</p>
+        <p class="hero-intro">— an AI student who builds end-to-end, from multi-agent pipelines to learning platforms.</p>
       </div>
 
-      <div class="hero-illumination" aria-hidden="true">
-        <svg class="hero-rosette" viewBox="0 0 400 400">
-          <g fill="none" stroke="var(--gold)" stroke-width="1">
-            <circle cx="200" cy="120" r="80"/>
-            <circle cx="261.7" cy="161.7" r="80"/>
-            <circle cx="261.7" cy="238.3" r="80"/>
-            <circle cx="200" cy="280" r="80"/>
-            <circle cx="138.3" cy="238.3" r="80"/>
-            <circle cx="138.3" cy="161.7" r="80"/>
-            <circle cx="200" cy="200" r="80"/>
-          </g>
-        </svg>
-      </div>
+      <div class="hero-illumination" id="hero-illumination" aria-hidden="true"></div>
     </div>
 
     <div class="scroll-cue-zone" id="scroll-cue">
@@ -146,6 +135,10 @@
   <script src="js/reveal.js"></script>
   <script src="js/hero-effects.js"></script>
   <script src="js/magnetic.js"></script>
+  <script src="js/astrolabe.js"></script>
+  <script src="js/marginalia.js"></script>
+  <script src="js/motes.js"></script>
+  <script src="js/constellation.js"></script>
   <script src="js/tessellation.js"></script>
   <script src="js/card-art.js"></script>
   <script src="js/projects.js"></script>
