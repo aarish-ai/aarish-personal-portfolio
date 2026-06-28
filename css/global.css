@@ -6,24 +6,35 @@
 
 :root {
   /* Core palette — warm manuscript tones, NOT black/white */
-  --ivory:        #F4EDE0;   /* primary background */
-  --ivory-deep:   #ECE2D0;   /* secondary panels, cards */
-  --ink:          #1B2A4A;   /* primary text — deep indigo */
-  --ink-soft:     #3D4F73;   /* secondary text */
-  --gold:         #B8924A;   /* accents, borders, hover states */
-  --gold-soft:    #D8C49A;   /* faint gold, watermarks */
-  --teal:         #1F7A6C;   /* secondary accent — links, tags */
-  --oxblood:      #7A2E2E;   /* rare accent — sparing use only */
+  --ivory: #F3EFE7;
+  --ivory-deep: #EAE0C9;
+  --ink: #1B2A4A;
+  --ink-soft: #384A6B;
+  --teal: #1F6B75;
+  --gold: #B8924A;
+  --gold-soft: #D4BA85;
+  --oxblood: #7C2B2B;
 
-  /* Typography */
   --font-serif: 'Cormorant Garamond', serif;
-  --font-sans:  'Inter', sans-serif;
+  --font-sans: 'Inter', sans-serif;
 
-  /* Spacing rhythm */
-  --space-sm:  16px;
-  --space-md:  32px;
-  --space-lg:  64px;
-  --space-xl:  120px;
+  --space-sm: 12px;
+  --space-md: 32px;
+  --space-lg: 64px;
+  --space-xl: 120px;
+}
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+}
+.grain-overlay svg {
+  width: 100%;
+  height: 100%;
 }
 
 html, body {
@@ -117,7 +128,6 @@ a {
 }
 #contact-seal:hover {
   background: var(--gold-soft);
-  transform: scale(1.06);
 }
 
 .nav-logo {

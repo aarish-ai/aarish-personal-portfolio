@@ -79,35 +79,35 @@
   z-index: 1;
 }
 
-.hero-rosette {
-  position: absolute;
-  top: 50%;
-  right: -80px;
-  width: 520px;
-  height: 520px;
-  transform: translateY(-50%);
-  opacity: 0.07;
-  z-index: 0;
-  pointer-events: none;
-}
-
 @media (max-width: 760px) {
   .page-frame { inset: 12px; }
   .folio-mark { display: none; }
-  .hero-rosette { width: 340px; height: 340px; right: -120px; }
+}
+
+#hero {
+  cursor: none;
+}
+
+.hero-grid {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1180px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: var(--space-lg);
 }
 
 .hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 640px;
+  text-align: left;
+  max-width: 560px;
 }
 
 .hero-kicker {
   font-family: var(--font-sans);
   font-size: 13px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.03em;
   color: var(--teal);
   margin-bottom: var(--space-sm);
 }
@@ -116,42 +116,144 @@
   display: block;
   width: 48px;
   height: 0;
-  margin: 10px auto 0;
+  margin: 10px 0 0;
   border-top: 1px solid var(--gold-soft);
   border-bottom: 1px solid var(--gold-soft);
   padding-top: 3px;
 }
 
 .hero-name {
+  position: relative;
+  display: inline-block;
   font-family: var(--font-serif);
   font-size: clamp(56px, 9vw, 96px);
   font-weight: 700;
   color: var(--ink);
   line-height: 1.05;
 }
+.name-underline {
+  position: absolute;
+  left: 4px;
+  bottom: -8px;
+  width: 92%;
+  height: 14px;
+  pointer-events: none;
+}
+.name-underline path {
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  transition: stroke-dashoffset 550ms ease;
+}
+.hero-name:hover .name-underline path {
+  stroke-dashoffset: 0;
+}
 
 .hero-intro {
   margin-top: var(--space-sm);
-  font-size: 17px;
-  font-weight: 300;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 19px;
+  font-weight: 500;
   color: var(--ink-soft);
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
-.scroll-cue {
+.hero-illumination {
+  position: relative;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.hero-illumination .hero-rosette {
+  width: 100%;
+  height: 100%;
+  max-width: 420px;
+  opacity: 0.55;
+  animation: breathe-rotate 240s linear infinite,
+             breathe-pulse 14s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes breathe-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes breathe-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 0.68; }
+}
+
+.lamplight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,146,74,0.10), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  will-change: transform;
+}
+#hero.lamplight-active .lamplight {
+  opacity: 1;
+}
+
+.scroll-cue-zone {
   position: absolute;
   bottom: var(--space-md);
   left: 50%;
-  transform: translateX(-50%);
+  margin-left: -14px;
   width: 28px;
-  height: 28px;
+  height: 36px;
   cursor: pointer;
+}
+.scroll-cue-inner {
+  width: 100%;
+  height: 100%;
   animation: pulse-cue 2.2s ease-in-out infinite;
 }
-
 @keyframes pulse-cue {
-  0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
-  50%      { opacity: 0.9; transform: translateX(-50%) translateY(6px); }
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  50%      { opacity: 0.9; transform: translateY(6px); }
+}
+
+@media (max-width: 760px) {
+  .hero-grid { grid-template-columns: 1fr; text-align: center; }
+  .hero-content { text-align: center; max-width: 100%; margin: 0 auto; }
+  .hero-kicker::after { margin: 10px auto 0; }
+  .hero-illumination { height: 220px; }
+  .hero-illumination .hero-rosette { max-width: 260px; opacity: 0.4; }
+}
+
+.hero-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 400;
+  transform: translate(-50%, -50%);
+  transition: opacity 200ms ease;
+}
+.hero-cursor::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+.hero-cursor.active {
+  opacity: 1;
 }
 
 /* Phase 11 */

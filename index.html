@@ -11,6 +11,18 @@
 </head>
 <body>
 
+  <div class="grain-overlay" aria-hidden="true">
+    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <filter id="grain-filter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="noise"/>
+        <feColorMatrix in="noise" type="matrix"
+          values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#grain-filter)"/>
+    </svg>
+  </div>
+  <div class="hero-cursor" id="hero-cursor" aria-hidden="true"></div>
+
   <!-- Hidden SVG arch clip-path definition (Phase 4) -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
@@ -61,34 +73,45 @@
 
     <div class="folio-mark" aria-hidden="true">Fol. I</div>
 
-    <svg class="hero-rosette" viewBox="0 0 400 400" aria-hidden="true">
-      <g fill="none" stroke="var(--gold)" stroke-width="1">
-        <circle cx="200" cy="120" r="80"/>
-        <circle cx="261.7" cy="161.7" r="80"/>
-        <circle cx="261.7" cy="238.3" r="80"/>
-        <circle cx="200" cy="280" r="80"/>
-        <circle cx="138.3" cy="238.3" r="80"/>
-        <circle cx="138.3" cy="161.7" r="80"/>
-        <circle cx="200" cy="200" r="80"/>
-      </g>
-    </svg>
+    <!-- Lamplight lives directly inside #hero (not nested deeper) so
+         its coordinates line up with the mousemove math in Phase F -->
+    <div class="lamplight" aria-hidden="true"></div>
 
-    <div class="hero-content">
-      <p class="hero-kicker">AI Student &amp; Builder</p>
-      <h1 class="hero-name">Aarish</h1>
-      <p class="hero-intro">
-        I build AI systems and web tools end to end — from multi-agent
-        pipelines to learning platforms — and I write about what I learn
-        along the way.
-      </p>
+    <div class="hero-grid">
+      <div class="hero-content">
+        <p class="hero-kicker">As-salamu alaykum, my name is</p>
+        <h1 class="hero-name">
+          Aarish
+          <svg class="name-underline" viewBox="0 0 220 14" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M4,8 C40,2 90,12 130,6 C160,2 190,9 216,5" fill="none" stroke="var(--gold)" stroke-width="2"/>
+          </svg>
+        </h1>
+        <p class="hero-intro">AI Student and Passionate Engineer</p>
+      </div>
+
+      <div class="hero-illumination" aria-hidden="true">
+        <svg class="hero-rosette" viewBox="0 0 400 400">
+          <g fill="none" stroke="var(--gold)" stroke-width="1">
+            <circle cx="200" cy="120" r="80"/>
+            <circle cx="261.7" cy="161.7" r="80"/>
+            <circle cx="261.7" cy="238.3" r="80"/>
+            <circle cx="200" cy="280" r="80"/>
+            <circle cx="138.3" cy="238.3" r="80"/>
+            <circle cx="138.3" cy="161.7" r="80"/>
+            <circle cx="200" cy="200" r="80"/>
+          </g>
+        </svg>
+      </div>
     </div>
 
-    <div class="scroll-cue" id="scroll-cue" aria-hidden="true">
-      <svg viewBox="0 0 24 36" width="20" height="32">
-        <path d="M10,1 C10,1 9,18 9,24 M2,20 C5,26 9,33 10,34 C11,33 15,26 18,20"
-              fill="none" stroke="var(--gold)" stroke-width="1.6"
-              stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+    <div class="scroll-cue-zone" id="scroll-cue">
+      <div class="scroll-cue-inner">
+        <svg viewBox="0 0 24 36" width="20" height="32">
+          <path d="M10,1 C10,1 9,18 9,24 M2,20 C5,26 9,33 10,34 C11,33 15,26 18,20"
+                fill="none" stroke="var(--gold)" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
     </div>
   </section>
 
@@ -121,10 +144,13 @@
   <div class="wip-banner">Work in Progress</div>
 
   <script src="js/reveal.js"></script>
+  <script src="js/hero-effects.js"></script>
+  <script src="js/magnetic.js"></script>
   <script src="js/tessellation.js"></script>
   <script src="js/card-art.js"></script>
   <script src="js/projects.js"></script>
   <script src="js/contact.js"></script>
+  <script src="js/scroll-reveal.js"></script>
   <script>
     document.getElementById('scroll-cue').addEventListener('click', () => {
       document.getElementById('work').scrollIntoView({ behavior: 'smooth' });
