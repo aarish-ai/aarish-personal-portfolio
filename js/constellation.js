@@ -5,15 +5,15 @@
   // out of roughly left 0–45% / top 20–65% (the text column) so
   // nothing crowds the name and intro.
   const MARKERS = [
-    { top: 10, left: 55, label: 'EDIT ME', detail: 'Edit this detail text' },
-    { top: 18, left: 85, label: 'EDIT ME', detail: 'Edit this detail text' },
-    { top: 35, left: 70, label: 'EDIT ME', detail: 'Edit this detail text' },
-    { top: 46, left: 92, label: 'EDIT ME', detail: 'Edit this detail text' },
-    { top: 55, left: 60, label: 'EDIT ME', detail: 'Edit this detail text' },
-    { top: 64, left: 88, label: 'EDIT ME', detail: 'Edit this detail text' },
-    { top: 80, left: 25, label: 'EDIT ME', detail: 'Edit this detail text' },
-    { top: 88, left: 65, label: 'EDIT ME', detail: 'Edit this detail text' },
-    { top: 93, left: 45, label: 'EDIT ME', detail: 'Edit this detail text' }
+    { top: 10, left: 55, label: '1', detail: 'Edit this detail text' },
+    { top: 18, left: 85, label: '2', detail: 'Edit this detail text' },
+    { top: 35, left: 70, label: '3', detail: 'Edit this detail text' },
+    { top: 46, left: 92, label: '4', detail: 'Edit this detail text' },
+    { top: 55, left: 60, label: '5', detail: 'Edit this detail text' },
+    { top: 64, left: 88, label: '6', detail: 'Edit this detail text' },
+    { top: 80, left: 25, label: '7', detail: 'Edit this detail text' },
+    { top: 88, left: 65, label: '8', detail: 'Edit this detail text' },
+    { top: 93, left: 45, label: '9', detail: 'Edit this detail text' }
   ];
 
   const field = document.getElementById('constellation');
