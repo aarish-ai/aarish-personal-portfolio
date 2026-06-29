@@ -44,6 +44,7 @@
   text-align: center;
   position: relative;
   padding: 0 var(--space-md);
+  will-change: opacity, transform;
 }
 
 .page-frame {
@@ -165,7 +166,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  perspective: 900px;
+}
+.astro-tilt-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  will-change: transform, filter;
+  filter: drop-shadow(0 8px 16px rgba(27,42,74,0.18));
+  transition: filter 180ms ease;
+}
+.astro-center-star {
+  transition: opacity 200ms ease;
 }
 
 
@@ -254,11 +269,7 @@
   transform-origin: 200px 200px;
 }
 
-@keyframes astro-spin-cw  { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-@keyframes astro-spin-ccw { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
 
-.astro-middle  { animation: astro-spin-ccw 320s linear infinite; }
-.astro-pointer { animation: astro-spin-cw  200s linear infinite; }
 /* astro-outer and astro-inner are intentionally NOT animated —
    a real instrument's frame and scale stay fixed */
 
@@ -322,6 +333,7 @@
   pointer-events: auto;
   transform: translate(-50%, -50%);
   transition: transform 200ms ease, opacity 200ms ease, box-shadow 200ms ease;
+  z-index: 2;
 }
 .constellation-dot:hover,
 .constellation-dot:focus-visible {
@@ -359,10 +371,27 @@
   color: var(--ink-soft);
   line-height: 1.4;
 }
-.constellation-dot:hover .constellation-tip,
-.constellation-dot:focus-visible .constellation-tip {
+.constellation-tip.visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+.constellation-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.const-line {
+  stroke: var(--gold-soft);
+  stroke-width: 0.15;
+  opacity: 0.3;
+  transition: opacity 200ms ease, stroke 200ms ease;
+}
+.const-line.active {
+  stroke: var(--gold);
+  opacity: 0.85;
 }
 
 /* Phase 11 */

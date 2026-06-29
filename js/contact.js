@@ -6,6 +6,7 @@
   const content  = document.getElementById('contact-panel-content');
 
   function openPanel() {
+    const isAboutPage = window.location.pathname.includes('about');
     fetch('data/contact.json')
       .then(r => r.json())
       .then(c => {
@@ -14,13 +15,12 @@
           <a href="https://${c.github}" target="_blank">${c.github}</a>
           <a href="https://${c.linkedin}" target="_blank">${c.linkedin}</a>
           <a href="CV.pdf" download="Aarish_CV.pdf">Download CV →</a>
+          ${isAboutPage ? '' : '<a href="about.html" class="panel-cta">About Me</a>'}
         `;
         backdrop.classList.add('active');
         panel.classList.add('active');
       });
 
-    // Also wire the footer links to the same data, if footer
-    // elements exist on this page
     const emailEl    = document.getElementById('footer-email');
     const githubEl   = document.getElementById('footer-github');
     const linkedinEl = document.getElementById('footer-linkedin');

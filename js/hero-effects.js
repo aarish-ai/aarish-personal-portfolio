@@ -26,6 +26,9 @@
     lampX += (targetX - lampX) * 0.12;
     lampY += (targetY - lampY) * 0.12;
     lamp.style.transform = `translate(${lampX - 240}px, ${lampY - 240}px)`;
+
+    hero.dispatchEvent(new CustomEvent('lamplight:move', { detail: { x: lampX, y: lampY } }));
+
     if (Math.abs(targetX - lampX) > 0.5 || Math.abs(targetY - lampY) > 0.5) {
       requestAnimationFrame(tick);
     } else {

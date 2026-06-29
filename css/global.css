@@ -65,58 +65,15 @@ a {
   letter-spacing: 0.01em;
 }
 
-/* Shared nav bar — used on both pages */
-.site-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 500;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px var(--space-lg);
-  background: rgba(244, 237, 224, 0.88);
-  backdrop-filter: blur(6px);
-  border-bottom: 1px solid var(--gold-soft);
-}
 
-.site-nav .nav-links {
-  display: flex;
-  gap: var(--space-md);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.site-nav .nav-links a {
-  color: var(--ink);
-  position: relative;
-  padding-bottom: 4px;
-}
-
-.site-nav .nav-links a::after {
-  content: '';
-  position: absolute;
-  left: 0; bottom: 0;
-  width: 0%;
-  height: 1px;
-  background: var(--gold);
-  transition: width 250ms ease;
-}
-
-.site-nav .nav-links a:hover::after {
-  width: 100%;
-}
-
-@media (max-width: 640px) {
-  .site-nav { padding: 16px var(--space-md); }
-  .site-nav .nav-links { gap: var(--space-sm); font-size: 13px; }
-}
 
 #contact-seal {
-  width: 38px;
-  height: 38px;
+  position: fixed;
+  top: 28px;
+  right: 32px;
+  z-index: 500;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid var(--gold);
   background: var(--ivory-deep);
@@ -129,16 +86,15 @@ a {
 #contact-seal:hover {
   background: var(--gold-soft);
 }
-
-.nav-logo {
-  display: flex;
-  opacity: 0.85;
-  transition: opacity 200ms ease;
-  cursor: pointer;
+#contact-seal svg {
+  width: 26px;
+  height: 26px;
 }
-.nav-logo:hover { opacity: 1; }
-.nav-logo svg { width: 20px; height: 20px; }
-#contact-seal svg { width: 22px; height: 22px; }
+@media (max-width: 640px) {
+  #contact-seal { top: 18px; right: 18px; width: 40px; height: 40px; }
+}
+
+
 
 @keyframes seal-pulse-once {
   0%   { transform: scale(1); }
@@ -204,6 +160,28 @@ a {
   padding-bottom: 10px;
 }
 #contact-panel-content a:hover { color: var(--teal); }
+
+#contact-panel-content a.panel-cta {
+  display: block;
+  text-align: center;
+  margin-top: 18px;
+  margin-bottom: 0;
+  padding: 10px 0;
+  border: 1px solid var(--gold);
+  border-bottom: 1px solid var(--gold);
+  border-radius: 4px;
+  background: var(--ivory-deep);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  transition: background 200ms ease, transform 200ms ease;
+}
+#contact-panel-content a.panel-cta:hover {
+  background: var(--gold-soft);
+  transform: translateY(-1px);
+}
 
 /* Work in Progress Banner */
 .wip-banner {
