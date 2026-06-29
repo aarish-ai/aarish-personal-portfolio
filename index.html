@@ -39,12 +39,14 @@
     </svg>
   </div>
 
-  <button id="contact-seal" aria-label="Contact">
-    <svg viewBox="0 0 40 40">
-      <circle cx="20" cy="20" r="17" fill="none" stroke="var(--ink)" stroke-width="1" stroke-dasharray="2.4 2.6"/>
-      <polygon points="20,11 21.53,16.30 26.36,13.64 23.70,18.47 29,20 23.70,21.53 26.36,26.36 21.53,23.70 20,29 18.47,23.70 13.64,26.36 16.30,21.53 11,20 16.30,18.47 13.64,13.64 18.47,16.30" fill="var(--gold)" opacity="0.85"/>
-    </svg>
-  </button>
+  <div class="contact-seal-wrap">
+    <button id="contact-seal" aria-label="Contact">
+      <svg class="seal-mark" viewBox="0 0 20 20" aria-hidden="true">
+        <polygon points="10,1 11.53,6.30 16.36,3.64 13.70,8.47 19,10 13.70,11.53 16.36,16.36 11.53,13.70 10,19 8.47,13.70 3.64,16.36 6.30,11.53 1,10 6.30,8.47 3.64,3.64 8.47,6.30" fill="var(--gold)" opacity="0.85"/>
+      </svg>
+      <span class="seal-label">Contact</span>
+    </button>
+  </div>
 
   <section id="hero">
     <div class="page-frame" aria-hidden="true">
@@ -76,15 +78,7 @@
       <div class="hero-illumination" id="hero-illumination" aria-hidden="true"></div>
     </div>
 
-    <div class="scroll-cue-zone" id="scroll-cue">
-      <div class="scroll-cue-inner">
-        <svg viewBox="0 0 24 36" width="20" height="32">
-          <path d="M10,1 C10,1 9,18 9,24 M2,20 C5,26 9,33 10,34 C11,33 15,26 18,20"
-                fill="none" stroke="var(--gold)" stroke-width="1.6"
-                stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-    </div>
+
   </section>
 
   <section id="work">
@@ -128,10 +122,6 @@
   <script src="js/projects.js"></script>
   <script src="js/contact.js"></script>
   <script src="js/scroll-reveal.js"></script>
-  <script>
-    document.getElementById('scroll-cue').addEventListener('click', () => {
-      document.getElementById('work').scrollIntoView({ behavior: 'smooth' });
-    });
-  </script>
+
 </body>
 </html>

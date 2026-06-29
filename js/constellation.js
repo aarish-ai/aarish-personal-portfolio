@@ -1,29 +1,70 @@
 (function () {
-  // EDIT THESE — top/left are plain numbers (percent of the hero
-  // area, no "%" sign). 8–10 entries works well. label is shown
-  // bold in the tooltip, detail is the line under it. Keep these
-  // out of roughly left 0–45% / top 20–65% (the text column) so
-  // nothing crowds the name and intro.
-  const MARKERS = [
-    { top: 22, left: 15, label: '1', detail: 'Edit this detail text' },
-    { top: 10, left: 28, label: '2', detail: 'Edit this detail text' },
-    { top: 40, left: 35, label: '3', detail: 'Edit this detail text' },
-    { top: 46, left: 92, label: '4', detail: 'Edit this detail text' },
-    { top: 55, left: 60, label: '5', detail: 'Edit this detail text' },
-    { top: 64, left: 88, label: '6', detail: 'Edit this detail text' },
-    { top: 80, left: 20, label: '7', detail: 'Edit this detail text' },
-    { top: 88, left: 65, label: '8', detail: 'Edit this detail text' },
-    { top: 93, left: 45, label: '9', detail: 'Edit this detail text' }
-  ];
-
-  const field = document.getElementById('constellation');
-  if (!field) return;
-
   const NS = 'http://www.w3.org/2000/svg';
 
-  // Connects each point to its 2 nearest neighbors — a natural
-  // constellation web that recomputes automatically if you edit,
-  // add, or remove markers above.
+  // 7 hand-placed layouts. Every point sits in the top (<=15) or
+  // bottom (>=84) band only — see note above for why. Feel free to
+  // add/remove layouts or nudge individual points, just keep new
+  // points within those same top/bottom bands.
+  const CONSTELLATIONS = [
+    // 1 — The Arc
+    [
+      { top: 8, left: 10 }, { top: 7, left: 25 }, { top: 9, left: 40 },
+      { top: 10, left: 55 }, { top: 9, left: 70 }, { top: 8, left: 85 },
+      { top: 88, left: 20 }, { top: 90, left: 50 }, { top: 88, left: 80 }
+    ],
+    // 2 — The Crown
+    [
+      { top: 14, left: 8 }, { top: 7, left: 18 }, { top: 13, left: 30 },
+      { top: 6, left: 42 }, { top: 13, left: 54 }, { top: 7, left: 66 },
+      { top: 13, left: 80 }, { top: 7, left: 92 }, { top: 90, left: 50 }
+    ],
+    // 3 — The Scales
+    [
+      { top: 9, left: 15 }, { top: 8, left: 50 }, { top: 9, left: 85 },
+      { top: 85, left: 10 }, { top: 91, left: 20 }, { top: 88, left: 30 },
+      { top: 85, left: 70 }, { top: 91, left: 80 }, { top: 88, left: 90 }
+    ],
+    // 4 — The Lantern Chain
+    [
+      { top: 7, left: 12 }, { top: 11, left: 28 }, { top: 8, left: 45 },
+      { top: 12, left: 62 }, { top: 7, left: 78 }, { top: 11, left: 93 },
+      { top: 89, left: 35 }, { top: 87, left: 50 }, { top: 85, left: 65 }
+    ],
+    // 5 — The Twin Arcs
+    [
+      { top: 6, left: 20 }, { top: 10, left: 35 }, { top: 6, left: 50 },
+      { top: 10, left: 65 }, { top: 6, left: 80 }, { top: 92, left: 25 },
+      { top: 86, left: 45 }, { top: 92, left: 65 }, { top: 86, left: 85 }
+    ],
+    // 6 — The Wide Net
+    [
+      { top: 8, left: 6 }, { top: 13, left: 22 }, { top: 7, left: 38 },
+      { top: 13, left: 58 }, { top: 7, left: 74 }, { top: 13, left: 90 },
+      { top: 88, left: 15 }, { top: 84, left: 50 }, { top: 88, left: 85 }
+    ],
+    // 7 — The Diamond Span
+    [
+      { top: 9, left: 10 }, { top: 6, left: 30 }, { top: 10, left: 50 },
+      { top: 6, left: 70 }, { top: 9, left: 90 }, { top: 90, left: 20 },
+      { top: 86, left: 50 }, { top: 90, left: 80 }, { top: 88, left: 65 }
+    ]
+  ];
+
+  // EDIT THESE — one entry per dot index (0–8), reused across
+  // whichever of the 7 layouts above loads. label is bold in the
+  // tooltip, detail is the line underneath.
+  const LABELS = [
+    { label: 'EDIT ME 1', detail: 'Edit this detail text' },
+    { label: 'EDIT ME 2', detail: 'Edit this detail text' },
+    { label: 'EDIT ME 3', detail: 'Edit this detail text' },
+    { label: 'EDIT ME 4', detail: 'Edit this detail text' },
+    { label: 'EDIT ME 5', detail: 'Edit this detail text' },
+    { label: 'EDIT ME 6', detail: 'Edit this detail text' },
+    { label: 'EDIT ME 7', detail: 'Edit this detail text' },
+    { label: 'EDIT ME 8', detail: 'Edit this detail text' },
+    { label: 'EDIT ME 9', detail: 'Edit this detail text' }
+  ];
+
   function buildEdges(points) {
     const edgeSet = new Set();
     points.forEach((p, i) => {
@@ -39,6 +80,16 @@
     });
     return Array.from(edgeSet).map((key) => key.split('-').map(Number));
   }
+
+  const field = document.getElementById('constellation');
+  if (!field) return;
+
+  const points = CONSTELLATIONS[Math.floor(Math.random() * CONSTELLATIONS.length)];
+  const MARKERS = points.map((p, i) => ({
+    top: p.top, left: p.left,
+    label: LABELS[i % LABELS.length].label,
+    detail: LABELS[i % LABELS.length].detail
+  }));
 
   const svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('viewBox', '0 0 100 100');

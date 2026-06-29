@@ -202,24 +202,7 @@
   opacity: 1;
 }
 
-.scroll-cue-zone {
-  position: absolute;
-  bottom: var(--space-md);
-  left: 50%;
-  margin-left: -14px;
-  width: 28px;
-  height: 36px;
-  cursor: pointer;
-}
-.scroll-cue-inner {
-  width: 100%;
-  height: 100%;
-  animation: pulse-cue 2.2s ease-in-out infinite;
-}
-@keyframes pulse-cue {
-  0%, 100% { opacity: 0.4; transform: translateY(0); }
-  50%      { opacity: 0.9; transform: translateY(6px); }
-}
+
 
 @media (max-width: 760px) {
   .hero-grid { grid-template-columns: 1fr; text-align: center; }
@@ -318,7 +301,7 @@
 .constellation {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 0;
   pointer-events: none;
 }
 .constellation-dot {
@@ -386,12 +369,12 @@
 .const-line {
   stroke: var(--gold-soft);
   stroke-width: 0.15;
-  opacity: 0.3;
+  opacity: 0.15;
   transition: opacity 200ms ease, stroke 200ms ease;
 }
 .const-line.active {
   stroke: var(--gold);
-  opacity: 0.85;
+  opacity: 0.55;
 }
 
 /* Phase 11 */
