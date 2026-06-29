@@ -5,9 +5,9 @@
   // out of roughly left 0–45% / top 20–65% (the text column) so
   // nothing crowds the name and intro.
   const MARKERS = [
-    { top: 17, left: 20, label: '1', detail: 'Edit this detail text' },
-    { top: 21, left: 27, label: '2', detail: 'Edit this detail text' },
-    { top: 40, left: 50, label: '3', detail: 'Edit this detail text' },
+    { top: 17, left: 15, label: '1', detail: 'Edit this detail text' },
+    { top: 25, left: 25, label: '2', detail: 'Edit this detail text' },
+    { top: 40, left: 35, label: '3', detail: 'Edit this detail text' },
     { top: 46, left: 92, label: '4', detail: 'Edit this detail text' },
     { top: 55, left: 60, label: '5', detail: 'Edit this detail text' },
     { top: 64, left: 88, label: '6', detail: 'Edit this detail text' },
