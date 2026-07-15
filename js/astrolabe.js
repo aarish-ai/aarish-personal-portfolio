@@ -1,204 +1,223 @@
 (function () {
-  const NS = 'http://www.w3.org/2000/svg';
-  const CX = 200, CY = 200;
-
-  function el(tag, attrs) {
-    const node = document.createElementNS(NS, tag);
-    for (const k in attrs) node.setAttribute(k, attrs[k]);
-    return node;
+  
+  const ns = "http://www.w3.org/2000/svg";
+  
+  function createEl(tag, attrs) {
+    const el = document.createElementNS(ns, tag);
+    for (let k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
   }
-
-  function polarPoint(cx, cy, r, angleDeg) {
-    const a = ((angleDeg - 90) * Math.PI) / 180;
-    return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
-  }
-
-  function starPoints(cx, cy, outerR, innerR) {
-    const pts = [];
-    for (let i = 0; i < 16; i++) {
-      const r = i % 2 === 0 ? outerR : innerR;
-      const a = (Math.PI / 8) * i - Math.PI / 2;
-      pts.push(`${(cx + r * Math.cos(a)).toFixed(2)},${(cy + r * Math.sin(a)).toFixed(2)}`);
+  
+  function starPoints(cx, cy, outerR, innerR, pointsCount = 16) {
+    let pts = [];
+    for (let i = 0; i < pointsCount; i++) {
+      let r = (i % 2 === 0) ? outerR : innerR;
+      let angle = (i * Math.PI / (pointsCount/2)) - Math.PI / 2;
+      pts.push(`${(cx + r * Math.cos(angle)).toFixed(2)},${(cy + r * Math.sin(angle)).toFixed(2)}`);
     }
     return pts.join(' ');
   }
-
-  function buildAstrolabe() {
-    const svg = el('svg', { viewBox: '0 0 400 400', class: 'astrolabe-svg', 'aria-hidden': 'true' });
-
-    const outer = el('g', { class: 'astro-ring astro-outer' });
-    outer.appendChild(el('circle', { cx: CX, cy: CY, r: 188, fill: 'none', stroke: 'var(--gold)', 'stroke-width': 1.4 }));
-    outer.appendChild(el('circle', { cx: CX, cy: CY, r: 172, fill: 'none', stroke: 'var(--gold)', 'stroke-width': 0.6, opacity: 0.5 }));
-    for (let i = 0; i < 72; i++) {
-      const deg = i * 5;
-      const isMajor = deg % 30 === 0;
-      const innerR = isMajor ? 164 : (deg % 15 === 0 ? 172 : 180);
-      const [x1, y1] = polarPoint(CX, CY, 188, deg);
-      const [x2, y2] = polarPoint(CX, CY, innerR, deg);
-      outer.appendChild(el('line', {
-        x1: x1.toFixed(2), y1: y1.toFixed(2), x2: x2.toFixed(2), y2: y2.toFixed(2),
-        stroke: 'var(--gold)', 'stroke-width': isMajor ? 1.2 : 0.6, opacity: isMajor ? 0.7 : 0.4
-      }));
-    }
-    svg.appendChild(outer);
-
-    const middle = el('g', { class: 'astro-ring astro-middle' });
-    middle.appendChild(el('circle', { cx: CX, cy: CY, r: 132, fill: 'none', stroke: 'var(--teal)', 'stroke-width': 1, opacity: 0.45 }));
+  
+  function setupRosette() {
+    const svg = document.getElementById('rosette-svg');
+    if (!svg) return;
+    
+    // We will build the layers here.
+    
+    // LAYER 0
+    const l0 = createEl('g', { id: 'layer-0' });
+    const c0 = createEl('circle', { cx: 300, cy: 300, r: 275, fill: 'none', stroke: 'var(--gold-soft)', 'stroke-width': '0.5', opacity: '0.2' });
+    l0.appendChild(c0);
+    svg.appendChild(l0);
+    
+    // LAYER 1 (Inner Star Core)
+    const l1 = createEl('g', { id: 'layer-1', style: 'transform-box: fill-box; transform-origin: center;' });
+    const s1_outer = createEl('polygon', { points: starPoints(300, 300, 60, 25, 16), fill: 'var(--gold)', opacity: '0.9' });
+    const s1_inner = createEl('polygon', { points: starPoints(300, 300, 38, 16, 16), fill: 'none', stroke: 'var(--ivory)', 'stroke-width': '0.6', opacity: '0.4' });
+    l1.appendChild(s1_outer);
+    l1.appendChild(s1_inner);
+    svg.appendChild(l1);
+    
+    // LAYER 2 (Inner Ring)
+    const l2 = createEl('g', { id: 'layer-2', style: 'transform-box: fill-box; transform-origin: center;' });
     for (let i = 0; i < 8; i++) {
-      const [x, y] = polarPoint(CX, CY, 132, i * 45);
-      middle.appendChild(el('rect', {
-        x: (x - 4).toFixed(2), y: (y - 4).toFixed(2), width: 8, height: 8,
-        transform: `rotate(45 ${x.toFixed(2)} ${y.toFixed(2)})`,
-        fill: 'var(--gold)', opacity: 0.55
-      }));
+      let angle = i * Math.PI / 4;
+      let angleDeg = i * 45;
+      
+      // kite
+      const kite = createEl('polygon', { 
+        points: `300,245 286,190 300,190 314,190`, // Needs correct radial mapping
+        fill: 'none', stroke: 'var(--gold)', 'stroke-width': '1', opacity: '0.65',
+        transform: `rotate(${angleDeg} 300 300)`
+      });
+      // The kite base is at r=110, tip at r=55. Width at base 28 => +-14.
+      // So relative to 300,300, tip is (300, 300-55) = (300, 245). Base is (300, 300-110) = (300, 190).
+      // Corners at base are (300-14, 190) and (300+14, 190).
+      // Wait, is it a kite? A kite has 4 points. tip, left base, bottom base? 
+      // "tip at r=55, base at r=110, width at base: 28px."
+      // So points: (300, 245) [tip], (286, 190) [left], (300, 190) [center-base? Or maybe no center base if it's a triangle, but it says kite/rhombus].
+      // Let's make it a kite: top tip at r=55, side points at r=110 width 28, bottom tip at r=130?
+      // Just a triangle pointing outward: 300,245 286,190 314,190
+      kite.setAttribute('points', `300,245 286,190 314,190`);
+      l2.appendChild(kite);
+      
+      // circle between kites at r=85. Halfway between angles.
+      let midAngle = angle + (Math.PI/8);
+      let cx = 300 + 85 * Math.sin(midAngle);
+      let cy = 300 - 85 * Math.cos(midAngle);
+      const dot = createEl('circle', { cx: cx, cy: cy, r: 4, fill: 'var(--gold)', opacity: '0.5' });
+      l2.appendChild(dot);
     }
-    svg.appendChild(middle);
-
-    const inner = el('g', { class: 'astro-ring astro-inner' });
-    inner.appendChild(el('circle', { cx: CX, cy: CY, r: 86, fill: 'none', stroke: 'var(--gold-soft)', 'stroke-width': 1 }));
-    svg.appendChild(inner);
-
-    const pointer = el('g', { class: 'astro-ring astro-pointer' });
-    const [px1, py1] = polarPoint(CX, CY, 176, 35);
-    const [px2, py2] = polarPoint(CX, CY, 176, 215);
-    pointer.appendChild(el('line', { x1: px1.toFixed(2), y1: py1.toFixed(2), x2: px2.toFixed(2), y2: py2.toFixed(2), stroke: 'var(--gold)', 'stroke-width': 1.4 }));
-    [35, 215].forEach((deg) => {
-      const [tx, ty] = polarPoint(CX, CY, 176, deg);
-      pointer.appendChild(el('rect', {
-        x: (tx - 5).toFixed(2), y: (ty - 5).toFixed(2), width: 10, height: 10,
-        transform: `rotate(45 ${tx.toFixed(2)} ${ty.toFixed(2)})`,
-        fill: 'none', stroke: 'var(--gold)', 'stroke-width': 1
-      }));
-    });
-    svg.appendChild(pointer);
-
-    // Invisible hit target behind the center star, so clicking
-    // anywhere near it (not just the exact star shape) winds it
-    const hit = el('circle', { cx: CX, cy: CY, r: 28, fill: 'transparent', class: 'astro-wind-target', style: 'cursor:pointer;' });
-    svg.appendChild(hit);
-
-    const centerStar = el('polygon', {
-      points: starPoints(CX, CY, 22, 10), fill: 'var(--gold)', opacity: 0.5,
-      class: 'astro-center-star', 'pointer-events': 'none'
-    });
-    svg.appendChild(centerStar);
-
-    return { svg, middleEl: middle, pointerEl: pointer, hitEl: hit, centerStarEl: centerStar };
-  }
-
-  function lerpAngle(a, b, t) {
-    const diff = ((b - a + 540) % 360) - 180;
-    return a + diff * t;
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('hero-illumination');
-    const hero = document.getElementById('hero');
-    if (!container || !hero) return;
-
-    container.innerHTML = '';
-    const tiltWrap = document.createElement('div');
-    tiltWrap.className = 'astro-tilt-wrap';
-    const { svg, middleEl, pointerEl, hitEl, centerStarEl } = buildAstrolabe();
-    tiltWrap.appendChild(svg);
-    container.appendChild(tiltWrap);
-
-    const BASE_MIDDLE_VEL  = 360 / 320;  // deg/s
-    const BASE_POINTER_VEL = 360 / 200;  // deg/s
-    const TRACK_DEAD_ZONE  = 26;         // px — inside this, ignore mouse
-    const WIND_BOOST       = 70;         // deg/s added on click
-    const DECAY            = 0.985;      // per-frame decay back to base
-
-    let middleAngle = 0,   middleVel  = BASE_MIDDLE_VEL;
-    let pointerAngle = 35, pointerVel = BASE_POINTER_VEL;
-    let tracking = false, targetAngle = 0;
-    let tiltX = 0, tiltY = 0, tiltTargetX = 0, tiltTargetY = 0;
-    let lastTime = null;
-
-    function frame(now) {
-      if (lastTime === null) lastTime = now;
-      const dt = Math.min((now - lastTime) / 1000, 0.05);
-      lastTime = now;
-
-      middleAngle += middleVel * dt;
-      middleVel = BASE_MIDDLE_VEL + (middleVel - BASE_MIDDLE_VEL) * Math.pow(DECAY, dt * 60);
-
-      if (tracking) {
-        pointerAngle = lerpAngle(pointerAngle, targetAngle, Math.min(dt * 6, 1));
-        pointerVel = BASE_POINTER_VEL;
-      } else {
-        pointerAngle += pointerVel * dt;
-        pointerVel = BASE_POINTER_VEL + (pointerVel - BASE_POINTER_VEL) * Math.pow(DECAY, dt * 60);
-      }
-
-      tiltX += (tiltTargetX - tiltX) * Math.min(dt * 5, 1);
-      tiltY += (tiltTargetY - tiltY) * Math.min(dt * 5, 1);
-
-      middleEl.style.transform = `rotate(${middleAngle.toFixed(2)}deg)`;
-      pointerEl.style.transform = `rotate(${pointerAngle.toFixed(2)}deg)`;
-      tiltWrap.style.transform = `perspective(900px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg)`;
-
-      requestAnimationFrame(frame);
+    svg.appendChild(l2);
+    
+    // LAYER 3 (Middle Ring)
+    const l3 = createEl('g', { id: 'layer-3', style: 'transform-box: fill-box; transform-origin: center;' });
+    const s3 = createEl('polygon', { points: starPoints(300, 300, 145, 110, 32), fill: 'none', stroke: 'var(--gold)', 'stroke-width': '1.2', opacity: '0.55' });
+    l3.appendChild(s3);
+    // petals
+    for (let i = 0; i < 8; i++) {
+       // Just creating circles for simplicity, clipping or intersecting would be complex without paths
+       let angle = i * Math.PI / 4;
+       let cx = 300 + 130 * Math.sin(angle);
+       let cy = 300 - 130 * Math.cos(angle);
+       let petal = createEl('circle', { cx: cx, cy: cy, r: 25, fill: 'var(--gold)', opacity: '0.06', stroke: 'var(--gold-soft)', 'stroke-width': '0.8', 'stroke-opacity': '0.35' });
+       // to insert behind s3, we can insert before
+       l3.insertBefore(petal, s3);
     }
-    requestAnimationFrame(frame);
-
-    // The pointer's geometry is drawn pointing at a fixed 35°
-    // (in the same "0 = up, clockwise" convention as polarPoint).
-    // +90 converts standard atan2 into that convention; -35
-    // corrects for that fixed drawing offset, so the rule actually
-    // points AT the cursor rather than 35° off from it.
-    container.addEventListener('mousemove', (e) => {
-      const rect = container.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
-      const dist = Math.hypot(dx, dy);
-
-      tracking = dist > TRACK_DEAD_ZONE;
-      if (tracking) {
-        targetAngle = (Math.atan2(dy, dx) * 180) / Math.PI + 55;
+    svg.appendChild(l3);
+    
+    // LAYER 4 (Outer Geometric Band)
+    const l4 = createEl('g', { id: 'layer-4', style: 'transform-box: fill-box; transform-origin: center;' });
+    const c4_1 = createEl('circle', { cx: 300, cy: 300, r: 190, fill: 'none', stroke: 'var(--gold-soft)', 'stroke-width': '0.6', opacity: '0.3' });
+    const c4_2 = createEl('circle', { cx: 300, cy: 300, r: 220, fill: 'none', stroke: 'var(--gold-soft)', 'stroke-width': '0.6', opacity: '0.3' });
+    l4.appendChild(c4_1);
+    l4.appendChild(c4_2);
+    
+    for (let i = 0; i < 24; i++) {
+      let isMajor = i % 3 === 0;
+      let r1 = 190;
+      let r2 = isMajor ? 220 : 205;
+      let angle = i * Math.PI / 12;
+      let x1 = 300 + r1 * Math.sin(angle);
+      let y1 = 300 - r1 * Math.cos(angle);
+      let x2 = 300 + r2 * Math.sin(angle);
+      let y2 = 300 - r2 * Math.cos(angle);
+      const line = createEl('line', { x1, y1, x2, y2, stroke: 'var(--gold)', opacity: '0.45', 'stroke-width': isMajor ? '1.2' : '0.8' });
+      l4.appendChild(line);
+      
+      if (i % 3 === 0) {
+        // cardinal diamond at r=205
+        let cx = 300 + 205 * Math.sin(angle);
+        let cy = 300 - 205 * Math.cos(angle);
+        let diamond = createEl('rect', { x: cx-4, y: cy-4, width: 8, height: 8, fill: 'var(--gold)', opacity: '0.6', transform: `rotate(45 ${cx} ${cy})`});
+        l4.appendChild(diamond);
       }
-
-      const maxOffset = rect.width / 2;
-      // NOTE: if the tilt looks backwards (leans away from the
-      // cursor instead of toward it) once you see it live, just
-      // flip the sign on these two lines — purely a perception
-      // call, not a bug.
-      tiltTargetY = Math.max(-7, Math.min(7, (dx / maxOffset) * 7));
-      tiltTargetX = Math.max(-7, Math.min(7, (-dy / maxOffset) * 7));
+    }
+    svg.appendChild(l4);
+    
+    // LAYER 5 (Outer Star)
+    const l5 = createEl('g', { id: 'layer-5', style: 'transform-box: fill-box; transform-origin: center;' });
+    const s5_1 = createEl('polygon', { points: starPoints(300, 300, 255, 195, 16), fill: 'none', stroke: 'var(--teal)', 'stroke-width': '1', opacity: '0.4' });
+    const s5_2 = createEl('polygon', { points: starPoints(300, 300, 265, 200, 16), fill: 'none', stroke: 'var(--gold-soft)', 'stroke-width': '0.5', opacity: '0.25', transform: 'rotate(22.5 300 300)' });
+    l5.appendChild(s5_1);
+    l5.appendChild(s5_2);
+    svg.appendChild(l5);
+    
+    // LAYER 6 (Outer Circle Border)
+    const l6 = createEl('g', { id: 'layer-6', style: 'transform-box: fill-box; transform-origin: center;' });
+    const c6 = createEl('circle', { cx: 300, cy: 300, r: 275, fill: 'none', stroke: 'var(--gold)', 'stroke-width': '0.8', 'stroke-dasharray': '4 6', opacity: '0.35' });
+    l6.appendChild(c6);
+    svg.appendChild(l6);
+    
+    // Setup animation
+    setupDrawIn(svg);
+    startRotation(l1, l2, l3, l4, l5, l6);
+  }
+  
+  function setupDrawIn(svg) {
+    // The prompt specifies a sequence of drawing in.
+    const layers = [
+      { id: 'layer-6', delay: 0, duration: 800 },
+      { id: 'layer-5', delay: 300, duration: 700 },
+      { id: 'layer-4', delay: 600, duration: 600 },
+      { id: 'layer-3', delay: 900, duration: 600 },
+      { id: 'layer-2', delay: 1200, duration: 500 },
+      { id: 'layer-1', delay: 1500, duration: 500 },
+    ];
+    
+    layers.forEach(l => {
+      const g = document.getElementById(l.id);
+      if (!g) return;
+      
+      const shapes = g.querySelectorAll('path, polygon, circle, line, rect');
+      shapes.forEach(shape => {
+        let length = 0;
+        if (shape.getTotalLength) {
+          length = shape.getTotalLength();
+        } else {
+          length = 2000; // fallback
+        }
+        
+        let targetOpacity = shape.getAttribute('opacity') || shape.style.opacity || '1';
+        shape.setAttribute('data-target-opacity', targetOpacity);
+        
+        shape.style.strokeDasharray = `${length}`;
+        shape.style.strokeDashoffset = `${length}`;
+        shape.style.opacity = '0';
+        
+        // Wait and then animate
+        setTimeout(() => {
+          shape.style.transition = `stroke-dashoffset ${l.duration}ms cubic-bezier(0.4, 0, 0.2, 1), opacity ${l.duration}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+          shape.style.strokeDashoffset = '0';
+          
+          if (l.id === 'layer-1' && shape.getAttribute('fill') !== 'none') {
+             // Center star fill fades in at 1800ms, 400ms duration (so delay + 300)
+             setTimeout(() => {
+                shape.style.transition = `opacity 400ms ease`;
+                shape.style.opacity = targetOpacity;
+             }, 300);
+          } else {
+             shape.style.opacity = targetOpacity;
+          }
+          
+        }, l.delay);
+      });
     });
-
-    container.addEventListener('mouseleave', () => {
-      tracking = false;
-      tiltTargetX = 0;
-      tiltTargetY = 0;
-    });
-
-    hitEl.addEventListener('mouseenter', () => { centerStarEl.style.opacity = '0.75'; });
-    hitEl.addEventListener('mouseleave', () => { centerStarEl.style.opacity = '0.5'; });
-    hitEl.addEventListener('click', () => {
-      middleVel += WIND_BOOST;
-      pointerVel += WIND_BOOST * 1.3;
-    });
-
-    // Shadow direction/offset driven by the lamplight position,
-    // dispatched from js/hero-effects.js (Phase P2 below)
-    hero.addEventListener('lamplight:move', (e) => {
-      const illRect = container.getBoundingClientRect();
-      const heroRect = hero.getBoundingClientRect();
-      const astroCx = illRect.left - heroRect.left + illRect.width / 2;
-      const astroCy = illRect.top - heroRect.top + illRect.height / 2;
-      const dx = astroCx - e.detail.x;
-      const dy = astroCy - e.detail.y;
-      const dist = Math.hypot(dx, dy) || 1;
-      const offX = (dx / dist) * 12;
-      const offY = (dy / dist) * 12;
-      tiltWrap.style.filter = `drop-shadow(${offX.toFixed(1)}px ${offY.toFixed(1)}px 14px rgba(27,42,74,0.22))`;
-    });
-
-    hero.addEventListener('mouseleave', () => {
-      tiltWrap.style.filter = '';
-    });
-  });
+  }
+  
+  let animationFrame;
+  let lastTime = 0;
+  
+  let angles = [0, 0, 0, 0, 0, 0];
+  
+  function startRotation(l1, l2, l3, l4, l5, l6) {
+    const speeds = [
+      (360 / 120),  // layer 1
+      -(360 / 90),  // layer 2
+      (360 / 70),   // layer 3
+      -(360 / 180), // layer 4
+      (360 / 240),  // layer 5
+      -(360 / 300)  // layer 6
+    ];
+    
+    function tick(time) {
+      if (!lastTime) lastTime = time;
+      const dt = (time - lastTime) / 1000; // seconds
+      lastTime = time;
+      
+      const layers = [l1, l2, l3, l4, l5, l6];
+      for (let i = 0; i < 6; i++) {
+        angles[i] += dt * speeds[i];
+        if (layers[i]) {
+          layers[i].style.transform = `rotate(${angles[i]}deg)`;
+        }
+      }
+      
+      animationFrame = requestAnimationFrame(tick);
+    }
+    animationFrame = requestAnimationFrame(tick);
+  }
+  
+  document.addEventListener('DOMContentLoaded', setupRosette);
+  
 })();

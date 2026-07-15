@@ -1,23 +1,40 @@
 (function () {
-  window.addEventListener('DOMContentLoaded', () => {
-    const overlay = document.getElementById('reveal-overlay');
-    const star    = document.getElementById('reveal-star');
-
-    // Star draws itself like ink tracing a line
-    requestAnimationFrame(() => {
-      star.classList.add('draw');
-    });
-
-    // Once drawn, the overlay irises shut around the star and
-    // disappears, revealing the page that's already rendered beneath
+  document.addEventListener('DOMContentLoaded', () => {
+    
+    // We expect the rosette elements to be drawn by astrolabe.js synchronously or slightly after.
+    // Wait for the SVG to be populated, or just run the sequence.
+    // astrolabe.js will inject paths. We'll wait a frame to ensure DOM is ready.
+    
     setTimeout(() => {
-      overlay.classList.add('iris-close');
-      star.classList.add('fade');
-    }, 400);
-
-    // Remove from DOM flow entirely once the animation completes
-    setTimeout(() => {
-      overlay.style.display = 'none';
-    }, 850);
+      const heroText = document.getElementById('hero-text');
+      const bottomRow = document.querySelector('.hero-bottom-row');
+      
+      // Phase 1: Rosette draw-in handled largely by astrolabe.js which sets up the stroke-dasharrays.
+      // But we will coordinate the text fading here.
+      
+      // Phase 2: Hero text fades in (2200ms -> 3200ms)
+      if (heroText) {
+        heroText.style.opacity = '0';
+        heroText.style.transform = 'translateY(12px)';
+        heroText.style.transition = 'opacity 800ms ease-out, transform 800ms ease-out';
+        
+        setTimeout(() => {
+          heroText.style.opacity = '1';
+          heroText.style.transform = 'translateY(0)';
+        }, 2200);
+      }
+      
+      // Phase 3: Bottom row appears (3000ms -> 3400ms)
+      if (bottomRow) {
+        bottomRow.style.opacity = '0';
+        bottomRow.style.transition = 'opacity 400ms ease';
+        
+        setTimeout(() => {
+          bottomRow.style.opacity = '1';
+        }, 3000);
+      }
+      
+    }, 50); // slight delay to let rosette geometry build
+    
   });
 })();

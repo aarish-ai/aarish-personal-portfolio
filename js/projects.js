@@ -1,7 +1,5 @@
 (function () {
   let projects = [];
-  let activeIndex = 0;
-  let initialLoadDone = false;
   const ROMANS = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
 
   function highlight(text, terms) {
@@ -13,309 +11,229 @@
     return out;
   }
 
-  function generateStarPoints(cx, cy, outerR, innerR, offsetAngle = 0) {
-    let points = [];
-    for (let i = 0; i < 16; i++) {
-      let angle = (i * Math.PI / 8) - Math.PI / 2 + (offsetAngle * Math.PI / 180);
-      let r = (i % 2 === 0) ? outerR : innerR;
-      points.push(`${(cx + r * Math.cos(angle)).toFixed(2)},${(cy + r * Math.sin(angle)).toFixed(2)}`);
-    }
-    return points.join(' ');
-  }
+  function renderDeck() {
+    const container = document.getElementById('deck-container');
+    const sentinel = document.getElementById('deck-scroll-sentinel');
+    if (!container || !sentinel) return;
 
-  const outerStarPts = generateStarPoints(35, 35, 34, 15, 0);
-  const innerStarPts = generateStarPoints(25, 25, 24, 10, 22.5);
+    sentinel.style.height = `${projects.length * 100}vh`;
 
-  function swapProjectDetail(index, isInitial = false) {
-    const p = projects[index];
-    if (!p) return;
-    
-    const rightPanel = document.querySelector('.desk-right-panel');
-    const contentLayer = rightPanel.querySelector('.desk-content-layer');
-    const folioMark = rightPanel.querySelector('.folio-mark');
-    const shimmer = rightPanel.querySelector('.page-shimmer');
-    
-    if (!isInitial) {
-      contentLayer.style.transition = 'transform 180ms ease-in, opacity 180ms ease-in';
-      contentLayer.style.transform = 'translateY(-24px)';
-      contentLayer.style.opacity = '0';
-    }
-    
-    const swapDelay = isInitial ? 0 : 180;
-    
-    setTimeout(() => {
-      if (folioMark) {
-        folioMark.textContent = `Fol. ${ROMANS[index] || (index + 1)}`;
-      }
+    projects.forEach((p, i) => {
+      const card = document.createElement('div');
+      card.className = 'project-page';
+      card.id = `project-card-${i}`;
       
       const firstLetter = p.name.charAt(0);
       const restName = p.name.slice(1);
       const highlights = p.tech || [];
       
-      const sealsHtml = p.tech.map((t, i) => `
-        <div class="wax-seal" style="opacity: 0; transform: translateY(8px);">
-          <svg class="seal-svg-outer" viewBox="0 0 70 70">
-            <polygon points="${outerStarPts}" />
-          </svg>
-          <svg class="seal-svg-inner" viewBox="0 0 50 50">
-            <polygon points="${innerStarPts}" />
-          </svg>
-          <span>${t}</span>
-        </div>
-      `).join('');
+      const pillsHtml = p.tech.map(t => `<span class="tech-pill">${t}</span>`).join('');
       
-      const pilcrow = `<svg class="section-pilcrow" viewBox="0 0 12 12"><path d="M6,0 L8,4 L12,6 L8,8 L6,12 L4,8 L0,6 L4,4 Z" /></svg>`;
+      const pilcrow = `<svg width="8" height="8" viewBox="0 0 12 12" style="fill: var(--gold); margin-right: 6px;"><path d="M6,0 L8,4 L12,6 L8,8 L6,12 L4,8 L0,6 L4,4 Z" /></svg>`;
       
-      contentLayer.innerHTML = `
-        <div class="project-title-row">
-          <span class="drop-initial">${firstLetter}</span><span class="rest-name">${restName}</span>
+      card.innerHTML = `
+        <div class="folio-notation">Fol. ${ROMANS[i] || (i+1)}</div>
+        
+        <div class="project-title">
+          <span class="drop-cap">${firstLetter}</span>${restName}
         </div>
-        <div class="desk-oneliner">
-          <svg class="dash-svg" width="24" height="20" viewBox="0 0 24 20"><line x1="0" y1="10" x2="24" y2="10" stroke="var(--gold)" stroke-width="1.5" opacity="0.6"/></svg>
+        
+        <div class="one-liner">
+          <div class="line-dash"></div>
           ${p.oneLiner}
         </div>
+        
         <div class="double-rule-divider"></div>
         
         <div class="section-block">
-          <div class="section-heading-row">
-            ${pilcrow}
-            <h4>The Problem</h4>
-            <div class="heading-line"></div>
-          </div>
+          <h4 class="section-heading">${pilcrow}The Problem</h4>
           <p>${highlight(p.problem, highlights)}</p>
         </div>
         
         <div class="section-block">
-          <div class="section-heading-row">
-            ${pilcrow}
-            <h4>The Approach</h4>
-            <div class="heading-line"></div>
-          </div>
+          <h4 class="section-heading">${pilcrow}The Approach</h4>
           <p>${highlight(p.approach, highlights)}</p>
         </div>
         
         <div class="section-block">
-          <div class="section-heading-row">
-            ${pilcrow}
-            <h4>The Outcome</h4>
-            <div class="heading-line"></div>
-          </div>
+          <h4 class="section-heading">${pilcrow}The Outcome</h4>
           <p>${highlight(p.outcome, highlights)}</p>
         </div>
         
-        <div class="colophon-header">
-          <div class="heading-line"></div>
-          <span>Instruments &amp; Methods</span>
-          <div class="heading-line"></div>
+        <div class="tech-pill-row">
+          <span class="row-label">Built with —</span>
+          ${pillsHtml}
         </div>
-        <div class="desk-tech-tags">
-          ${sealsHtml}
-        </div>
-        ${p.url ? `<a href="${p.url}" target="_blank" class="desk-project-link">View project →</a>` : ''}
+        
+        ${p.url ? `<a href="${p.url}" target="_blank" class="project-link">View project →</a>` : ''}
       `;
       
-      contentLayer.style.transition = 'none';
-      contentLayer.style.transform = 'translateY(28px)';
-      contentLayer.style.opacity = '0';
-      
-      const seals = contentLayer.querySelectorAll('.wax-seal');
-      seals.forEach((seal, i) => {
-        seal.style.transition = 'opacity 400ms ease, transform 400ms cubic-bezier(0.16, 1, 0.3, 1)';
-        seal.style.transitionDelay = (300 + i * 55) + 'ms';
-      });
-      
-      shimmer.classList.remove('active');
-      void shimmer.offsetWidth;
-      shimmer.classList.add('active');
-      
-      const incomingDelay = isInitial ? 50 : 20;
-      
-      setTimeout(() => {
-        contentLayer.style.transition = 'transform 280ms cubic-bezier(0.16, 1, 0.3, 1), opacity 280ms cubic-bezier(0.16, 1, 0.3, 1)';
-        contentLayer.style.transform = 'translateY(0)';
-        contentLayer.style.opacity = '1';
-        
-        seals.forEach(seal => {
-          seal.style.opacity = '1';
-          seal.style.transform = 'translateY(0)';
-        });
-        
-      }, incomingDelay);
-      
-    }, swapDelay);
+      container.appendChild(card);
+    });
+
+    const sweepLine = document.createElement('div');
+    sweepLine.className = 'sweep-line';
+    container.appendChild(sweepLine);
+
+    window.addEventListener('scroll', () => {
+      requestAnimationFrame(updateDeck);
+    });
+    // Initial call
+    updateDeck();
   }
 
-  function handleTabClick(index) {
-    if (index === activeIndex) return;
-    
-    const tabs = document.querySelectorAll('.desk-tab');
-    if (tabs[activeIndex]) tabs[activeIndex].classList.remove('active');
-    activeIndex = index;
-    if (tabs[activeIndex]) tabs[activeIndex].classList.add('active');
-    
-    swapProjectDetail(activeIndex, false);
-  }
+  let lastActiveIndex = 0;
+  let sweepLineActive = false;
 
-  function enhanceSectionAtmosphere() {
-    const workSection = document.getElementById('work');
-    if (!workSection) return;
+  function updateDeck() {
+    const sentinel = document.getElementById('deck-scroll-sentinel');
+    const container = document.getElementById('deck-container');
+    const sweepLine = container.querySelector('.sweep-line');
+    if (!sentinel) return;
+
+    const rect = sentinel.getBoundingClientRect();
+    const totalScroll = sentinel.offsetHeight - window.innerHeight;
     
-    const existingFrieze = workSection.querySelector('.section-frieze');
-    if (!existingFrieze) {
-      const frieze = document.createElement('div');
-      frieze.className = 'section-frieze';
-      frieze.innerHTML = `
-        <svg width="100%" height="24" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="frieze-pattern" x="0" y="0" width="40" height="24" patternUnits="userSpaceOnUse">
-              <line x1="10" y1="6" x2="10" y2="18" stroke="var(--gold-soft)" stroke-width="1" opacity="0.45" />
-              <polygon points="30,8 34,12 30,16 26,12" fill="none" stroke="var(--gold-soft)" stroke-width="1" opacity="0.45" />
-            </pattern>
-          </defs>
-          <rect x="0" y="0" width="100%" height="100%" fill="url(#frieze-pattern)" />
-        </svg>
-      `;
-      workSection.insertBefore(frieze, workSection.firstChild);
+    // scrolled is how far the top of the sentinel has gone past the top of the viewport
+    // Wait, the sticky container keeps deck-container fixed, but sentinel scrolls up.
+    // If sentinel top is 0, progress = 0.
+    const scrolled = -rect.top;
+    
+    // We only care when sentinel is within the viewport or above it
+    if (scrolled < 0) {
+      // not yet reached
+      applyTransforms(-1, 0); // show first card fully
+      return;
     }
+    
+    let progress = Math.max(0, Math.min(1, scrolled / totalScroll));
+    if (totalScroll <= 0) progress = 0;
+    
+    const projectProgress = progress * (projects.length - 1); // length - 1 because last card doesn't scroll off
+    const activeIndex = Math.floor(projectProgress);
+    const cardProgress = projectProgress - activeIndex;
 
-    const titleContainer = workSection.querySelector('h2');
-    if (titleContainer && !titleContainer.querySelector('.title-star')) {
-      const titleText = titleContainer.textContent.trim();
-      titleContainer.innerHTML = `
-        <svg class="title-star" width="12" height="12" viewBox="0 0 12 12"><polygon points="6,0 6.8,4.2 11,3 7.8,6.8 11,11 6.8,8.8 6,12 5.2,8.8 1,11 4.2,6.8 1,3 5.2,4.2" fill="var(--gold)" opacity="0.6"/></svg>
-        ${titleText}
-        <svg class="title-star" width="12" height="12" viewBox="0 0 12 12"><polygon points="6,0 6.8,4.2 11,3 7.8,6.8 11,11 6.8,8.8 6,12 5.2,8.8 1,11 4.2,6.8 1,3 5.2,4.2" fill="var(--gold)" opacity="0.6"/></svg>
-      `;
-      titleContainer.style.textAlign = 'center';
-      const stars = titleContainer.querySelectorAll('.title-star');
-      stars.forEach(s => {
-        s.style.margin = '0 12px';
-        s.style.display = 'inline-block';
-        s.style.verticalAlign = 'middle';
-      });
+    applyTransforms(activeIndex, cardProgress);
+
+    // Trigger sweep line between transitions
+    if (cardProgress > 0.4 && cardProgress < 0.6 && activeIndex !== lastActiveIndex) {
+      if (!sweepLineActive) {
+        sweepLineActive = true;
+        sweepLine.style.animation = 'sweep-flash 300ms ease';
+        setTimeout(() => {
+          sweepLine.style.animation = 'none';
+          sweepLineActive = false;
+        }, 300);
+      }
+      lastActiveIndex = activeIndex;
     }
   }
 
-  function renderAll() {
-    const grid = document.getElementById('project-grid');
-    grid.innerHTML = '';
+  function applyTransforms(activeIndex, cardProgress) {
+    if (activeIndex < 0) {
+      activeIndex = 0;
+      cardProgress = 0;
+    }
     
-    const leftPanel = document.createElement('div');
-    leftPanel.className = 'desk-left-panel';
-    
-    const spine = document.createElement('div');
-    spine.className = 'desk-spine';
-    spine.innerHTML = `
-      <svg class="spine-svg" width="18" height="100%" preserveAspectRatio="none">
-        <line x1="9" y1="0" x2="9" y2="100%" stroke="var(--gold-soft)" stroke-width="0.8" opacity="0.6" />
-        <rect x="6.5" y="25%" width="5" height="5" fill="var(--gold)" opacity="0.4" transform="rotate(45 9 25%)" />
-        <rect x="6.5" y="50%" width="5" height="5" fill="var(--gold)" opacity="0.4" transform="rotate(45 9 50%)" />
-        <rect x="6.5" y="75%" width="5" height="5" fill="var(--gold)" opacity="0.4" transform="rotate(45 9 75%)" />
-      </svg>
-    `;
-    leftPanel.appendChild(spine);
-    
-    projects.forEach((p, i) => {
-      const tab = document.createElement('div');
-      tab.className = 'desk-tab';
-      if (i === activeIndex) tab.classList.add('active');
+    projects.forEach((_, i) => {
+      const card = document.getElementById(`project-card-${i}`);
+      if (!card) return;
       
-      tab.innerHTML = `
-        <div class="ambient-glow"></div>
-        <div class="tab-content">
-          <div class="chapter-illumination" id="miniature-${p.id}"></div>
-          <div class="row-1">
-            <span class="plate-mark">${ROMANS[i] || (i + 1)}</span>
-            <span class="tab-name">${p.name}</span>
-          </div>
-          <div class="row-2">
-            <div class="tab-oneliner">${p.oneLiner}</div>
-          </div>
-        </div>
-      `;
+      const totalCards = projects.length;
+      card.style.zIndex = totalCards - i;
       
-      tab.addEventListener('click', () => handleTabClick(i));
-      leftPanel.appendChild(tab);
-      
-      if (i < projects.length - 1) {
-        const divider = document.createElement('div');
-        divider.className = 'tab-divider';
-        divider.setAttribute('aria-hidden', 'true');
-        divider.innerHTML = `
-          <svg width="100%" height="12" viewBox="0 0 100 12" preserveAspectRatio="none">
-            <line x1="0" y1="6" x2="100" y2="6" stroke="var(--gold-soft)" opacity="0.4" stroke-width="1" />
-            <polygon points="50,1 52,4 55,6 52,8 50,11 48,8 45,6 48,4" fill="var(--gold)" opacity="0.35" />
-          </svg>
-        `;
-        leftPanel.appendChild(divider);
+      if (i < activeIndex) {
+        // Card has been scrolled off
+        card.style.transform = `translateY(-60px) rotate(-2deg)`;
+        card.style.opacity = '0';
+        card.style.pointerEvents = 'none';
+      } else if (i === activeIndex) {
+        // Currently exiting card
+        // Interpolate out
+        const yOffset = -60 * cardProgress;
+        const rotOffset = -2 * cardProgress;
+        const opacity = 1 - (cardProgress * 1.5); // fades slightly faster
+        card.style.transform = `translateY(${yOffset}px) rotate(${rotOffset}deg)`;
+        card.style.opacity = Math.max(0, opacity).toString();
+        card.style.pointerEvents = opacity > 0.5 ? 'auto' : 'none';
+      } else {
+        // Cards waiting in stack
+        // Their index relative to active:
+        const relIdx = i - activeIndex;
+        // As cardProgress goes 0->1, they move up one slot.
+        // position(relIdx) at 0 progress = offset for relIdx
+        // position(relIdx) at 1 progress = offset for relIdx - 1
+        
+        // Let's interpolate:
+        const currentPos = relIdx - cardProgress;
+        
+        const yOffset = 16 * currentPos;
+        const scale = Math.max(0.9, 1 - (0.03 * currentPos));
+        
+        // Base opacity: front card is 1, rest are 0.6
+        // Transition front-most waiting card from 0.6 -> 1
+        let opacity = 0.6;
+        if (relIdx === 1) {
+          opacity = 0.6 + (0.4 * cardProgress);
+        }
+        
+        card.style.transform = `translateY(${yOffset}px) scale(${scale})`;
+        card.style.opacity = opacity.toString();
+        card.style.pointerEvents = 'none';
       }
     });
-    
-    const rightPanel = document.createElement('div');
-    rightPanel.className = 'desk-right-panel';
-    
-    const ruledLines = document.createElement('div');
-    ruledLines.className = 'ruled-lines';
-    ruledLines.innerHTML = `
-      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="ruled" x="0" y="0" width="100" height="28" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="28" x2="1000" y2="28" stroke="var(--gold-soft)" stroke-width="0.4" opacity="0.18" />
-          </pattern>
-        </defs>
-        <rect x="0" y="0" width="100%" height="100%" fill="url(#ruled)" />
-      </svg>
-    `;
-    rightPanel.appendChild(ruledLines);
-    
-    const folioMark = document.createElement('div');
-    folioMark.className = 'folio-mark';
-    folioMark.textContent = `Fol. ${ROMANS[activeIndex] || 1}`;
-    rightPanel.appendChild(folioMark);
-    
-    const shimmer = document.createElement('div');
-    shimmer.className = 'page-shimmer';
-    rightPanel.appendChild(shimmer);
-    
-    const contentLayer = document.createElement('div');
-    contentLayer.className = 'desk-content-layer';
-    contentLayer.style.opacity = '0'; 
-    rightPanel.appendChild(contentLayer);
-    
-    grid.appendChild(leftPanel);
-    grid.appendChild(rightPanel);
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !initialLoadDone) {
-          initialLoadDone = true;
-          setTimeout(() => {
-            swapProjectDetail(activeIndex, true);
-          }, 250);
-          observer.disconnect();
-        }
-      });
-    }, { threshold: 0.1 });
-    observer.observe(grid);
   }
+
+  // Also hook into scroll for the rosette dissolve and fixed contact button
+  function updateHeroScroll() {
+    const work = document.getElementById('work');
+    const rosetteWrap = document.getElementById('rosette-wrap');
+    const fixedContactBtn = document.getElementById('contact-fixed-btn');
+    if (!work || !rosetteWrap || !fixedContactBtn) return;
+    
+    const rect = work.getBoundingClientRect();
+    const threshold = window.innerHeight * 0.85; // enters viewport threshold
+    
+    if (rect.top < threshold) {
+      // Work section entered
+      rosetteWrap.style.transition = 'opacity 600ms ease-in, transform 600ms cubic-bezier(0.4, 0, 1, 1)';
+      rosetteWrap.style.opacity = '0';
+      rosetteWrap.style.transform = 'translate(-50%, -50%) scale(0.15)';
+      
+      fixedContactBtn.style.opacity = '1';
+      fixedContactBtn.style.pointerEvents = 'auto';
+    } else {
+      // Back to hero
+      rosetteWrap.style.transition = 'opacity 600ms ease, transform 600ms cubic-bezier(0.16, 1, 0.3, 1)';
+      rosetteWrap.style.opacity = '1';
+      rosetteWrap.style.transform = 'translate(-50%, -50%) scale(1)';
+      
+      fixedContactBtn.style.opacity = '0';
+      fixedContactBtn.style.pointerEvents = 'none';
+    }
+  }
+
+  window.addEventListener('scroll', () => {
+    requestAnimationFrame(updateHeroScroll);
+  });
+
+  // Attach fixed contact button logic
+  document.addEventListener('DOMContentLoaded', () => {
+    const fixedBtn = document.getElementById('contact-fixed-btn');
+    if (fixedBtn && typeof window.openContactPanel === 'function') {
+      fixedBtn.addEventListener('click', window.openContactPanel);
+    }
+    // ensure hero contact seal also works
+    const heroBtn = document.getElementById('contact-seal');
+    if (heroBtn && typeof window.openContactPanel === 'function') {
+       heroBtn.addEventListener('click', window.openContactPanel);
+    }
+  });
 
   fetch('data/projects.json')
     .then(r => r.json())
     .then(data => {
       projects = data;
-      renderAll();
-      
-      projects.forEach(p => {
-        const mini = document.getElementById(`miniature-${p.id}`);
-        if (mini && typeof window.renderCardArt === 'function') {
-          window.renderCardArt(mini, p.id);
-        }
-      });
-      
-      enhanceSectionAtmosphere();
-      
-      if (typeof renderTessellation === 'function') {
-        renderTessellation(projects.length);
-      }
+      renderDeck();
     });
 })();

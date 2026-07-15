@@ -23,68 +23,58 @@
   </div>
   <div class="hero-cursor" id="hero-cursor" aria-hidden="true"></div>
 
-  <!-- Hidden SVG arch clip-path definition (Phase 4) -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <defs>
-      <clipPath id="arch-clip" clipPathUnits="objectBoundingBox">
-        <path d="M0,1 L0,0.42 C0,0.20 0.16,0.07 0.5,0 C0.84,0.07 1,0.20 1,0.42 L1,1 Z" />
-      </clipPath>
-    </defs>
-  </svg>
+  
 
-  <!-- Reveal overlay — see Phase 8 -->
-  <div id="reveal-overlay">
-    <svg id="reveal-star" viewBox="0 0 100 100">
-      <polygon points="50,8 56.89,33.37 79.70,20.30 66.63,43.11 92,50 66.63,56.89 79.70,79.70 56.89,66.63 50,92 43.11,66.63 20.30,79.70 33.37,56.89 8,50 33.37,43.11 20.30,20.30 43.11,33.37" />
-    </svg>
+  
+
+  
+  <div id="contact-fixed-btn" style="opacity: 0; pointer-events: none;">
+    Contact
   </div>
 
-  <div class="contact-seal-wrap">
-    <button id="contact-seal" aria-label="Contact">
-      <svg class="seal-mark" viewBox="0 0 20 20" aria-hidden="true">
-        <polygon points="10,1 11.53,6.30 16.36,3.64 13.70,8.47 19,10 13.70,11.53 16.36,16.36 11.53,13.70 10,19 8.47,13.70 3.64,16.36 6.30,11.53 1,10 6.30,8.47 3.64,3.64 8.47,6.30" fill="var(--gold)" opacity="0.85"/>
-      </svg>
-      <span class="seal-label">Contact</span>
-    </button>
-  </div>
 
-  <section id="hero">
-    <div class="page-frame" aria-hidden="true">
-      <svg class="frame-corner corner-tl" viewBox="0 0 40 40"><path d="M2,38 Q2,2 38,2 M10,38 Q10,14 26,10" fill="none" stroke="var(--gold)" stroke-width="1"/></svg>
-      <svg class="frame-corner corner-tr" viewBox="0 0 40 40"><path d="M2,38 Q2,2 38,2 M10,38 Q10,14 26,10" fill="none" stroke="var(--gold)" stroke-width="1"/></svg>
-      <svg class="frame-corner corner-bl" viewBox="0 0 40 40"><path d="M2,38 Q2,2 38,2 M10,38 Q10,14 26,10" fill="none" stroke="var(--gold)" stroke-width="1"/></svg>
-      <svg class="frame-corner corner-br" viewBox="0 0 40 40"><path d="M2,38 Q2,2 38,2 M10,38 Q10,14 26,10" fill="none" stroke="var(--gold)" stroke-width="1"/></svg>
-    </div>
-
-    <div class="folio-mark" aria-hidden="true">Fol. I</div>
-    <div class="marginalia" id="marginalia" aria-hidden="true"></div>
-
+    <section id="hero">
     <div class="lamplight" aria-hidden="true"></div>
-    <div class="motes-field" aria-hidden="true"></div>
-    <div class="constellation" id="constellation"></div>
+    <div class="hero-cursor" id="hero-cursor" aria-hidden="true"></div>
 
-    <div class="hero-grid">
-      <div class="hero-content">
-        <p class="hero-kicker">As-salamu alaykum, I'm</p>
-        <h1 class="hero-name">
-          Aarish
-          <svg class="name-underline" viewBox="0 0 220 14" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M4,8 C40,2 90,12 130,6 C160,2 190,9 216,5" fill="none" stroke="var(--gold)" stroke-width="2"/>
-          </svg>
-        </h1>
-        <p class="hero-intro">— an AI student who builds end-to-end, from multi-agent pipelines to learning platforms.</p>
-      </div>
-
-      <div class="hero-illumination" id="hero-illumination" aria-hidden="true"></div>
+    <div id="rosette-wrap" aria-hidden="true">
+      <svg id="rosette-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+        <!-- layers injected by JS -->
+      </svg>
     </div>
 
+    <div id="hero-text" aria-hidden="false">
+      <p class="hero-kicker">As-salamu alaykum — I'm</p>
+      <h1 class="hero-name">Aarish</h1>
+      <p class="hero-intro">AI student. I build end-to-end —<br>
+      from multi-agent pipelines to learning platforms.</p>
+    </div>
 
+    <div class="hero-bottom-row">
+      <button id="contact-seal" aria-label="Contact">
+        <span class="seal-label">Contact</span>
+      </button>
+      <a href="#work" class="scroll-hint" aria-label="Scroll to work">
+        <svg width="20" height="32" viewBox="0 0 20 32">
+          <rect x="7" y="1" width="6" height="18" rx="3"
+                fill="none" stroke="var(--gold)" stroke-width="1.2"/>
+          <circle cx="10" cy="7" r="2" fill="var(--gold)" class="scroll-dot"/>
+        </svg>
+      </a>
+    </div>
   </section>
 
-  <section id="work">
-    <h2 class="section-title">Selected Work</h2>
-    <div id="tessellation-strip"></div>      <!-- Phase 11 -->
-    <div id="project-grid"></div>            <!-- Phase 12 -->
+    <section id="work">
+    <div class="section-label">
+      <span class="label-text">Selected Work</span>
+      <div class="label-line"></div>
+    </div>
+    
+    <div id="deck-scroll-sentinel">
+      <div id="deck-container">
+        <!-- .project-page elements injected by JS -->
+      </div>
+    </div>
   </section>
 
   <footer class="site-footer">
