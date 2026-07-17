@@ -27,6 +27,25 @@
     lampY += (targetY - lampY) * 0.12;
     lamp.style.transform = `translate(${lampX - 240}px, ${lampY - 240}px)`;
 
+    window.lampWorldX = lampX;
+    window.lampWorldY = lampY;
+
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const maxDist = Math.min(window.innerWidth, window.innerHeight) * 0.5;
+    const dist = Math.hypot(lampX - cx, lampY - cy);
+    const proximity = Math.max(0, 1 - dist / maxDist);
+
+    const rosetteOpacity = 0.42 + (proximity * 0.38);
+    const rosetteSvg = document.getElementById('rosette-svg');
+    if (rosetteSvg && !window.rosetteUnfolded) {
+      rosetteSvg.style.opacity = rosetteOpacity;
+    }
+
+    const warmth = (proximity * 0.15).toFixed(3);
+    document.documentElement.style.setProperty('--lamp-warm', warmth);
+
+
     hero.dispatchEvent(new CustomEvent('lamplight:move', { detail: { x: lampX, y: lampY } }));
 
     if (Math.abs(targetX - lampX) > 0.5 || Math.abs(targetY - lampY) > 0.5) {

@@ -113,6 +113,37 @@
     const activeIndex = Math.floor(projectProgress);
     const cardProgress = projectProgress - activeIndex;
 
+    const clipRect = document.getElementById('progress-clip-rect');
+    if (clipRect) {
+      const fillHeight = progress * 40;
+      clipRect.setAttribute('y', 40 - fillHeight);
+      clipRect.setAttribute('height', fillHeight);
+    }
+    
+    const progressStar = document.getElementById('progress-star');
+    if (progressStar) {
+      if (progress > 0 && progress < 1) {
+        progressStar.style.opacity = '1';
+        progressStar.style.transform = 'scale(1)';
+      } else if (progress === 1) {
+        // pulse
+        if (progressStar.dataset.pulsed !== 'true') {
+          progressStar.dataset.pulsed = 'true';
+          progressStar.style.transition = 'opacity 400ms ease, transform 300ms ease';
+          progressStar.style.transform = 'scale(1.3)';
+          progressStar.style.opacity = '1';
+          setTimeout(() => {
+             progressStar.style.transform = 'scale(1)';
+             setTimeout(() => { progressStar.style.opacity = '0'; }, 300);
+          }, 300);
+        }
+      } else {
+        progressStar.style.opacity = '0';
+        progressStar.dataset.pulsed = 'false';
+      }
+    }
+
+
     applyTransforms(activeIndex, cardProgress);
 
     // Trigger sweep line between transitions
@@ -184,32 +215,37 @@
     });
   }
 
-  // Also hook into scroll for the rosette dissolve and fixed contact button
+  let rosetteUnfolded = false;
+  window.rosetteUnfolded = false;
+
   function updateHeroScroll() {
     const work = document.getElementById('work');
-    const rosetteWrap = document.getElementById('rosette-wrap');
-    const fixedContactBtn = document.getElementById('contact-fixed-btn');
-    if (!work || !rosetteWrap || !fixedContactBtn) return;
+    const fixedContactBtn = document.getElementById('contact-fixed-btn'); // may be unused now if wrap is the button, but we leave it
+    if (!work) return;
     
     const rect = work.getBoundingClientRect();
-    const threshold = window.innerHeight * 0.85; // enters viewport threshold
+    const threshold = window.innerHeight * 0.85; 
     
     if (rect.top < threshold) {
-      // Work section entered
-      rosetteWrap.style.transition = 'opacity 600ms ease-in, transform 600ms cubic-bezier(0.4, 0, 1, 1)';
-      rosetteWrap.style.opacity = '0';
-      rosetteWrap.style.transform = 'translate(-50%, -50%) scale(0.15)';
-      
-      fixedContactBtn.style.opacity = '1';
-      fixedContactBtn.style.pointerEvents = 'auto';
+      if (!rosetteUnfolded && typeof window.unfoldRosette === 'function') {
+        rosetteUnfolded = true;
+        window.rosetteUnfolded = true;
+        window.unfoldRosette();
+        if (fixedContactBtn) {
+          fixedContactBtn.style.opacity = '1';
+          fixedContactBtn.style.pointerEvents = 'auto';
+        }
+      }
     } else {
-      // Back to hero
-      rosetteWrap.style.transition = 'opacity 600ms ease, transform 600ms cubic-bezier(0.16, 1, 0.3, 1)';
-      rosetteWrap.style.opacity = '1';
-      rosetteWrap.style.transform = 'translate(-50%, -50%) scale(1)';
-      
-      fixedContactBtn.style.opacity = '0';
-      fixedContactBtn.style.pointerEvents = 'none';
+      if (rosetteUnfolded && typeof window.restoreRosette === 'function') {
+        rosetteUnfolded = false;
+        window.rosetteUnfolded = false;
+        window.restoreRosette();
+        if (fixedContactBtn) {
+          fixedContactBtn.style.opacity = '0';
+          fixedContactBtn.style.pointerEvents = 'none';
+        }
+      }
     }
   }
 

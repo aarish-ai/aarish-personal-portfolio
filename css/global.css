@@ -6,13 +6,13 @@
 
 :root {
   /* Core palette — warm manuscript tones, NOT black/white */
-  --ivory: #F0E6D0;
+  --ivory: #F4ECD8;
   --ivory-deep: #D4BA85;
-  --ink: #0D1A2E;
-  --ink-soft: #1A2F4A;
+  --ink: #080F1C;
+  --ink-soft: #0F1E35;
   --teal: #4AABBA;
-  --gold: #C9A84C;
-  --gold-soft: #A88A3C;
+  --gold: #D4A843;
+  --gold-soft: #B8922E;
   --oxblood: #8B3A3A;
 
   --font-serif: 'Cormorant Garamond', serif;
@@ -264,4 +264,30 @@ a {
   background-image: repeating-linear-gradient(45deg, rgba(201,168,76,0.3) 0 4px, transparent 4px 8px);
   opacity: 0.4;
   margin-bottom: 32px;
+}
+
+#audio-toggle {
+  position: fixed;
+  top: 24px;
+  left: 28px;
+  z-index: 600;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-soft);
+  background: rgba(8, 15, 28, 0.75);
+  backdrop-filter: blur(6px);
+  color: var(--gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 200ms ease, box-shadow 200ms ease, opacity 200ms ease;
+  opacity: 0.7;
+}
+
+#audio-toggle:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(212,168,67,0.2);
+  opacity: 1;
 }
