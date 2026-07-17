@@ -134,12 +134,12 @@
     // Radial Mist Layer
     const defs = createEl('defs', {});
     const rg = createEl('radialGradient', { id: 'rosette-mist', cx: '50%', cy: '50%', r: '50%' });
-    rg.innerHTML = 
+    rg.innerHTML = `
       <stop offset="0%" stop-color="#080F1C" stop-opacity="0.0"/>
       <stop offset="55%" stop-color="#080F1C" stop-opacity="0.0"/>
       <stop offset="80%" stop-color="#080F1C" stop-opacity="0.45"/>
       <stop offset="100%" stop-color="#080F1C" stop-opacity="0.82"/>
-    ;
+    `;
     defs.appendChild(rg);
     svg.appendChild(defs);
     const mistRect = createEl('rect', { width: '600', height: '600', fill: 'url(#rosette-mist)', 'pointer-events': 'none' });

@@ -29,7 +29,7 @@
       
       const pillsHtml = p.tech.map(t => `<span class="tech-pill">${t}</span>`).join('');
       
-      const pilcrow = `<svg width="8" height="8" viewBox="0 0 12 12" style="fill: var(--gold); margin-right: 6px;"><path d="M6,0 L8,4 L12,6 L8,8 L6,12 L4,8 L0,6 L4,4 Z" /></svg>`;
+      const pilcrow = `<svg width="8" height="8" viewBox="0 0 12 12" style="fill: var(--gold); margin-right: 6px;"><path d="M6,0 L7,5 L12,6 L7,7 L6,12 L5,7 L0,6 L5,5 Z" /></svg>`;
       
       card.innerHTML = `
         <div class="folio-notation">Fol. ${ROMANS[i] || (i+1)}</div>
