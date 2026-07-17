@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #080F1C;
+  --color-ink-soft: #0F1E35;
+  --color-ivory: #F4ECD8;
+  --color-gold: #D4A843;
+  --color-gold-soft: #B8922E;
+  --color-teal: #4B8B8B;
+  --color-oxblood: #6A2C2C;
+}
+
+@layer base {
+  :root {
+    --ink: #080F1C;
+    --ink-soft: #0F1E35;
+    --ivory: #F4ECD8;
+    --gold: #D4A843;
+    --gold-soft: #B8922E;
+    --teal: #4B8B8B;
+    --oxblood: #6A2C2C;
+  }
+  
+  html, body {
+    @apply bg-[var(--ink)] text-[var(--ivory)] m-0 p-0 overflow-x-hidden;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6, .serif {
+    font-family: 'Cormorant Garamond', serif;
+  }
+}
+
+/* Custom Scrollbar for the right panel if needed */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 168, 67, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 168, 67, 0.4);
+}
