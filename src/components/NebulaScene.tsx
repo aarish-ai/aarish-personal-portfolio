@@ -154,7 +154,7 @@ function Particles({ warpActive, isAbout }: { warpActive: boolean, isAbout: bool
 export default function NebulaScene() {
   const pathname = usePathname();
   const [warpActive, setWarpActive] = useState(false);
-  const isAbout = pathname === '/about';
+  const isHome = pathname === '/';
 
   // Trigger warp effect on route change
   useEffect(() => {
@@ -170,7 +170,7 @@ export default function NebulaScene() {
     <div className="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--color-ink-soft)_0%,_var(--color-ink)_100%)]">
       <Canvas camera={{ position: [0, 0, 15], fov: 60 }}>
         <fog attach="fog" args={['#080F1C', 10, 40]} />
-        <Particles warpActive={warpActive} isAbout={isAbout} />
+        <Particles warpActive={warpActive} isAbout={isHome} />
       </Canvas>
     </div>
   );

@@ -10,6 +10,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 import NebulaScene from "@/components/NebulaScene";
+import AstrolabeNav from "@/components/AstrolabeNav";
 
 export const metadata: Metadata = {
   title: "Aarish | Portfolio",
@@ -22,10 +23,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${cormorant.variable} antialiased`}>
+    <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
+      <body className="antialiased bg-[var(--ink)] text-[var(--ivory)] min-h-screen selection:bg-[var(--gold)]/30 selection:text-[var(--gold)]">
         <NebulaScene />
-        {children}
+        <div className="relative z-10 min-h-screen flex flex-col">
+          {children}
+        </div>
+        <AstrolabeNav />
       </body>
     </html>
   );
