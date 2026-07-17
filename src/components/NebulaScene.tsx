@@ -7,11 +7,10 @@ import * as THREE from 'three';
 
 const NUM_PARTICLES = 2500;
 
-function Particles({ warpActive }: { warpActive: boolean }) {
+function Particles({ warpActive, isAbout }: { warpActive: boolean, isAbout: boolean }) {
   const pointsRef = useRef<THREE.Points>(null);
-  const { mouse, viewport } = useThree();
 
-  // Create a procedural glowing dot texture
+  // Procedural glowing dot texture
   const particleTexture = useMemo(() => {
     const canvas = document.createElement('canvas');
     canvas.width = 64;
@@ -20,75 +19,108 @@ function Particles({ warpActive }: { warpActive: boolean }) {
     if (context) {
       const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
       gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-      gradient.addColorStop(0.2, 'rgba(212, 168, 67, 0.8)'); // Gold core
-      gradient.addColorStop(0.5, 'rgba(212, 168, 67, 0.2)'); // Soft glow
+      gradient.addColorStop(0.2, 'rgba(212, 168, 67, 0.8)'); 
+      gradient.addColorStop(0.5, 'rgba(212, 168, 67, 0.2)'); 
       gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
       
       context.fillStyle = gradient;
       context.fillRect(0, 0, 64, 64);
     }
-    const texture = new THREE.CanvasTexture(canvas);
-    return texture;
+    return new THREE.CanvasTexture(canvas);
   }, []);
 
-  const [positions, scales, opacities, baseZ] = useMemo(() => {
-    const p = new Float32Array(NUM_PARTICLES * 3);
+  const [basePositions, astrolabePositions, scales, currentPositions] = useMemo(() => {
+    const baseP = new Float32Array(NUM_PARTICLES * 3);
+    const astroP = new Float32Array(NUM_PARTICLES * 3);
+    const currP = new Float32Array(NUM_PARTICLES * 3);
     const s = new Float32Array(NUM_PARTICLES);
-    const o = new Float32Array(NUM_PARTICLES);
-    const bz = new Float32Array(NUM_PARTICLES);
 
     for (let i = 0; i < NUM_PARTICLES; i++) {
-      // Create a cylindrical spread around the user
+      // --- Base Nebula State ---
       const radius = 5 + Math.random() * 35;
       const theta = Math.random() * Math.PI * 2;
       const y = (Math.random() - 0.5) * 40;
-
-      p[i * 3] = Math.cos(theta) * radius;
-      p[i * 3 + 1] = y;
-      
-      // Spread Z from far back to just in front of camera
       const z = (Math.random() - 0.5) * 50; 
-      p[i * 3 + 2] = z;
-      bz[i] = z; // Store base Z for resetting during warp
+      
+      baseP[i * 3] = Math.cos(theta) * radius;
+      baseP[i * 3 + 1] = y;
+      baseP[i * 3 + 2] = z;
+      
+      currP[i * 3] = baseP[i * 3];
+      currP[i * 3 + 1] = baseP[i * 3 + 1];
+      currP[i * 3 + 2] = baseP[i * 3 + 2];
 
-      s[i] = Math.random() * 1.5 + 0.5; // Slightly larger for the soft texture
-      o[i] = Math.random() * 0.5 + 0.1;
+      s[i] = Math.random() * 1.5 + 0.5;
+
+      // --- Astrolabe/Gyroscope Target State ---
+      // Distribute particles into 3 interlocking rings at different radii + a central core
+      const ringGroup = i % 9;
+      const ringTheta = Math.random() * Math.PI * 2;
+      let targetX = 0, targetY = 0, targetZ = 0;
+
+      if (i < 500) {
+        // Inner glowing core
+        targetX = (Math.random() - 0.5) * 6;
+        targetY = (Math.random() - 0.5) * 6;
+        targetZ = (Math.random() - 0.5) * 6;
+      } else {
+        // Rings
+        const r = ringGroup < 3 ? 12 : ringGroup < 6 ? 18 : 25;
+        const axis = ringGroup % 3;
+        
+        if (axis === 0) { // XY Plane
+          targetX = Math.cos(ringTheta) * r;
+          targetY = Math.sin(ringTheta) * r;
+          targetZ = (Math.random() - 0.5) * 0.5;
+        } else if (axis === 1) { // XZ Plane
+          targetX = Math.cos(ringTheta) * r;
+          targetY = (Math.random() - 0.5) * 0.5;
+          targetZ = Math.sin(ringTheta) * r;
+        } else { // YZ Plane
+          targetX = (Math.random() - 0.5) * 0.5;
+          targetY = Math.cos(ringTheta) * r;
+          targetZ = Math.sin(ringTheta) * r;
+        }
+      }
+      
+      astroP[i * 3] = targetX;
+      astroP[i * 3 + 1] = targetY;
+      astroP[i * 3 + 2] = targetZ - 10; // Push back slightly
     }
 
-    return [p, s, o, bz];
+    return [baseP, astroP, s, currP];
   }, []);
 
   useFrame((state, delta) => {
     if (!pointsRef.current) return;
     
-    // Normal rotation
+    // Normal rotation of the entire system
     pointsRef.current.rotation.y += delta * 0.03;
     pointsRef.current.rotation.x += delta * 0.01;
 
-    // Mouse interactivity: Swirling force
-    const targetX = (mouse.x * viewport.width) / 4;
-    const targetY = (mouse.y * viewport.height) / 4;
-    
-    // Camera pan
-    state.camera.position.x += (targetX - state.camera.position.x) * 0.02;
-    state.camera.position.y += (targetY - state.camera.position.y) * 0.02;
-    state.camera.lookAt(0, 0, 0);
+    const positionsAttr = pointsRef.current.geometry.attributes.position;
+    const posArray = positionsAttr.array as Float32Array;
 
-    // Warp speed logic (flying through stars)
-    if (warpActive) {
-      const positionsAttr = pointsRef.current.geometry.attributes.position;
-      const posArray = positionsAttr.array as Float32Array;
-      
-      for (let i = 0; i < NUM_PARTICLES; i++) {
-        posArray[i * 3 + 2] += delta * 60; // Move fast towards camera
-        
-        // If it passes the camera (z > 15), wrap it far back
+    // Smoothly interpolate positions between Nebula and Astrolabe
+    const targetPositions = isAbout ? astrolabePositions : basePositions;
+    const lerpSpeed = isAbout ? delta * 1.5 : delta * 0.8;
+
+    for (let i = 0; i < NUM_PARTICLES; i++) {
+      if (warpActive) {
+        // Warp speed: ignore target temporarily and fly at camera
+        posArray[i * 3 + 2] += delta * 60;
         if (posArray[i * 3 + 2] > 20) {
-          posArray[i * 3 + 2] = -40;
+          posArray[i * 3 + 2] = -40; // Wrap back
         }
+      } else {
+        // Smoothly lerp towards target shape
+        posArray[i * 3] += (targetPositions[i * 3] - posArray[i * 3]) * lerpSpeed;
+        posArray[i * 3 + 1] += (targetPositions[i * 3 + 1] - posArray[i * 3 + 1]) * lerpSpeed;
+        posArray[i * 3 + 2] += (targetPositions[i * 3 + 2] - posArray[i * 3 + 2]) * lerpSpeed;
       }
-      positionsAttr.needsUpdate = true;
     }
+    
+    positionsAttr.needsUpdate = true;
   });
 
   return (
@@ -96,8 +128,8 @@ function Particles({ warpActive }: { warpActive: boolean }) {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={positions.length / 3}
-          args={[positions, 3]}
+          count={currentPositions.length / 3}
+          args={[currentPositions, 3]}
         />
         <bufferAttribute
           attach="attributes-scale"
@@ -106,9 +138,9 @@ function Particles({ warpActive }: { warpActive: boolean }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.4} // Increased size because glow edges are transparent
+        size={0.4}
         map={particleTexture}
-        color="#F4ECD8" // Ivory tint to mix with gold texture
+        color="#F4ECD8"
         transparent
         opacity={0.8}
         sizeAttenuation
@@ -122,13 +154,14 @@ function Particles({ warpActive }: { warpActive: boolean }) {
 export default function NebulaScene() {
   const pathname = usePathname();
   const [warpActive, setWarpActive] = useState(false);
+  const isAbout = pathname === '/about';
 
   // Trigger warp effect on route change
   useEffect(() => {
     setWarpActive(true);
     const timeout = setTimeout(() => {
       setWarpActive(false);
-    }, 800); // 0.8 seconds of warp speed
+    }, 800); 
 
     return () => clearTimeout(timeout);
   }, [pathname]);
@@ -137,7 +170,7 @@ export default function NebulaScene() {
     <div className="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--color-ink-soft)_0%,_var(--color-ink)_100%)]">
       <Canvas camera={{ position: [0, 0, 15], fov: 60 }}>
         <fog attach="fog" args={['#080F1C', 10, 40]} />
-        <Particles warpActive={warpActive} />
+        <Particles warpActive={warpActive} isAbout={isAbout} />
       </Canvas>
     </div>
   );

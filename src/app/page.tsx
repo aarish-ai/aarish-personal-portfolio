@@ -15,13 +15,20 @@ export default function Home() {
           Crafting immersive digital experiences through engineering and alchemy.
         </p>
 
-        <div className="pt-12">
+        <div className="pt-12 flex flex-col md:flex-row gap-6">
           <Link 
             href="/work" 
             className="group relative inline-flex items-center gap-4 px-8 py-4 border border-[var(--gold-soft)]/40 rounded-full hover:border-[var(--gold)] bg-[var(--ink-soft)]/50 backdrop-blur-md transition-all duration-300 hover:shadow-[0_0_30px_rgba(212,168,67,0.15)]"
           >
             <span className="text-[var(--gold)] uppercase tracking-widest text-sm font-medium">Enter the Study</span>
             <ArrowRight className="w-4 h-4 text-[var(--gold)] group-hover:translate-x-1 transition-transform" />
+          </Link>
+          
+          <Link 
+            href="/about" 
+            className="group relative inline-flex items-center justify-center gap-4 px-8 py-4 border border-[var(--teal)]/30 rounded-full hover:border-[var(--teal)]/80 bg-transparent transition-all duration-300"
+          >
+            <span className="text-[var(--ivory)] opacity-80 group-hover:opacity-100 uppercase tracking-widest text-sm font-medium transition-opacity">About the Author</span>
           </Link>
         </div>
       </div>
