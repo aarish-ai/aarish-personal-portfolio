@@ -30,11 +30,13 @@ function ConstellationNode({
   position, 
   project, 
   isActive, 
+  anyActive,
   onClick 
 }: { 
   position: [number, number, number]; 
   project: Project; 
   isActive: boolean;
+  anyActive: boolean;
   onClick: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
@@ -94,8 +96,8 @@ function ConstellationNode({
 
       {/* Floating HTML Label */}
       <Html distanceFactor={15} center position={[0, -1.2, 0]} zIndexRange={[100, 0]}>
-        <div className={`transition-all duration-500 flex flex-col items-center pointer-events-none ${isActive ? 'opacity-0' : 'opacity-100'}`}>
-          <h3 className={`font-serif whitespace-nowrap drop-shadow-[0_0_15px_rgba(255,215,0,0.8)] transition-all duration-300 ${hovered ? 'text-4xl text-[#FFEDA0]' : 'text-3xl text-[#FFC107]'}`}>
+        <div className={`transition-all duration-500 flex flex-col items-center pointer-events-none ${anyActive ? 'opacity-0' : 'opacity-100'}`}>
+          <h3 className={`font-serif whitespace-nowrap drop-shadow-md transition-all duration-300 ${hovered ? 'text-2xl text-[#FFEDA0]' : 'text-xl text-[#D4A843]'}`}>
             {project.name}
           </h3>
         </div>
@@ -177,6 +179,7 @@ function ConstellationScene({ projects, activeProject, setActiveProject }: { pro
             position={pos}
             project={project}
             isActive={activeProject?.id === project.id}
+            anyActive={activeProject !== null}
             onClick={() => setActiveProject(project)}
           />
         );
