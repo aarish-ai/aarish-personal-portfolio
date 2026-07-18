@@ -40,44 +40,62 @@ function ConstellationNode({
   const [hovered, setHovered] = useState(false);
   const meshRef = useRef<THREE.Mesh>(null);
 
+  const glowTexture = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 128;
+    canvas.height = 128;
+    const context = canvas.getContext('2d')!;
+    const gradient = context.createRadialGradient(64, 64, 0, 64, 64, 64);
+    gradient.addColorStop(0, 'rgba(255, 255, 200, 1)'); 
+    gradient.addColorStop(0.2, 'rgba(255, 200, 50, 0.8)');
+    gradient.addColorStop(1, 'rgba(212, 168, 67, 0)');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
       meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
       
-      // Pulse scale when hovered, calm otherwise
       const targetScale = hovered ? 1.5 : (isActive ? 1.2 : 1);
       meshRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
     }
   });
 
+  const haloScale = hovered || isActive ? 4 : 2.5;
+
   return (
     <group position={position}>
+      {/* The Soft Glowing Halo (Matches Nebula but brighter) */}
+      <sprite scale={[haloScale, haloScale, 1]}>
+        <spriteMaterial map={glowTexture} transparent blending={THREE.AdditiveBlending} depthWrite={false} opacity={hovered || isActive ? 1 : 0.7} />
+      </sprite>
+
+      {/* The Distorting Core */}
       <Sphere 
         ref={meshRef}
-        args={[0.6, 64, 64]} 
+        args={[0.4, 32, 32]} 
         onClick={(e) => { e.stopPropagation(); onClick(); }}
         onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
         onPointerOut={(e) => { e.stopPropagation(); setHovered(false); document.body.style.cursor = 'auto'; }}
       >
         <MeshDistortMaterial 
-          color={hovered || isActive ? "#FFD700" : "#D4A843"} 
-          emissive={hovered || isActive ? "#FF8C00" : "#D4A843"}
-          emissiveIntensity={hovered || isActive ? 2 : 0.8}
-          distort={0.3} 
-          speed={2} 
-          roughness={0.2}
-          metalness={0.8}
+          color={hovered || isActive ? "#FFEDA0" : "#FFC107"} 
+          emissive={hovered || isActive ? "#FFD700" : "#D4A843"}
+          emissiveIntensity={hovered || isActive ? 3 : 1.5}
+          distort={0.4} 
+          speed={3} 
+          roughness={0.1}
+          metalness={0.9}
         />
       </Sphere>
 
       {/* Floating HTML Label */}
       <Html distanceFactor={15} center position={[0, -1.2, 0]} zIndexRange={[100, 0]}>
         <div className={`transition-all duration-500 flex flex-col items-center pointer-events-none ${isActive ? 'opacity-0' : 'opacity-100'}`}>
-          <span className="text-[#D4A843] font-sans tracking-[0.3em] text-[10px] uppercase mb-1 drop-shadow-[0_0_8px_rgba(212,168,67,0.8)]">
-            Folio {project.id}
-          </span>
-          <h3 className={`font-serif whitespace-nowrap drop-shadow-[0_0_10px_rgba(0,0,0,0.8)] transition-all duration-300 ${hovered ? 'text-3xl text-white' : 'text-2xl text-[#D4A843]'}`}>
+          <h3 className={`font-serif whitespace-nowrap drop-shadow-[0_0_15px_rgba(255,215,0,0.8)] transition-all duration-300 ${hovered ? 'text-4xl text-[#FFEDA0]' : 'text-3xl text-[#FFC107]'}`}>
             {project.name}
           </h3>
         </div>
