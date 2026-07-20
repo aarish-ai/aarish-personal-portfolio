@@ -1,12 +1,9 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import EclipseScene from "@/components/EclipseScene";
 
 export default function About() {
   return (
     <main className="flex-1 flex flex-col min-h-screen relative overflow-x-hidden">
-      {/* The 3D Eclipse Background */}
-      <EclipseScene />
 
       {/* Navigation */}
       <nav className="absolute top-8 left-8 z-50 pointer-events-auto">
