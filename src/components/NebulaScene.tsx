@@ -81,20 +81,27 @@ function EclipseElements({ isAbout }: { isAbout: boolean }) {
        (coronaRef.current.material as THREE.SpriteMaterial).opacity = coronaOpacity;
     }
 
-    // t=0 to t=3.5: Moon slowly slides into place to cover the Sun.
+    // t=0 to t=3.5: Moon flies in from deep space behind the camera.
     if (moonRef.current) {
        const slideProgress = Math.min(1, t / 3.5);
-       const easeOutCubic = 1 - Math.pow(1 - slideProgress, 3); // Smooth deceleration
+       // Exponential deceleration for a dramatic arrival
+       const easeOutQuart = 1 - Math.pow(1 - slideProgress, 4); 
        
-       const targetX = 15 - (easeOutCubic * 15);
+       // Start far behind camera (Z=30), slightly off-center (X=4, Y=3)
+       // This forces the massive moon to sweep past the camera view
+       const startZ = 30;
+       const startX = 4;
+       const startY = 3;
        
        if (t >= 3.5) {
+          moonRef.current.position.z = 0;
           // Enable parallax once fully locked
           moonRef.current.position.x = THREE.MathUtils.lerp(moonRef.current.position.x, state.pointer.x * 0.5, 0.05);
           moonRef.current.position.y = THREE.MathUtils.lerp(moonRef.current.position.y, state.pointer.y * 0.5, 0.05);
        } else {
-          moonRef.current.position.x = targetX;
-          moonRef.current.position.y = 0;
+          moonRef.current.position.z = startZ - (easeOutQuart * startZ);
+          moonRef.current.position.x = startX - (easeOutQuart * startX);
+          moonRef.current.position.y = startY - (easeOutQuart * startY);
        }
     }
 
@@ -122,19 +129,20 @@ function EclipseElements({ isAbout }: { isAbout: boolean }) {
         <pointsMaterial color="#F4ECD8" size={0.05} transparent opacity={0} sizeAttenuation depthWrite={false} />
       </points>
 
-      {/* The Corona (Sun) */}
-      <sprite ref={coronaRef} scale={[28, 28, 1]} position={[0, 0, -2]}>
+      {/* The Corona (Sun) - Scaled up for better proportions */}
+      <sprite ref={coronaRef} scale={[30, 30, 1]} position={[0, 0, -2]}>
         <spriteMaterial map={coronaTexture} transparent opacity={0} blending={THREE.AdditiveBlending} depthWrite={false} />
       </sprite>
 
-      {/* The Moon */}
-      <mesh ref={moonRef} position={[15, 0, 0]}>
-        <sphereGeometry args={[4.8, 64, 64]} />
+      {/* The Moon - Scaled up so it covers more of the Sun */}
+      {/* Position starts behind camera, animation handles it */}
+      <mesh ref={moonRef} position={[4, 3, 30]}>
+        <sphereGeometry args={[5.5, 64, 64]} />
         <meshBasicMaterial color="#020308" />
       </mesh>
 
-      {/* The Diamond Ring Flare */}
-      <sprite ref={flareRef} scale={[8, 8, 1]} position={[3.2, 3.2, -1]}>
+      {/* The Diamond Ring Flare - Shifted out to match larger Moon */}
+      <sprite ref={flareRef} scale={[9, 9, 1]} position={[3.6, 3.6, -1]}>
         <spriteMaterial map={flareTexture} transparent opacity={0} blending={THREE.AdditiveBlending} depthWrite={false} />
       </sprite>
     </group>
