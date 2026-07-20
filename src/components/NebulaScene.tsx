@@ -64,34 +64,51 @@ function EclipseElements({ isAbout }: { isAbout: boolean }) {
   }, []);
 
   useFrame((state, delta) => {
-    // Smoothly animate the cinematic transition progress
+    // The exact cinematic timeline the user requested
     if (isAbout) {
-      progress.current = THREE.MathUtils.lerp(progress.current, 1, delta * 1.5);
+      progress.current += delta;
     } else {
-      progress.current = THREE.MathUtils.lerp(progress.current, 0, delta * 3);
+      progress.current -= delta * 3; // Fast reverse when leaving
+      if (progress.current < 0) progress.current = 0;
     }
 
-    const p = progress.current;
+    const t = progress.current;
 
-    // The Moon slides in from the right to eclipse the collapsed particles
+    // t=0 to t=1: Hyperspace jump (particles rushing).
+    // During this time, Corona smoothly fades in at the destination.
+    if (coronaRef.current) {
+       const coronaOpacity = Math.min(1, t / 1.0); // Fades in over 1 second
+       (coronaRef.current.material as THREE.SpriteMaterial).opacity = coronaOpacity;
+    }
+
+    // t=0 to t=3.5: Moon slowly slides into place to cover the Sun.
     if (moonRef.current) {
-       // Starts far right, slides to center
-       const targetX = 15 - (p * 15);
-       moonRef.current.position.x = targetX;
-
-       // Once fully in, enable subtle mouse parallax
-       if (p > 0.99) {
+       const slideProgress = Math.min(1, t / 3.5);
+       const easeOutCubic = 1 - Math.pow(1 - slideProgress, 3); // Smooth deceleration
+       
+       const targetX = 15 - (easeOutCubic * 15);
+       
+       if (t >= 3.5) {
+          // Enable parallax once fully locked
           moonRef.current.position.x = THREE.MathUtils.lerp(moonRef.current.position.x, state.pointer.x * 0.5, 0.05);
           moonRef.current.position.y = THREE.MathUtils.lerp(moonRef.current.position.y, state.pointer.y * 0.5, 0.05);
        } else {
+          moonRef.current.position.x = targetX;
           moonRef.current.position.y = 0;
        }
     }
 
-    // Fades
-    if (coronaRef.current) (coronaRef.current.material as THREE.SpriteMaterial).opacity = p;
-    if (flareRef.current) (flareRef.current.material as THREE.SpriteMaterial).opacity = Math.max(0, (p - 0.5) * 2); // Flares late
-    if (starsRef.current) (starsRef.current.material as THREE.PointsMaterial).opacity = p * 0.6;
+    // t=2.5 to t=4: Stars fade in once the Sun is mostly covered.
+    if (starsRef.current) {
+       const starOpacity = Math.max(0, Math.min(1, (t - 2.5) / 1.5)) * 0.6;
+       (starsRef.current.material as THREE.PointsMaterial).opacity = starOpacity;
+    }
+    
+    // Flare fades in exactly as the eclipse aligns
+    if (flareRef.current) {
+       const flareOpacity = Math.max(0, Math.min(1, (t - 2.8) / 1.0));
+       (flareRef.current.material as THREE.SpriteMaterial).opacity = flareOpacity;
+    }
   });
 
   return (
@@ -146,10 +163,9 @@ function Particles({ warpActive, isHome, isAbout }: { warpActive: boolean, isHom
     return new THREE.CanvasTexture(canvas);
   }, []);
 
-  const [basePositions, astrolabePositions, sunPositions, scales, currentPositions] = useMemo(() => {
+  const [basePositions, astrolabePositions, scales, currentPositions] = useMemo(() => {
     const baseP = new Float32Array(NUM_PARTICLES * 3);
     const astroP = new Float32Array(NUM_PARTICLES * 3);
-    const sunP = new Float32Array(NUM_PARTICLES * 3);
     const currP = new Float32Array(NUM_PARTICLES * 3);
     const s = new Float32Array(NUM_PARTICLES);
 
@@ -201,17 +217,9 @@ function Particles({ warpActive, isHome, isAbout }: { warpActive: boolean, isHom
       astroP[i * 3] = targetX;
       astroP[i * 3 + 1] = targetY;
       astroP[i * 3 + 2] = targetZ - 10;
-
-      // --- The Sun State (For the cinematic transition) ---
-      // A dense, flat 2D circle sitting exactly where the Eclipse corona will be
-      const sunR = Math.random() * 4.6;
-      const sunTheta = Math.random() * Math.PI * 2;
-      sunP[i * 3] = Math.cos(sunTheta) * sunR;
-      sunP[i * 3 + 1] = Math.sin(sunTheta) * sunR;
-      sunP[i * 3 + 2] = -5; // Behind the moon
     }
 
-    return [baseP, astroP, sunP, s, currP];
+    return [baseP, astroP, s, currP];
   }, []);
 
   useFrame((state, delta) => {
@@ -224,16 +232,15 @@ function Particles({ warpActive, isHome, isAbout }: { warpActive: boolean, isHom
     const positionsAttr = pointsRef.current.geometry.attributes.position;
     const posArray = positionsAttr.array as Float32Array;
 
-    // Smoothly interpolate positions based on route
-    const targetPositions = isAbout ? sunPositions : (isHome ? astrolabePositions : basePositions);
+    // Smoothly interpolate positions based on route (Sun collapse is removed for hyperspace jump)
+    const targetPositions = isHome ? astrolabePositions : basePositions;
     
-    // When collapsing to the Sun, move very fast for cinematic impact
-    const lerpSpeed = isAbout ? delta * 3.5 : delta * 0.8;
+    const lerpSpeed = delta * 0.8;
 
     for (let i = 0; i < NUM_PARTICLES; i++) {
-      if (warpActive && !isAbout) {
-        // Warp speed for general navigation (but disabled when transitioning to Eclipse)
-        posArray[i * 3 + 2] += delta * 60;
+      if (warpActive) {
+        // Warp speed: Particles rush past camera like Millenium Falcon
+        posArray[i * 3 + 2] += delta * 80;
         if (posArray[i * 3 + 2] > 20) {
           posArray[i * 3 + 2] = -40; // Wrap back
         }
@@ -247,10 +254,10 @@ function Particles({ warpActive, isHome, isAbout }: { warpActive: boolean, isHom
     
     positionsAttr.needsUpdate = true;
 
-    // Fade out particles when the Moon completely covers them
+    // Fade out particles rapidly if we jumped into the Eclipse (/about)
     if (isAbout) {
       const material = pointsRef.current.material as THREE.PointsMaterial;
-      material.opacity = THREE.MathUtils.lerp(material.opacity, 0, delta * 0.8);
+      material.opacity = THREE.MathUtils.lerp(material.opacity, 0, delta * 2.5);
     } else {
       const material = pointsRef.current.material as THREE.PointsMaterial;
       material.opacity = THREE.MathUtils.lerp(material.opacity, 0.8, delta * 2);
