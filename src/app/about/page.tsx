@@ -27,17 +27,26 @@ export default function About() {
            </div>
         </div>
 
-        {/* The Text Content Container (No Box, pure void overlay) */}
-        <div className="w-full max-w-3xl pointer-events-auto pb-64 px-6 md:px-0">
+        {/* The Text Content Container (With soft gradient strip and text shadows) */}
+        <div className="w-full max-w-2xl pointer-events-auto pb-64 px-6 md:px-12 relative">
           
-          <div className="text-center mb-16">
-            <span className="text-[#D4A843] font-sans tracking-[0.4em] text-xs uppercase font-bold block mb-4">Chapter I</span>
-            <h1 className="text-5xl md:text-7xl font-serif text-[#F4ECD8] leading-tight">The Alchemist</h1>
+          {/* Soft dark strip to dim the corona without hard edges */}
+          <div 
+            className="absolute inset-0 bg-[#020308]/50 backdrop-blur-[4px] -z-10"
+            style={{ 
+              WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
+              maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)'
+            }}
+          />
+
+          <div className="text-center mb-16 pt-16">
+            <span className="text-[#D4A843] font-sans tracking-[0.4em] text-xs uppercase font-bold block mb-4 drop-shadow-md">Chapter I</span>
+            <h1 className="text-5xl md:text-7xl font-serif text-[#F4ECD8] leading-tight drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]">The Alchemist</h1>
           </div>
 
-          <div className="text-[18px] md:text-[22px] font-serif text-[#EBE3D1]/90 leading-relaxed space-y-8 mb-32 drop-shadow-lg">
+          <div className="text-[18px] md:text-[22px] font-serif text-[#EBE3D1]/95 leading-relaxed space-y-8 mb-32 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
             <p>
-              <span className="float-left text-8xl leading-[0.7] pr-4 pt-2 text-[#D4A843]">I</span>
+              <span className="float-left text-8xl leading-[0.7] pr-4 pt-2 text-[#D4A843] drop-shadow-lg">I</span>
               'm an AI student who'd rather build than just study — most of what I know about machine learning, web systems, and software architecture has come from shipping real projects rather than only coursework.
             </p>
             <p>
