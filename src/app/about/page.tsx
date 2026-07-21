@@ -1,7 +1,17 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function About() {
+  const [showVerse, setShowVerse] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setShowVerse(true), 2500);
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <main className="flex-1 flex flex-col min-h-screen relative overflow-x-hidden">
 
@@ -16,10 +26,21 @@ export default function About() {
       {/* The Foreground Content Overlay */}
       <div className="relative z-10 w-full flex flex-col items-center justify-start pointer-events-none">
         
-        {/* 100vh Spacer: Ensures the user only sees the Eclipse when they first load the page */}
-        <div className="w-full h-[100vh] flex items-end justify-center pb-24">
+        {/* 100vh Spacer: Ensures the user sees the Sea of Stars and Verse before scrolling */}
+        <div className="w-full h-[100vh] flex flex-col items-center justify-center relative pb-12">
+           
+           {/* The Verse */}
+           <div className={`transition-opacity duration-[2000ms] ease-in-out flex flex-col items-center gap-6 text-center ${showVerse ? 'opacity-100' : 'opacity-0'}`}>
+              <h2 className="text-4xl md:text-6xl font-serif text-[#D4A843] drop-shadow-[0_0_15px_rgba(212,168,67,0.3)] leading-relaxed" dir="rtl">
+                ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ
+              </h2>
+              <p className="text-[#F4ECD8]/70 font-sans tracking-[0.2em] text-sm uppercase mt-4">
+                "All praise is for Allah - the Lord of all Worlds"
+              </p>
+           </div>
+
            {/* Subtle Scroll Hint */}
-           <div className="text-[#D4A843]/50 font-sans tracking-[0.3em] text-xs uppercase animate-pulse">
+           <div className={`absolute bottom-24 text-[#D4A843]/50 font-sans tracking-[0.3em] text-xs uppercase animate-pulse transition-opacity duration-[2000ms] ${showVerse ? 'opacity-100' : 'opacity-0'}`}>
              Scroll to Unveil
            </div>
         </div>
