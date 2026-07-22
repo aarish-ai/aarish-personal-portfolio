@@ -190,9 +190,20 @@ function ConstellationScene({ projects, activeProject, setActiveProject }: { pro
 
 export default function ConstellationCanvas({ projects }: { projects: Project[] }) {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [showStars, setShowStars] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowStars(true), 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div className="absolute inset-0 w-full h-full z-10">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: showStars ? 1 : 0 }}
+      transition={{ duration: 2 }}
+      className="absolute inset-0 w-full h-full z-10"
+    >
       
       <Canvas camera={{ position: [0, 0, 15], fov: 45 }}>
         <fog attach="fog" args={['#080F1C', 10, 40]} />
@@ -212,35 +223,32 @@ export default function ConstellationCanvas({ projects }: { projects: Project[] 
             exit={{ opacity: 0 }}
             className="absolute inset-0 z-50 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start p-6 md:p-16 pointer-events-none"
           >
-            {/* The Parchment Panel (positioned on the left side of the screen) */}
+            {/* The Dark Glassmorphism Panel */}
             <motion.div 
               initial={{ x: -50, opacity: 0, rotateY: 20 }}
               animate={{ x: 0, opacity: 1, rotateY: 0 }}
               exit={{ x: -50, opacity: 0, rotateY: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 200, delay: 0.2 }}
-              className="relative w-full md:w-[600px] max-h-[85vh] overflow-y-auto bg-[#EBE3D1] shadow-[0_30px_60px_rgba(0,0,0,0.6)] rounded-lg p-8 md:p-12 border border-[#D4A843]/30 pointer-events-auto mt-20 md:mt-0"
+              className="relative w-full md:w-[600px] max-h-[85vh] overflow-y-auto bg-[#020308]/70 backdrop-blur-xl shadow-[0_30px_60px_rgba(0,0,0,0.9)] rounded-3xl p-8 md:p-12 border border-[#D4A843]/20 pointer-events-auto mt-20 md:mt-0"
               style={{ perspective: "1500px" }}
             >
-              {/* Paper Texture */}
-              <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E\")" }} />
-              
               <button 
                 onClick={() => setActiveProject(null)}
-                className="absolute top-6 right-6 p-2 rounded-full border border-[#D4A843]/40 text-[#0F1E35] hover:bg-[#D4A843]/10 transition-colors z-20"
+                className="absolute top-6 right-6 p-2 rounded-full border border-[#D4A843]/40 text-[#F4ECD8] hover:bg-[#D4A843]/20 transition-colors z-20"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="relative z-10 flex flex-col space-y-8">
                 <div>
-                  <span className="text-[#D4A843] font-sans tracking-widest text-xs uppercase font-bold mb-2 block">Project Folio</span>
-                  <h2 className="text-4xl md:text-5xl font-serif text-[#080F1C] mb-4 leading-tight">{activeProject.name}</h2>
-                  <p className="font-serif italic text-lg md:text-xl text-[#6A2C2C] leading-snug">
+                  <span className="text-[#D4A843] font-sans tracking-widest text-xs uppercase font-bold mb-2 block drop-shadow-md">Project Folio</span>
+                  <h2 className="text-4xl md:text-5xl font-serif text-[#F4ECD8] mb-4 leading-tight drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]">{activeProject.name}</h2>
+                  <p className="font-serif italic text-lg md:text-xl text-[#D4A843]/80 leading-snug">
                     {activeProject.oneLiner}
                   </p>
                   <div className="flex flex-wrap gap-2 mt-6">
                     {activeProject.tech.map((t) => (
-                      <span key={t} className="px-3 py-1 rounded border border-[#D4A843]/40 bg-transparent text-[#0F1E35] text-[10px] tracking-wider uppercase font-medium">
+                      <span key={t} className="px-3 py-1 rounded-full border border-[#D4A843]/30 bg-black/40 text-[#F4ECD8] text-[10px] tracking-wider uppercase font-medium">
                         {t}
                       </span>
                     ))}
@@ -249,7 +257,7 @@ export default function ConstellationCanvas({ projects }: { projects: Project[] 
 
                 <div className="w-full h-px bg-gradient-to-r from-transparent via-[#D4A843]/50 to-transparent my-2"></div>
 
-                <div className="space-y-6 text-[14px] md:text-[16px] leading-relaxed text-[#0F1E35] font-serif pr-4">
+                <div className="space-y-6 text-[14px] md:text-[16px] leading-relaxed text-[#F4ECD8]/90 font-serif pr-4">
                   <div>
                     <h3 className="text-[10px] uppercase tracking-[0.2em] text-[#D4A843] mb-2 font-sans font-bold">The Problem</h3>
                     <p className="text-justify">{activeProject.problem}</p>
@@ -268,7 +276,7 @@ export default function ConstellationCanvas({ projects }: { projects: Project[] 
                 
                 {activeProject.url && (
                   <div className="pt-6">
-                    <a href={activeProject.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center w-full py-4 border border-[#D4A843] text-[#0F1E35] hover:bg-[#080F1C] hover:text-[#D4A843] transition-all duration-300 font-sans tracking-widest uppercase text-xs font-medium">
+                    <a href={activeProject.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center w-full py-4 rounded-xl border border-[#D4A843]/50 text-[#F4ECD8] hover:bg-[#D4A843]/10 hover:border-[#D4A843] transition-all duration-300 font-sans tracking-widest uppercase text-xs font-medium">
                       Examine Live Artifact
                     </a>
                   </div>
@@ -292,6 +300,6 @@ export default function ConstellationCanvas({ projects }: { projects: Project[] 
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
