@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aarish's Night Study Portfolio (V5)
 
-## Getting Started
+Welcome to the Night Study portfolio! This site is built with **Next.js 14 (App Router)**, **React Three Fiber** (for WebGL 3D graphics), **Tailwind CSS**, and **Framer Motion**.
 
-First, run the development server:
+This document serves as your definitive guide to personalizing and updating your portfolio. 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📂 Where to Edit Your Content
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Here is exactly where all of your personal data lives and how to change it.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. The Home Page (Name & One-Liner)
+**File:** `src/app/page.tsx`
+- Open this file to change the massive "AARISH" title. 
+- You can also edit the sub-headline ("Crafting immersive digital experiences through engineering and alchemy").
 
-## Learn More
+### 2. The About Page (Bio & Skills)
+**File:** `src/app/about/page.tsx`
+- **Bio (Chapter I):** Scroll down to line `~66` to find the text for your biography. You can edit the paragraphs directly here. The massive golden "I" drop-cap is hardcoded as the first letter.
+- **Skills (Chapter II):** Scroll down to line `~88`. You will find arrays of strings like `['TypeScript', 'Python', 'Go']`. Simply add, remove, or modify the text in these arrays, and the UI will automatically generate the glassmorphism pill badges for them!
 
-To learn more about Next.js, take a look at the following resources:
+### 3. The Work Page (Projects & Constellation)
+**File:** `data/projects.json`
+- This is the easiest file to edit. It is a simple JSON array.
+- To add a new project, simply copy an existing project object and paste it into the array.
+- **Fields:**
+  - `id`: Keep this unique (e.g., "1", "2").
+  - `name`: The title of the project.
+  - `oneLiner`: The short description under the title.
+  - `tech`: An array of technologies used (e.g., `["React", "Three.js"]`).
+  - `problem`, `approach`, `outcome`: The detailed paragraphs for the project card.
+  - `url`: The link to the live project (or GitHub repo).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. The Contact Links (Footer)
+**File:** `src/components/FooterBar.tsx`
+- Scroll down to the `<a>` tags.
+- Here you can update your email address (`aarish.ai@example.com`) in both the `href="mailto:..."` and the visible text.
+- You can update your GitHub and LinkedIn URLs in their respective `href` attributes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 5. Your Resume (CV)
+**File:** `public/CV.pdf`
+- Your resume is served statically from the `public` folder.
+- To update your resume, simply drag and drop your new PDF into the `public/` folder, replacing the existing `CV.pdf`. Make sure the filename remains exactly `CV.pdf` so the download link continues to work.
 
-## Deploy on Vercel
+### 6. Website Metadata (SEO)
+**File:** `src/app/layout.tsx`
+- At the top of this file, you will find the `metadata` object.
+- Change the `title` and `description` to update what shows up in browser tabs and when you share your website link on social media.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚀 How to Run Locally
+
+If you ever want to preview your changes on your own computer before pushing to GitHub:
+
+1. Open your terminal in the project directory.
+2. Run `npm install` (only needed the first time).
+3. Run `npm run dev`.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+When you're happy with your edits, simply commit and push your changes to the `main` branch, and Vercel will automatically deploy them to `aarishportfolio.vercel.app`!
