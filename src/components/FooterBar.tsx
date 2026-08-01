@@ -54,15 +54,15 @@ export default function FooterBar() {
               transition={{ duration: 0.4, type: "spring", stiffness: 200, damping: 20 }}
               className="flex flex-wrap items-center justify-center gap-4 md:gap-8 w-max"
             >
-              <a href="mailto:aarish.ai@example.com" className="text-[#D4A843] hover:text-[#FFEDA0] transition-colors drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] font-sans text-sm tracking-wide">
-                aarish.ai@example.com
+              <a href="mailto:aarishmuhammad@gamil.com" className="text-[#D4A843] hover:text-[#FFEDA0] transition-colors drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] font-sans text-sm tracking-wide">
+                aarishmuhammad@gmail.com
               </a>
               <span className="text-[#D4A843]/60 mx-1 md:mx-2">•</span>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-[#D4A843] hover:text-[#FFEDA0] transition-colors drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] font-sans text-sm tracking-wide">
+              <a href="https://github.com/aarish-ai" target="_blank" rel="noopener noreferrer" className="text-[#D4A843] hover:text-[#FFEDA0] transition-colors drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] font-sans text-sm tracking-wide">
                 GitHub
               </a>
               <span className="text-[#D4A843]/60 mx-1 md:mx-2">•</span>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-[#D4A843] hover:text-[#FFEDA0] transition-colors drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] font-sans text-sm tracking-wide">
+              <a href="https://linkedin.com/aarish-muhammad-3161b8321/" target="_blank" rel="noopener noreferrer" className="text-[#D4A843] hover:text-[#FFEDA0] transition-colors drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] font-sans text-sm tracking-wide">
                 LinkedIn
               </a>
               <span className="text-[#D4A843]/60 mx-1 md:mx-2">•</span>

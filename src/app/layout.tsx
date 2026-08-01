@@ -13,8 +13,8 @@ import NebulaScene from "@/components/NebulaScene";
 import FooterBar from "@/components/FooterBar";
 
 export const metadata: Metadata = {
-  title: "Aarish | Portfolio",
-  description: "Aarish - Night Study Portfolio",
+  title: "Aarish's Portfolio",
+  description: "Aarish - Nebula Portfolio :)",
 };
 
 export default function RootLayout({
