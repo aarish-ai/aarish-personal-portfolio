@@ -19,12 +19,32 @@ type Project = {
   url: string;
 };
 
-// Fixed positions for the constellation nodes
-const CONSTELLATION_POSITIONS: Record<string, [number, number, number]> = {
-  "01": [-5, 2, -2],
-  "02": [0, -1, 1],
-  "03": [4, 3, -1],
-};
+// Procedural positions for the constellation nodes to allow infinite organic scaling without overlap
+function getProjectPosition(index: number): [number, number, number] {
+  const predefined: [number, number, number][] = [
+    [-5, 2, -2],
+    [0, -1, 1],
+    [4, 3, -1],
+    [-4, -3, 2], // 4th project position
+  ];
+  if (index < predefined.length) return predefined[index];
+
+  // Procedural phyllotaxis (Fermat's spiral) for infinite organic scaling
+  const i = index - predefined.length + 1; 
+  const goldenAngle = 2.39996323; // ~137.5 degrees
+  const angle = i * goldenAngle;
+  
+  // Radius expands outwards
+  const radius = 6 + Math.sqrt(i) * 3;
+  
+  // Height oscillates organically
+  const y = Math.sin(i * 1.5) * 4; 
+  
+  const x = Math.cos(angle) * radius;
+  const z = Math.sin(angle) * radius;
+
+  return [x, y, z];
+}
 
 function ConstellationNode({ 
   position, 
@@ -111,8 +131,7 @@ function ConstellationScene({ projects, activeProject, setActiveProject }: { pro
 
   // The lines connecting the stars
   const points = useMemo(() => projects.map((p, i) => {
-    const posId = String(i + 1).padStart(2, '0');
-    return new THREE.Vector3(...(CONSTELLATION_POSITIONS[posId] || [0,0,0]));
+    return new THREE.Vector3(...getProjectPosition(i));
   }), [projects]);
 
   // Handle camera fly-ins
@@ -120,8 +139,7 @@ function ConstellationScene({ projects, activeProject, setActiveProject }: { pro
     if (controlsRef.current) {
       if (activeProject) {
         const index = projects.findIndex(p => p.id === activeProject.id);
-        const posId = String(index + 1).padStart(2, '0');
-        const pos = CONSTELLATION_POSITIONS[posId] || [0,0,0];
+        const pos = getProjectPosition(index);
         
         // Fly close to the star, slightly offset to the right so the modal has space on the left
         controlsRef.current.setLookAt(
@@ -171,8 +189,7 @@ function ConstellationScene({ projects, activeProject, setActiveProject }: { pro
       />
 
       {projects.map((project, index) => {
-        const posId = String(index + 1).padStart(2, '0');
-        const pos = CONSTELLATION_POSITIONS[posId] || [0,0,0];
+        const pos = getProjectPosition(index);
         return (
           <ConstellationNode
             key={project.id}
