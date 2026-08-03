@@ -42,15 +42,15 @@ export default function IntroScreen() {
   useEffect(() => {
     setIsClient(true);
     const introTimestamp = sessionStorage.getItem("introTimestamp");
-    if (introTimestamp && Date.now() - parseInt(introTimestamp) > 8500) {
+    if (introTimestamp && Date.now() - parseInt(introTimestamp) > 7500) {
       setShowIntro(false);
     } else {
       if (!introTimestamp) {
         sessionStorage.setItem("introTimestamp", Date.now().toString());
       }
-      // Hide after sequence completes (1.5s wait + 1.5s fade + 4.5s write + 1s hold = 8.5s)
+      // Hide after sequence completes (1.5s wait + 1.5s fade + 3.5s write + 1s hold = 7.5s)
       const elapsed = introTimestamp ? Date.now() - parseInt(introTimestamp) : 0;
-      const remaining = Math.max(0, 8500 - elapsed);
+      const remaining = Math.max(0, 7500 - elapsed);
       
       const timer = setTimeout(() => {
         setShowIntro(false);
@@ -86,7 +86,7 @@ export default function IntroScreen() {
 
           {/* Typewriter Text */}
           <div className="text-3xl md:text-5xl text-[#F4ECD8] font-light tracking-wide h-12 md:h-16 opacity-80 flex items-center justify-center">
-            <TypewriterText text="As-salam u Alaykum! I am . . ." delay={3} duration={4.5} />
+            <TypewriterText text="As-salam u Alaykum! I am . . ." delay={3} duration={3.5} />
           </div>
         </motion.div>
       )}

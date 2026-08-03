@@ -19,16 +19,16 @@ export default function FooterBar() {
       const introTimestamp = sessionStorage.getItem("introTimestamp");
       
       if (!introTimestamp) {
-        // Intro hasn't even started or mounted yet, wait 8.5s
-        const timer = setTimeout(() => setShowFooter(true), 8500);
+        // Intro hasn't even started or mounted yet, wait 7.5s
+        const timer = setTimeout(() => setShowFooter(true), 7500);
         return () => clearTimeout(timer);
       }
       
       const elapsed = Date.now() - parseInt(introTimestamp);
-      if (elapsed > 8500) {
+      if (elapsed > 7500) {
         setShowFooter(true);
       } else {
-        const timer = setTimeout(() => setShowFooter(true), 8500 - elapsed);
+        const timer = setTimeout(() => setShowFooter(true), 7500 - elapsed);
         return () => clearTimeout(timer);
       }
     };
