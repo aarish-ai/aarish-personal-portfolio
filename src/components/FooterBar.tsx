@@ -1,15 +1,31 @@
 "use client";
 
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function FooterBar() {
   const pathname = usePathname();
   const [isHovered, setIsHovered] = useState(false);
+  const [showFooter, setShowFooter] = useState(false);
+
+  useEffect(() => {
+    if (pathname !== '/') return;
+
+    const hasPlayed = sessionStorage.getItem("introPlayed");
+    if (hasPlayed) {
+      setShowFooter(true);
+    } else {
+      // Wait for the cinematic intro to finish (8.5s)
+      const timer = setTimeout(() => {
+        setShowFooter(true);
+      }, 8500);
+      return () => clearTimeout(timer);
+    }
+  }, [pathname]);
 
   // The user requested this only be on the home page
-  if (pathname !== '/') {
+  if (pathname !== '/' || !showFooter) {
     return null;
   }
 

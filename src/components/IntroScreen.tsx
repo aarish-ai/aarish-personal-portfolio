@@ -46,10 +46,10 @@ export default function IntroScreen() {
       setShowIntro(false);
     } else {
       sessionStorage.setItem("introPlayed", "true");
-      // Hide after sequence completes (1.5s wait + 1.5s fade + 2.5s write + 1s hold = 6.5s)
+      // Hide after sequence completes (1.5s wait + 1.5s fade + 4.5s write + 1s hold = 8.5s)
       const timer = setTimeout(() => {
         setShowIntro(false);
-      }, 6500);
+      }, 8500);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -74,14 +74,14 @@ export default function IntroScreen() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.5, duration: 1.5, ease: "easeOut" }}
-            className={`text-3xl md:text-5xl lg:text-6xl text-[#D4A843] drop-shadow-[0_0_25px_rgba(212,168,67,0.4)] mb-8 text-center ${amiri.className}`}
+            className={`absolute top-12 md:top-16 text-2xl md:text-4xl lg:text-5xl text-[#D4A843] drop-shadow-[0_0_25px_rgba(212,168,67,0.4)] text-center ${amiri.className}`}
           >
             بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
           </motion.h1>
 
           {/* Typewriter Text */}
-          <div className="text-xl md:text-2xl text-[#F4ECD8] font-light tracking-wide h-8 opacity-80">
-            <TypewriterText text="As-salam u Alaykum! I am . . ." delay={3} duration={2.5} />
+          <div className="text-3xl md:text-5xl text-[#F4ECD8] font-light tracking-wide h-12 md:h-16 opacity-80 flex items-center justify-center">
+            <TypewriterText text="As-salam u Alaykum! I am . . ." delay={3} duration={4.5} />
           </div>
         </motion.div>
       )}
