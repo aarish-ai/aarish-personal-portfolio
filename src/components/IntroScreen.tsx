@@ -41,15 +41,20 @@ export default function IntroScreen() {
 
   useEffect(() => {
     setIsClient(true);
-    const hasPlayed = sessionStorage.getItem("introPlayed");
-    if (hasPlayed) {
+    const introTimestamp = sessionStorage.getItem("introTimestamp");
+    if (introTimestamp && Date.now() - parseInt(introTimestamp) > 8500) {
       setShowIntro(false);
     } else {
-      sessionStorage.setItem("introPlayed", "true");
+      if (!introTimestamp) {
+        sessionStorage.setItem("introTimestamp", Date.now().toString());
+      }
       // Hide after sequence completes (1.5s wait + 1.5s fade + 4.5s write + 1s hold = 8.5s)
+      const elapsed = introTimestamp ? Date.now() - parseInt(introTimestamp) : 0;
+      const remaining = Math.max(0, 8500 - elapsed);
+      
       const timer = setTimeout(() => {
         setShowIntro(false);
-      }, 8500);
+      }, remaining);
       return () => clearTimeout(timer);
     }
   }, []);

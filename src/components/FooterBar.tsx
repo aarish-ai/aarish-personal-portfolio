@@ -12,16 +12,30 @@ export default function FooterBar() {
   useEffect(() => {
     if (pathname !== '/') return;
 
-    const hasPlayed = sessionStorage.getItem("introPlayed");
-    if (hasPlayed) {
-      setShowFooter(true);
-    } else {
-      // Wait for the cinematic intro to finish (8.5s)
-      const timer = setTimeout(() => {
+    // We can't guarantee introTimestamp is set immediately if IntroScreen and FooterBar 
+    // mount at the same time and IntroScreen hasn't run its useEffect yet. 
+    // However, they both run on client mount. To be safe, wait a tick.
+    const checkIntro = () => {
+      const introTimestamp = sessionStorage.getItem("introTimestamp");
+      
+      if (!introTimestamp) {
+        // Intro hasn't even started or mounted yet, wait 8.5s
+        const timer = setTimeout(() => setShowFooter(true), 8500);
+        return () => clearTimeout(timer);
+      }
+      
+      const elapsed = Date.now() - parseInt(introTimestamp);
+      if (elapsed > 8500) {
         setShowFooter(true);
-      }, 8500);
-      return () => clearTimeout(timer);
-    }
+      } else {
+        const timer = setTimeout(() => setShowFooter(true), 8500 - elapsed);
+        return () => clearTimeout(timer);
+      }
+    };
+    
+    // Give IntroScreen's useEffect a chance to set the timestamp
+    const initialTimer = setTimeout(checkIntro, 10);
+    return () => clearTimeout(initialTimer);
   }, [pathname]);
 
   // The user requested this only be on the home page
