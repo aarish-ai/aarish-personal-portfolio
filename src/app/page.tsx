@@ -1,16 +1,15 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import IntroScreen from "@/components/IntroScreen";
 
 export default function Home() {
   return (
     <main className="flex-1 flex flex-col items-center justify-center min-h-screen px-6 sm:px-12 relative">
+      <IntroScreen />
       <div className="absolute inset-0 bg-black/20 pointer-events-none" />
       
       <div className="relative z-10 max-w-4xl w-full flex flex-col items-center text-center space-y-8">
         <div className="flex flex-col items-center space-y-4">
-          <p className="text-lg md:text-xl text-[var(--ivory)] opacity-80 font-light tracking-wide">
-            As-salam u Alaykum, I'm
-          </p>
           <h1 className="text-6xl md:text-8xl font-light tracking-widest text-[var(--gold)] drop-shadow-[0_0_25px_rgba(212,168,67,0.3)] serif uppercase">
             Aarish
           </h1>
